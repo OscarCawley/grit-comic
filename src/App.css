@@ -2,38 +2,4 @@
   text-align: center;
 }
 
-.comic-viewer {
-  position: relative;
-  display: inline-block;
-}
-
-.comic-viewer img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-.hover-overlay {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 50%;
-  background: rgba(0, 0, 0, 0.3);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  z-index: 1;
-}
-
-.hover-overlay.left {
-  left: 0;
-}
-
-.hover-overlay.right {
-  right: 0;
-}
-
-.hover-overlay.visible {
-  opacity: 1;
-}
-
 

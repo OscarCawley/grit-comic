@@ -1,5 +1,5 @@
 import React from 'react';
-import ComicViewer from '../components/ComicViewer.js'
+import ComicViewer from '../../components/ComicViewer/ComicViewer.js';
 
 const Chapters = () => {
     return (

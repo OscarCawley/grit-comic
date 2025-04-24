@@ -1,8 +1,8 @@
 import './App.css';
-import Header from './components/Header.js'
-import Navigation from './components/Navigation.js'
-import ComicViewer from './components/ComicViewer.js';
-import Chapters from './pages/Chapters.js';
+import Header from './components/Header/Header.js'
+import Navigation from './components/Navigation/Navigation.js';
+import ComicViewer from './components/ComicViewer/ComicViewer.js';
+import Chapters from './pages/Chapters/Chapters.js';
 
 function App() {
   return (

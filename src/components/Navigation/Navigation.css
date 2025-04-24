@@ -1,23 +1,6 @@
 .navigation {
-    display: flex;
-    justify-content: center; /* Center the main buttons */
-    align-items: center; /* Vertically center items */
     background-color: #354555;
     padding: 10px 20px;
-    position: relative; /* Enable positioning for child elements */
-}
-
-.navigation .main-buttons {
-    display: flex;
-    gap: 15px; /* Add spacing between buttons */
-}
-
-.navigation .socials {
-    position: absolute; /* Position the socials independently */
-    right: 20px; /* Push the socials to the right */
-    display: flex;
-    gap: 10px; /* Add spacing between social links */
-    font-family: Arial, sans-serif;
 }
 
 .navigation button {
@@ -28,15 +11,4 @@
     font-weight: 600;
     font-size: 18px;
     cursor: pointer;
-}
-
-.navigation a {
-    color: white;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 16px;
-}
-
-.navigation a:hover {
-    text-decoration: underline;
 }

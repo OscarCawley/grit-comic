@@ -1,8 +1,10 @@
 import React from 'react';
 
+const importAll = (context) => context.keys().map(context);
+
 const chapters = [
-    {title: "Chapter 1: Blah Blah", pages: ["page1.jpg", "page2.jpg"]},
-    {title: "Chapter 2: Goo Goo Ga Ga", pages: ["page3.jpg"]},
+    {title: "Chapter 1: Blah Blah", pages: importAll(require.context('../../assets/chapters/chapter1', false, /\.(jpg)$/))},
+    {title: "Chapter 2: Goo Goo Ga Ga", pages: importAll(require.context('../../assets/chapters/chapter2', false, /\.(jpg)$/))},
 ];
 
 const ComicViewer = () => {

@@ -1,4 +1,7 @@
 import React from 'react';
+import './ComicViewer.css';
+import leftArrow from '../../assets/icons/left-arrow.png';
+import rightArrow from '../../assets/icons/right-arrow.png';
 
 const importAll = (context) => context.keys().map(context);
 
@@ -51,11 +54,11 @@ const ComicViewer = () => {
 
 
     return (
-        <div>
+        <div className='comic-viewer-container'>
             <div className="comic-chapter-title">
-                <button onClick={ () => handleChapterChange('prev')}>&lt;</button>
+                <button onClick={ () => handleChapterChange('prev')}><img src={leftArrow}/></button>
                 {chapters[currentChapter].title}
-                <button onClick={ () => handleChapterChange('next')}>&gt;</button>
+                <button onClick={ () => handleChapterChange('next')}><img src={rightArrow}/></button>
             </div>
             <div className="comic-page-indicator">
                 Page {currentPage + 1} of {chapters[currentChapter].pages.length}

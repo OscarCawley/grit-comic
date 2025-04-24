@@ -1,0 +1,31 @@
+.comic-viewer-container {
+    margin: 20px auto;
+}
+
+.comic-chapter-title {
+    font-family: Arial, sans-serif;
+    color: white;
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.comic-chapter-title button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0 20px;
+}
+
+.comic-chapter-title img {
+    height: 22px;
+    width: 40px;
+}
+
+.comic-page-indicator {
+    font-family: Arial, sans-serif;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}

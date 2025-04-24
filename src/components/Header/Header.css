@@ -1,3 +1,17 @@
+@font-face {
+    font-family: 'Grit Press';
+    src: url('../../assets/GritPress_TB.otf') format('opentype');
+}
+
 .header {
     display: flex;
+    justify-content: center;
+    background-color: #29353C;
+}
+
+.header h1 {
+    font-family: 'Grit Press';
+    font-size: 180px;
+    margin: 0;
+    color: #AAC7D8;
 }

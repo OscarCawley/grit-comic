@@ -15,11 +15,24 @@ const ComicViewer = () => {
         const clickX = e.clientX - left;
     
         if (clickX < width / 2) {
-          // Left side clicked
-          if (currentPage > 0) setCurrentPage(currentPage - 1);
-        } else {
-          // Right side clicked
-          if (currentPage < chapters[currentChapter].pages.length - 1) setCurrentPage(currentPage + 1);
+            // Left side clicked
+            if (currentPage > 0) {
+                setCurrentPage(currentPage - 1);
+            } else if (currentPage <= 0 && currentChapter > 0) {
+                // If on the first page of the current chapter and not on the first chapter, go to the last page of the previous chapter
+                setCurrentChapter(currentChapter - 1);
+                setCurrentPage(chapters[currentChapter - 1].pages.length - 1); // Go to last page of the previous chapter
+            }
+        }
+        else {
+            // Right side clicked
+            if (currentPage < chapters[currentChapter].pages.length - 1) {
+                setCurrentPage(currentPage + 1)
+            } else if (currentPage >= chapters[currentChapter].pages.length - 1 && currentChapter < chapters.length - 1) {
+                // If on the last page of the current chapter and not on the last chapter, go to the first page of the next chapter
+                setCurrentChapter(currentChapter + 1);
+                setCurrentPage(0); // Go to first page of the next chapter
+            }
         }
     };
 

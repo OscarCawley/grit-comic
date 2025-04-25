@@ -6,6 +6,7 @@ import Chapters from './pages/Chapters/Chapters.js';
 import Support from './pages/Support/Support.js';
 import Wiki from './pages/Wiki/Wiki.js';
 import Updates from './pages/Updates/Updates.js';
+import LogInPage from './pages/LogInPage/LogInPage.js';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
 				<Route path="/wiki" element={<Wiki />} />
 				<Route path="/updates" element={<Updates />} />
 				<Route path="/support" element={<Support />} />
+				<Route path='/login' element={<LogInPage />} />
 			</Routes>
 			<Footer />
       	</div>

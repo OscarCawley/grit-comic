@@ -1,23 +1,10 @@
-.socials {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 15px;
-}
-
-.socials img {
-    width: 30px;
-    height: 30px;
-}
-
-.footer {
+footer {
     background-color: #354555;
     padding: 20px 0;
     text-align: center;
 }
 
-.footer p {
+footer p {
     color: #fff;
     font-size: 16px;
     font-family: Arial, sans-serif;

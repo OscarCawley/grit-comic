@@ -7,6 +7,7 @@ import Support from './pages/Support/Support.js';
 import Wiki from './pages/Wiki/Wiki.js';
 import Updates from './pages/Updates/Updates.js';
 import LogInPage from './pages/LogInPage/LogInPage.js';
+import SignUpPage from './pages/SignUpPage/SignUpPage.js'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
 				<Route path="/updates" element={<Updates />} />
 				<Route path="/support" element={<Support />} />
 				<Route path='/login' element={<LogInPage />} />
+				<Route path='/signup' element={<SignUpPage />} />
 			</Routes>
 			<Footer />
       	</div>

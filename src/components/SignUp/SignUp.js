@@ -1,16 +1,28 @@
 import React, { useState } from 'react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../../firebase';
+import { auth, db } from '../../firebase';
+import { doc, setDoc } from 'firebase/firestore'; // Firestore functions
 
 const SignUp = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [username, setUsername] = useState('');
     const [error, setError] = useState('');
 
     const handleSignUp = async (e) => {
         e.preventDefault();
         try {
-            await createUserWithEmailAndPassword(auth, email, password);
+            // Create user with email and password
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+
+            // Save additional user info (username) in Firestore
+            await setDoc(doc(db, 'users', user.uid), {
+                email: user.email,
+                username: username, // Store the username
+                createdAt: new Date(),
+            });
+
             alert('Account created successfully!');
         } catch (err) {
             setError(err.message);
@@ -19,6 +31,12 @@ const SignUp = () => {
 
     return (
         <form onSubmit={handleSignUp}>
+            <input
+                type="text"
+                placeholder="Username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+            />
             <input
                 type="email"
                 placeholder="Email"

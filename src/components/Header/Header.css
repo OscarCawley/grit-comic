@@ -34,3 +34,8 @@
     font-size: 18px;
     cursor: pointer;
 }
+
+.header-title-link {
+    text-decoration: none; /* Remove underline */
+    color: inherit; /* Inherit the color from the parent */
+}

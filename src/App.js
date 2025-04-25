@@ -2,6 +2,7 @@ import './App.css';
 import Header from './components/Header/Header.js'
 import Navigation from './components/Navigation/Navigation.js';
 import Footer from './components/Footer/Footer.js';
+import ComicViewer from './components/ComicViewer/ComicViewer.js';
 import Chapters from './pages/Chapters/Chapters.js';
 import Support from './pages/Support/Support.js';
 import Wiki from './pages/Wiki/Wiki.js';
@@ -18,7 +19,7 @@ function App() {
 			<Header />
 			<Navigation />
 			<Routes>
-				<Route path="/" element={<Chapters />} />
+				<Route path="/" element={<ComicViewer />} />
 				<Route path="/chapters" element={<Chapters />} />
 				<Route path="/wiki" element={<Wiki />} />
 				<Route path="/updates" element={<Updates />} />

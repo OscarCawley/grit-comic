@@ -9,6 +9,7 @@ const Navigation = () => {
     return (
         <div className='navigation'>
             <div className='main-buttons'>
+                <Link to="/"><button>HOME</button></Link>
                 <Link to="/chapters"><button>CHAPTERS</button></Link>
                 <Link to="/wiki"><button>WIKI</button></Link>
                 <Link to="/updates"><button>UPDATES</button></Link>

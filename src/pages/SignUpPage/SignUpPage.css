@@ -1,0 +1,27 @@
+.sign-up-page {
+    font-family: Arial, sans-serif;
+    color: white;
+    height: 100vh;
+}
+
+.sign-up-page p button {
+    background-color: #AAC7D8; /* Light blue button */
+    color: #29353C; /* Dark text for contrast */
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: 8px;
+}
+
+.sign-up-page p button:hover {
+    background-color: #8AAFC0; /* Slightly darker blue on hover */
+}
+
+.sign-up-page p button:focus {
+    outline: none;
+    box-shadow: 0 0 5px #AAC7D8; /* Highlight button on focus */
+}

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth, db } from '../../firebase';
 import { doc, setDoc } from 'firebase/firestore'; // Firestore functions
+import './SignUp.css';
 
 const SignUp = () => {
     const [email, setEmail] = useState('');
@@ -30,7 +31,7 @@ const SignUp = () => {
     };
 
     return (
-        <form onSubmit={handleSignUp}>
+        <form className='sign-up-form' onSubmit={handleSignUp}>
             <input
                 type="text"
                 placeholder="Username"

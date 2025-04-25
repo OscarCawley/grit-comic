@@ -9,7 +9,7 @@ const LogInPage = () => {
             <h1>Log In</h1>
             <LogIn />
             <p>Don't have an account? <Link to="/signup"><button>Sign Up</button></Link></p>
-            <p>Forgot your password? <Link to="/reset-password"><button>Reset Password</button></Link></p>
+            <p>Forgot your password? <Link to="/resetpassword"><button>Reset Password</button></Link></p>
         </div>
     );
 };

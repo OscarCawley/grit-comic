@@ -1,0 +1,41 @@
+.chapters-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    color: white;
+}
+
+.chapters-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+    width: 500px;
+}
+
+.chapter-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    border: 1px solid #AAC7D8; /* Light blue border */
+    border-radius: 5px;
+    border-width: 3px;
+    padding: 10px;
+    margin-bottom: 1rem;
+}
+
+.chapter-item h2 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin : 0;
+}
+
+.chapter-item p {
+    white-space: nowrap;
+    margin: 0;
+}

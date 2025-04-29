@@ -20,7 +20,7 @@
 
 .account-container {
     position: absolute;
-    right: 20px;
+    right: 10px;
     display: flex;
     gap: 20px;
 }
@@ -51,5 +51,5 @@
     text-transform: uppercase; /* Capitalizes the first letter of each word */
     color: white;
     font-weight: 600;
-    font-size: 26px;
+    font-size: 18px;
 }

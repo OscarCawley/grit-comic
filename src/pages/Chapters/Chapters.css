@@ -65,7 +65,7 @@
     align-items: center; /* Center content horizontally */
 }
 
-.description p {
+.textbox {
     width: auto;
     max-width: 300px;
     padding: 10px;

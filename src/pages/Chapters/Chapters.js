@@ -1,13 +1,21 @@
 import React, { useState } from 'react';
 import './Chapters.css';
-import chapters, { storyDescription } from '../../data.js';
+import chapters, { storyDescription, updateStoryDescription } from '../../data.js';
 import volumeCover from '../../assets/volume-cover.png';
 
 const Chapters = () => {
-    const [description, setDescription] = useState('');
+    const [description, setDescription] = useState(storyDescription);
+    const [isEditable, setIsEditable] = useState(false);
+
+    const isAuthorized = true;
+
+    const handleEditClick = () => {
+        setIsEditable(!isEditable);
+    };
 
     const handleDescriptionChange = (e) => {
         setDescription(e.target.value);
+        updateStoryDescription(e.target.value); // change when database is implemented
     }
 
 
@@ -27,7 +35,21 @@ const Chapters = () => {
                 ))}
             </ul>
             <div className='description'>
-                <p>{storyDescription}</p>
+            {isEditable ? (
+                    <textarea className='textbox'
+                        value={description}
+                        onChange={handleDescriptionChange}
+                        rows="4"
+                        cols="50"
+                    />
+                ) : (
+                    <p className='textbox'>{description}</p>
+                )}
+                {isAuthorized && (
+                    <button onClick={handleEditClick}>
+                        {isEditable ? 'Save' : 'Edit'}
+                    </button>
+                )}
             </div>
         </div>
     );

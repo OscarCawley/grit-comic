@@ -5,7 +5,11 @@ const chapters = [
     {title: "Chapter 2: Goo Goo Ga Ga", pages: importAll(require.context('./assets/chapters/chapter2', false, /\.(jpg)$/))},
 ];
 
-const storyDescription = 'Italian brainrot is an Internet meme that emerged in early 2025, characterized by absurd photos of AI-generated creatures with pseudo-Italian names.[1][2] The phenomenon quickly spread across social media platforms such as TikTok and Instagram, thanks to its combination of synthesized "Italian" voiceovers, grotesque as well as funny visuals, and nonsensical narrative.'
+let storyDescription = 'Italian brainrot is an Internet meme that emerged in early 2025, characterized by absurd photos of AI-generated creatures with pseudo-Italian names.[1][2] The phenomenon quickly spread across social media platforms such as TikTok and Instagram, thanks to its combination of synthesized "Italian" voiceovers, grotesque as well as funny visuals, and nonsensical narrative.'
 
-export default chapters; 
+export const updateStoryDescription = (newDescription) => {
+    storyDescription = newDescription;
+};
+
+export default chapters;
 export { storyDescription };

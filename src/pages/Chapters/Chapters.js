@@ -27,7 +27,7 @@ const Chapters = () => {
                 ))}
             </ul>
             <div className='description'>
-                <textarea value={storyDescription} />
+                <p>{storyDescription}</p>
             </div>
         </div>
     );

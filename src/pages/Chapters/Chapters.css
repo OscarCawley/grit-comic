@@ -1,9 +1,14 @@
 .chapters-page {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
     font-family: Arial, sans-serif;
     color: white;
+}
+
+.volume-covers {
+    display: flex;
+    flex-direction: column;
 }
 
 .chapters-list {

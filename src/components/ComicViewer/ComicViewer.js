@@ -2,7 +2,7 @@ import React from 'react';
 import './ComicViewer.css';
 import leftArrow from '../../assets/icons/left-arrow.png';
 import rightArrow from '../../assets/icons/right-arrow.png';
-import chapters from '../../chaptersData.js';
+import chapters from '../../data.js';
 
 const ComicViewer = () => {
 

@@ -1,14 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Chapters.css';
-import chapters from '../../chaptersData.js';
+import chapters, { storyDescription } from '../../data.js';
+import volumeCover from '../../assets/volume-cover.png';
 
 const Chapters = () => {
+    const [description, setDescription] = useState('');
+
+    const handleDescriptionChange = (e) => {
+        setDescription(e.target.value);
+    }
 
 
     return (
         <div className='chapters-page'>
-            <h1>Chapters</h1>
+            <div className='volume-covers'>
+                <img src={volumeCover} alt="Volume Cover" />
+                <img src={volumeCover} alt="Volume Cover" />
+            </div>
             <ul className='chapters-list'>
+                <h1>Chapters</h1>
                 {chapters.map((chapter, index) => (
                     <li key={index} className='chapter-item'>
                         <h2>{chapter.title}</h2>
@@ -16,6 +26,9 @@ const Chapters = () => {
                     </li>
                 ))}
             </ul>
+            <div className='description'>
+                <textarea value={storyDescription} />
+            </div>
         </div>
     );
 };

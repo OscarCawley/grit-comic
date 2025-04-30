@@ -9,13 +9,13 @@ import { getFirestore } from "firebase/firestore"; // Import Firestore
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyAv_Livr2SwtXJqqK3fx8UaNSWP8Qi7_T8",
-  authDomain: "grit-comic.firebaseapp.com",
-  projectId: "grit-comic",
-  storageBucket: "grit-comic.firebasestorage.app",
-  messagingSenderId: "309217261233",
-  appId: "1:309217261233:web:d19ca422ffd7696bded490",
-  measurementId: "G-NWHCSM2CLW"
+    apiKey: process.env.REACT_APP_API_KEY,
+    authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+    projectId: process.env.REACT_APP_PROJECT_ID,
+    storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+    messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+    appId: process.env.REACT_APP_APP_ID,
+    measurementId: process.env.REACT_APP_MEASUREMENT_ID,
 };
 
 // Initialize Firebase

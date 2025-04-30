@@ -1,13 +1,20 @@
-import React from 'react';
-import './ComicViewer.css';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import './Home.css';
 import leftArrow from '../../assets/icons/left-arrow.png';
 import rightArrow from '../../assets/icons/right-arrow.png';
 import chapters from '../../data.js';
 
-const ComicViewer = () => {
+const Home = () => {
+    const [searchParams] = useSearchParams(); // Initialize useSearchParams
+    const initialChapter = parseInt(searchParams.get('chapter')) || 0; // Get chapter index from query params
+    const [currentPage, setCurrentPage] = useState(0);
+    const [currentChapter, setCurrentChapter] = useState(0);
 
-    const [currentPage, setCurrentPage] = React.useState(0);
-    const [currentChapter, setCurrentChapter] = React.useState(0);
+    useEffect(() => {
+        setCurrentChapter(initialChapter); // Update chapter when query param changes
+        setCurrentPage(0); // Reset to the first page
+    }, [initialChapter]);
 
     const handleImageClick = (e) => {
         const { left, width } = e.target.getBoundingClientRect();
@@ -64,4 +71,4 @@ const ComicViewer = () => {
     );
 };
 
-export default ComicViewer;
+export default Home;

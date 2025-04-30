@@ -40,6 +40,7 @@
     border-width: 3px;
     padding: 10px;
     margin-bottom: 1rem;
+    cursor: pointer;
 }
 
 .chapters-list h1 {

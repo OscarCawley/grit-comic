@@ -12,19 +12,28 @@ const SignUp = () => {
 
     const handleSignUp = async (e) => {
         e.preventDefault();
-        try {
-            // Create user with email and password
-            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-            const user = userCredential.user;
+        setError('');
+        setSuccess('');
 
-            // Save additional user info (username) in Firestore
-            await setDoc(doc(db, 'users', user.uid), {
-                email: user.email,
-                username: username, // Store the username
-                createdAt: new Date(),
+        try {
+            const res = await fetch('http://localhost:5000/api/users/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password, username }),
             });
 
-            alert('Account created successfully!');
+            const data = await res.json();
+
+            if (!res.ok) {
+                throw new Error(data.message || 'Something went wrong');
+            }
+
+            setSuccess('Account created successfully!');
+            setEmail('');
+            setPassword('');
+            setUsername('');
         } catch (err) {
             setError(err.message);
         }
@@ -52,6 +61,7 @@ const SignUp = () => {
             />
             <button type="submit">Sign Up</button>
             {error && <p>{error}</p>}
+            {success && <p style={{ color: 'green' }}>{success}</p>}
         </form>
     );
 };

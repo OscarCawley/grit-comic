@@ -9,9 +9,9 @@
             "server": "localhost",
             "port": 3306,
             "driver": "MySQL",
+            "name": "gritcomicdb",
             "database": "gritcomicdb",
-            "username": "root",
-            "name": "grit-comic-db"
+            "username": "root"
         }
     ]
 }

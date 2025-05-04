@@ -30,11 +30,12 @@ const Login = () => {
 
             // Store the JWT token in localStorage (or cookies, or context)
             localStorage.setItem('token', data.token);
+
+            alert('Logged in successfully!');
             
             setEmail('');
             setPassword('');
             navigate('/');
-            console.log('Navigating to home page');
 
         } catch (err) {
             setError(err.message);

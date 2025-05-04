@@ -10,8 +10,13 @@ const Home = () => {
     const initialChapter = parseInt(searchParams.get('chapter')) || 0; // Get chapter index from query params
     const [currentPage, setCurrentPage] = useState(0);
     const [currentChapter, setCurrentChapter] = useState(0);
+    const [users, setUsers] = useState([]); // State to hold user data
 
     useEffect(() => {
+        fetch('http://localhost:5000/api/users')
+            .then((res) => res.json())
+            .then((data) => setUsers(data))
+            .catch((err) => console.error(err));
         setCurrentChapter(initialChapter); // Update chapter when query param changes
         setCurrentPage(0); // Reset to the first page
     }, [initialChapter]);

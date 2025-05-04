@@ -1,7 +1,4 @@
 import React, { useState } from 'react';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth, db } from '../../firebase';
-import { doc, setDoc } from 'firebase/firestore'; // Firestore functions
 import './SignUp.css';
 
 const SignUp = () => {
@@ -9,6 +6,7 @@ const SignUp = () => {
     const [password, setPassword] = useState('');
     const [username, setUsername] = useState('');
     const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
 
     const handleSignUp = async (e) => {
         e.preventDefault();

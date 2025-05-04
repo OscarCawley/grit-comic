@@ -2,9 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import './Header.css';
+import { useLocation } from 'react-router-dom'; // Import useLocation to get the current path
+
+//TODO: make it so the header updates when the user logs in or out
 
 const Header = () => {
     const [user, setUser] = useState(null);
+    const location = useLocation();
 
     useEffect(() => {
         // Check if the user is logged in by looking for a token in localStorage
@@ -19,7 +23,7 @@ const Header = () => {
             console.log('No token found, user is not logged in.');
             setUser(null); // No token, so set user to null
         }
-    }, []); // Run only once when component mounts
+    }, [location.pathname]); // Run only once when component mounts
 
     const handleSignOut = () => {
         // Remove token and update user state

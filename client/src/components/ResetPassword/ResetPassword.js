@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import { sendPasswordResetEmail } from 'firebase/auth';
-import { auth } from '../../firebase';
 import './ResetPassword.css';
 
 const ResetPassword = () => {
@@ -11,8 +9,19 @@ const ResetPassword = () => {
     const handleResetPassword = async (e) => {
         e.preventDefault();
         try {
-            await sendPasswordResetEmail(auth, email);
-            setMessage('Password reset email sent! Check your inbox.');
+            const response = await fetch('http://localhost:5000/api/users/reset-password', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email }),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || 'Something went wrong');
+            }
+
+            setMessage(data.message);
             setError('');
         } catch (err) {
             setError(err.message);

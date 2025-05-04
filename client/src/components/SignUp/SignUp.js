@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './SignUp.css';
 
 const SignUp = () => {
@@ -6,15 +7,14 @@ const SignUp = () => {
     const [password, setPassword] = useState('');
     const [username, setUsername] = useState('');
     const [error, setError] = useState('');
-    const [success, setSuccess] = useState('');
+    const navigate = useNavigate();
 
     const handleSignUp = async (e) => {
         e.preventDefault();
         setError('');
-        setSuccess('');
 
         try {
-            const res = await fetch('http://localhost:5000/api/users/register', {
+            const res = await fetch('http://localhost:5000/api/users/signup', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -28,10 +28,11 @@ const SignUp = () => {
                 throw new Error(data.message || 'Something went wrong');
             }
 
-            setSuccess('Account created successfully!');
             setEmail('');
             setPassword('');
             setUsername('');
+            navigate('/');
+            
         } catch (err) {
             setError(err.message);
         }
@@ -59,7 +60,6 @@ const SignUp = () => {
             />
             <button type="submit">Sign Up</button>
             {error && <p>{error}</p>}
-            {success && <p style={{ color: 'green' }}>{success}</p>}
         </form>
     );
 };

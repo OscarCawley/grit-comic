@@ -1,18 +1,41 @@
 import React, { useState } from 'react';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../../firebase';
+import { useNavigate } from 'react-router-dom';
 import './LogIn.css';
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const navigate = useNavigate();
 
     const handleLogin = async (e) => {
         e.preventDefault();
+        setError('');
+
         try {
-            await signInWithEmailAndPassword(auth, email, password);
-            alert('Logged in successfully!');
+            // Send login request to the backend
+            const res = await fetch('http://localhost:5000/api/users/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password }),
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                throw new Error(data.message || 'Something went wrong');
+            }
+
+            // Store the JWT token in localStorage (or cookies, or context)
+            localStorage.setItem('token', data.token);
+            
+            setEmail('');
+            setPassword('');
+            navigate('/');
+            console.log('Navigating to home page');
+
         } catch (err) {
             setError(err.message);
         }

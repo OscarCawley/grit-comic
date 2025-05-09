@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const db = require('./db');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
+const { sendPasswordResetEmail } = require('./emailUtils'); // Import the email utility function
 require('dotenv').config();
 
 const app = express();
@@ -100,11 +101,8 @@ app.post('/api/users/forgot-password', async (req, res) => {
       });
 
       const resetLink = `http://localhost:3000/reset-password?token=${token}`;
-      await transporter.sendMail({
-          to: email,
-          subject: 'Password Reset',
-          html: `<p>Click <a href="${resetLink}">here</a> to reset your password. This link will expire in 1 hour.</p>`,
-      });
+      
+      await sendPasswordResetEmail(email, resetLink);
 
       res.json({ message: 'Password reset email sent!' });
   } catch (err) {

@@ -99,7 +99,7 @@ app.post('/api/users/forgot-password', async (req, res) => {
           },
       });
 
-      const resetLink = `http://your-frontend-url/reset-password?token=${token}`;
+      const resetLink = `http://localhost:3000/reset-password?token=${token}`;
       await transporter.sendMail({
           to: email,
           subject: 'Password Reset',
@@ -107,6 +107,36 @@ app.post('/api/users/forgot-password', async (req, res) => {
       });
 
       res.json({ message: 'Password reset email sent!' });
+  } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: 'An error occurred. Please try again.' });
+  }
+});
+
+app.post('/api/users/reset-password', async (req, res) => {
+  const { token, password } = req.body;
+
+  try {
+      // Check if the token exists and is valid
+      const [user] = await db.query(
+          'SELECT * FROM users WHERE reset_token = ? AND reset_token_expiry > NOW()',
+          [token]
+      );
+
+      if (user.length === 0) {
+          return res.status(400).json({ message: 'Invalid or expired token' });
+      }
+
+      // Hash the new password
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      // Update the user's password and clear the reset token
+      await db.query(
+          'UPDATE users SET password = ?, reset_token = NULL, reset_token_expiry = NULL WHERE reset_token = ?',
+          [hashedPassword, token]
+      );
+
+      res.json({ message: 'Password has been reset successfully!' });
   } catch (err) {
       console.error(err);
       res.status(500).json({ message: 'An error occurred. Please try again.' });

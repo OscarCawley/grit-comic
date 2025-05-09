@@ -10,6 +10,7 @@ import Updates from './pages/Updates/Updates.js';
 import LogInPage from './pages/LogInPage/LogInPage.js';
 import SignUpPage from './pages/SignUpPage/SignUpPage.js'
 import ForgotPasswordPage from './pages/ForgotPasswordPage/ForgotPasswordPage.js';
+import ResetPasswordPage from './pages/ResetPasswordPage/ResetPasswordPage.js';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 function App() {
@@ -26,7 +27,8 @@ function App() {
 				<Route path="/support" element={<Support />} />
 				<Route path='/login' element={<LogInPage />} />
 				<Route path='/signup' element={<SignUpPage />} />
-				<Route path='/forgotpassword' element={<ForgotPasswordPage />} />
+				<Route path='/forgot-password' element={<ForgotPasswordPage />} />
+				<Route path="/reset-password" element={<ResetPasswordPage />} />
 			</Routes>
 			<Footer />
       	</div>

@@ -32,7 +32,7 @@ const SignUpPage = () => {
             setEmail('');
             setPassword('');
             setUsername('');
-            navigate('/');
+            navigate('/login');
             
         } catch (err) {
             setError(err.message);

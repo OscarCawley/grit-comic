@@ -33,7 +33,7 @@ const ForgotPasswordPage = () => {
 
     return (
         <div className='forgot-password-page'>
-            <h1>Reset Password</h1>
+            <h1>Forgot Password</h1>
             <div>
                 <form className="forgot-password-form" onSubmit={handleForgotPassword}>
                     <input

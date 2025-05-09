@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useSearchParams } from 'react-router-dom'; // Assuming you're using React Router
+import { useNavigate, useSearchParams } from 'react-router-dom'; // Assuming you're using React Router
 import './ResetPasswordPage.css';
 
 const ResetPasswordPage = () => {
@@ -9,6 +9,7 @@ const ResetPasswordPage = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
+    const navigate = useNavigate();
 
     const handleResetPassword = async (e) => {
         e.preventDefault();
@@ -33,6 +34,7 @@ const ResetPasswordPage = () => {
 
             setMessage(data.message);
             setError('');
+            setTimeout(() => { navigate('/login') }, 3000); // Redirect to login after 3 seconds
         } catch (err) {
             setError(err.message);
             setMessage('');
@@ -41,8 +43,8 @@ const ResetPasswordPage = () => {
 
     return (
         <div className="reset-password-page">
+            <h1>Reset Password</h1>
             <form className="reset-password-form" onSubmit={handleResetPassword}>
-                <h2>Reset Your Password</h2>
                 <input
                     type="password"
                     placeholder="Enter new password"
@@ -57,8 +59,8 @@ const ResetPasswordPage = () => {
                 />
                 <button type="submit">Reset Password</button>
             </form>
-            {message && <p className="success-message">{message}</p>}
-            {error && <p className="error-message">{error}</p>}
+            {message && <p>{message}</p>}
+            {error && <p>{error}</p>}
         </div>
     );
 };

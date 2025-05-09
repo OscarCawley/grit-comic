@@ -63,7 +63,7 @@ const LogInPage = () => {
                 {error && <p>{error}</p>}
             </form>
             <p>Don't have an account? <Link to="/signup"><button>Sign Up</button></Link></p>
-            <p>Forgot your password? <Link to="/resetpassword"><button>Reset Password</button></Link></p>
+            <p>Forgot your password? <Link to="/forgotpassword"><button>Reset Password</button></Link></p>
         </div>
     );
 };

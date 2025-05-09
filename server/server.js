@@ -11,12 +11,14 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.get('/api/users', (req, res) => {
-  // Fetch all users from the database
-  db.query('SELECT * FROM users', (err, results) => {
-      if (err) return res.status(500).send('Database error');
-      res.json(results);
-  });
+app.get('/api/users', async (req, res) => {
+  try {
+    const [results] = await db.query('SELECT * FROM users');
+    res.json(results);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Database error');
+  }
 });
 
 app.post('/api/users/signup', async (req, res) => {
@@ -71,7 +73,7 @@ app.post('/api/users/login', async (req, res) => {
   }
 });
 
-app.post('/api/users/reset-password', async (req, res) => {
+app.post('/api/users/forgot-password', async (req, res) => {
   const { email } = req.body;
 
   try {

@@ -1,60 +1,10 @@
-import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Chapters.css';
 import chapters from '../../data.js';
 import volumeCover from '../../assets/volume-cover.png';
 
 const Chapters = () => {
-    const [description, setDescription] = useState('');
-    const [isEditable, setIsEditable] = useState(false);
     const navigate = useNavigate();
-
-    const isAuthorized = true;
-
-    useEffect(() => {
-        const fetchDescription = async () => {
-            try {
-                const response = await fetch('http://localhost:5000/api/story-description'); // Fetch from backend
-                if (!response.ok) {
-                    throw new Error('Failed to fetch story description');
-                }
-                const data = await response.json();
-                setDescription(data.description); // Set the description from the backend
-            } catch (err) {
-                console.error('Error fetching story description:', err);
-            }
-        };
-
-        fetchDescription();
-    }, []);
-
-    const handleEditClick = () => {
-        setIsEditable(!isEditable);
-    };
-
-    const handleDescriptionChange = (e) => {
-        setDescription(e.target.value);
-    }
-
-    const handleSaveClick = async () => {
-        try {
-            const response = await fetch('http://localhost:5000/api/story-description', {
-                method: 'PUT', // Use PUT for updating
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ description }), // Send the updated description
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to update story description');
-            }
-
-            setIsEditable(false);
-        } catch (err) {
-            console.error('Error updating story description:', err);
-        }
-    };
 
     const handleChapterClick = (index) => {
         navigate(`/?chapter=${index}`); // Navigate to Home with chapter index as a query parameter
@@ -77,21 +27,7 @@ const Chapters = () => {
                 ))}
             </ul>
             <div className='description'>
-                {isEditable ? (
-                    <textarea className='textbox'
-                        value={description}
-                        onChange={handleDescriptionChange}
-                        rows="4"
-                        cols="50"
-                    />
-                ) : (
-                    <p className='textbox'>{description}</p>
-                )}
-                {isAuthorized && (
-                    <button onClick={isEditable ? handleSaveClick : handleEditClick}>
-                        {isEditable ? 'Save' : 'Edit'}
-                    </button>
-                )}
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
             </div>
         </div>
     );

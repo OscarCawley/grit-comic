@@ -22,35 +22,6 @@ app.get('/api/users', async (req, res) => {
   }
 });
 
-app.get('/api/story-description', async (req, res) => {
-  try {
-    const [results] = await db.query('SELECT config_value AS description FROM config WHERE config_key = ?', ['story_description']);
-    if (results.length > 0) {
-      res.json({ description: results[0].description });
-    } else {
-      res.status(404).json({ message: 'Description not found' });
-    }
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Database error');
-  }
-});
-
-app.put('/api/story-description', async (req, res) => {
-  const { description } = req.body;
-  try {
-    const [result] = await db.query('UPDATE config SET config_value = ? WHERE config_key = ?', [description, 'story_description']);
-    if (result.affectedRows > 0) {
-      res.json({ message: 'Description updated successfully' });
-    } else {
-      res.status(404).json({ message: 'Description not found' });
-    }
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Database error');
-  }
-});
-
 app.post('/api/users/signup', async (req, res) => {
   const { username, email, password } = req.body;
 

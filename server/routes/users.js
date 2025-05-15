@@ -127,4 +127,21 @@ router.put('/reset-password', async (req, res) => {
   }
 });
 
+router.delete('/:id', async (req, res) => {
+  const userId = req.params.id;
+
+  try {
+    const [result] = await db.query('DELETE FROM users WHERE id = ?', [userId]);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.json({ message: 'User deleted successfully' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Database error', error: err });
+  }
+});
+
 module.exports = router;

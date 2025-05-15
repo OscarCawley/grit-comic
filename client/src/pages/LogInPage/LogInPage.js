@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './LogInPage.css';
 import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const LogInPage = () => {
 
@@ -15,22 +16,13 @@ const LogInPage = () => {
 
         try {
             // Send login request to the backend
-            const res = await fetch('http://localhost:5000/api/users/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email, password }),
+            const res = await axios.post('http://localhost:5000/api/users/login', {
+                email,
+                password
             });
 
-            const data = await res.json();
-
-            if (!res.ok) {
-                throw new Error(data.message || 'Something went wrong');
-            }
-
             // Store the JWT token in localStorage (or cookies, or context)
-            localStorage.setItem('token', data.token);
+            localStorage.setItem('token', res.data.token);
 
             alert('Logged in successfully!');
             
@@ -39,7 +31,7 @@ const LogInPage = () => {
             navigate('/');
 
         } catch (err) {
-            setError(err.message);
+            setError(err.response?.data?.message || err.message || 'Something went wrong');
         }
     };
 

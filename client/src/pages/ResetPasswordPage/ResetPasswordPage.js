@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom'; // Assuming you're using React Router
 import './ResetPasswordPage.css';
+import axios from 'axios';
 
 const ResetPasswordPage = () => {
     const [searchParams] = useSearchParams();
@@ -20,23 +21,16 @@ const ResetPasswordPage = () => {
         }
 
         try {
-            const response = await fetch('http://localhost:5000/api/users/reset-password', {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ token, password }),
+            const res = await axios.put('http://localhost:5000/api/users/reset-password', {
+                token,
+                password,
             });
 
-            const data = await response.json();
-
-            if (!response.ok) {
-                throw new Error(data.message || 'Something went wrong');
-            }
-
-            setMessage(data.message);
+            setMessage(res.data.message);
             setError('');
             setTimeout(() => { navigate('/login') }, 3000); // Redirect to login after 3 seconds
         } catch (err) {
-            setError(err.message);
+            setError(err.response?.data?.message || err.message || 'Something went wrong');
             setMessage('');
         }
     };

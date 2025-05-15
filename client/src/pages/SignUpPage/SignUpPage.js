@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './SignUpPage.css';
 import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const SignUpPage = () => {
 
@@ -15,19 +16,11 @@ const SignUpPage = () => {
         setError('');
 
         try {
-            const res = await fetch('http://localhost:5000/api/users/signup', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email, password, username }),
+            const res = await axios.post('http://localhost:5000/api/users/signup', {
+                email,
+                password,
+                username
             });
-
-            const data = await res.json();
-
-            if (!res.ok) {
-                throw new Error(data.message || 'Something went wrong');
-            }
 
             setEmail('');
             setPassword('');
@@ -35,7 +28,7 @@ const SignUpPage = () => {
             navigate('/login');
             
         } catch (err) {
-            setError(err.message);
+            setError(err.response?.data?.message || err.message || 'Something went wrong');
         }
     };
 

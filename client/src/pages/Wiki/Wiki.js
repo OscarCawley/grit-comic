@@ -13,14 +13,18 @@ const Wiki = () => {
         try {
             const response = await axios.get('http://localhost:5000/api/wiki');
             setPosts(response.data);
+            setPosts(prevPosts => [...prevPosts].sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at)));
         } catch (error) {
             console.error('Error fetching wiki data:', error);
         }};
     
     return (
         <div className='wiki'>
-            <h1>Wiki</h1>
+            <div className="category-list">
+                <h1>Category</h1>
+            </div>
             <div className="wiki-list">
+                <h1>Wiki</h1>
                 {posts.map((post) => (
                     <div key={post.id} className="wiki-item">
                         <div className='wiki-item-header'>

@@ -24,11 +24,19 @@ const WikiList = () => {
 	};
 
 	const handleCreate = async () => {
+
+		const { title, slug, content, category_id } = formData;
+
+		if (!title.trim() || !slug.trim() || !content.trim() || !category_id || isNaN(category_id)) {
+		alert('Please fill out all fields before creating the post.');
+		return;}
+
 		try {
 			await axios.post('http://localhost:5000/api/wiki/create', formData);
 			alert('Wiki post created!');
 		
 			setFormData({ title: '', slug: '', content: '', category_id: '' });
+			fetchPosts();
 		} catch (err) {
 			console.error('Error creating post:', err);
 			alert('Failed to create post.');
@@ -94,8 +102,10 @@ const WikiList = () => {
 				/>
 				<select
 					value={formData.category_id}
-					onChange={(e) => setFormData({ ...formData, category_id: e.target.value })}
+					onChange={(e) => setFormData({ ...formData, category_id: parseInt(e.target.value) })}
 				>
+					
+					<option value="">Select Category</option>
 					{categories.map(category => (
 						<option key={category.id} value={category.id}>{category.name}</option>
 					))}

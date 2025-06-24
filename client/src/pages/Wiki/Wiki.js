@@ -3,25 +3,42 @@ import axios from 'axios';
 import './Wiki.css';
 
 const Wiki = () => {
+    const [allPosts, setAllPosts] = useState([]);
     const [posts, setPosts] = useState([]);
+    const [activeCategory, setActiveCategory] = useState("all");
 
     useEffect(() => {
         fetchWiki();
     }, [])
 
-        const fetchWiki = async () => {
-        try {
-            const response = await axios.get('http://localhost:5000/api/wiki');
-            setPosts(response.data);
-            setPosts(prevPosts => [...prevPosts].sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at)));
-        } catch (error) {
-            console.error('Error fetching wiki data:', error);
-        }};
+    const fetchWiki = async () => {
+    try {
+        const response = await axios.get('http://localhost:5000/api/wiki');
+        setAllPosts(response.data);
+        setAllPosts(prevPosts => [...prevPosts].sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at)));
+    } catch (error) {
+        console.error('Error fetching wiki data:', error);
+    }};
     
+
+    const handleCategoryClick = (category) => {
+        setActiveCategory(category);
+        if (category === "All") {
+            setPosts(allPosts);
+        } else {
+            setPosts(allPosts.filter(post => post.category_name === category));
+        }
+        return;
+    }
+
     return (
         <div className='wiki'>
             <div className="category-list">
                 <h1>Category</h1>
+                <button className={`category-button ${activeCategory === "All" ? "active" : ""}`} onClick={() => handleCategoryClick("All")}>All</button>
+                <button className={`category-button ${activeCategory === "General" ? "active" : ""}`} onClick={() => handleCategoryClick("General")}>General</button>
+                <button className={`category-button ${activeCategory === "World" ? "active" : ""}`} onClick={() => handleCategoryClick("World")}>World</button>
+                <button className={`category-button ${activeCategory === "Characters" ? "active" : ""}`} onClick={() => handleCategoryClick("Characters")}>Characters</button>
             </div>
             <div className="wiki-list">
                 <h1>Wiki</h1>

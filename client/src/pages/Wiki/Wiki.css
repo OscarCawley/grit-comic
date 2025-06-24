@@ -1,0 +1,44 @@
+.wiki {
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+.wiki h1 {
+    font-size: 2.5em;
+    margin: 2rem 0;
+    text-align: center;
+}
+
+.wiki-list {
+  display: flex;
+  flex-direction: column;
+  max-width: 600px;
+  margin: 0 auto;
+  color: white;
+  gap: 30px;
+}
+
+.wiki-item {
+    text-align: left;
+    border: 1px solid #AAC7D8; /* Light blue border */
+    border-radius: 5px;
+    border-width: 3px;
+    padding: 10px;
+}
+
+.wiki-item-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.wiki-item-header h2 {
+    font-size: 1.5em;
+    margin: 0;
+}
+
+.wiki-item-updated {
+    font-size: 0.8em;
+    color: #AAC7D8; /* Light blue text */
+    text-align: right;
+    margin: 0;
+}

@@ -1,0 +1,1 @@
+INSERT INTO categories (name) VALUES ('General'), ('Characters'), ('World');

@@ -1,7 +1,79 @@
-/*
-Potential database layout:
-    id
-    section
-    title
-    content
-*/
+const express = require('express');
+const db = require('../db');
+
+const router = express.Router();
+
+router.get('/', async (req, res) => {
+    try {
+        const [results] = await db.query("SELECT wiki.*, categories.name AS category_name, DATE_FORMAT(wiki.created_at, '%d/%m/%Y %H:%i') AS created_at_formatted, DATE_FORMAT(wiki.updated_at, '%d/%m/%Y %H:%i') AS updated_at_formatted FROM wiki JOIN categories ON wiki.category_id = categories.id");
+        res.json(results);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Database error');
+    }
+});
+
+router.get('/categories', async (req, res) => {
+    try {
+        const [results] = await db.query('SELECT * FROM categories');
+        res.json(results);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Database error');
+    }
+});
+
+router.post('/create', async (req, res) => {
+    const { title, slug, content, category_id } = req.body;
+
+    if (!title || !slug || !content || !category_id) {
+        return res.status(400).json({ message: 'Please provide all fields (title, slug, content, category_id)' });
+    }
+
+    try {
+        await db.query(
+            'INSERT INTO wiki (title, slug, content, category_id) VALUES (?, ?, ?, ?)',
+            [title, slug, content, category_id]
+        );
+
+        res.status(201).json({ message: 'Post created successfully!' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Error inserting post', error: err });
+    }
+});
+
+router.put('/:id', async (req, res) => {
+    const { id } = req.params;
+    const { title, slug, content, category_id } = req.body;
+
+    if (!title || !slug || !content || !category_id) {
+        return res.status(400).json({ message: 'Please provide all fields (title, slug, content, category_id)' });
+    }
+
+    try {
+        await db.query(
+            'UPDATE wiki SET title = ?, slug = ?, content = ?, category_id = ? WHERE id = ?',
+            [title, slug, content, category_id, id]
+        );
+
+        res.status(200).json({ message: 'Post updated successfully!' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Error updating post', error: err });
+    }
+});
+
+router.delete('/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        await db.query('DELETE FROM wiki WHERE id = ?', [id]);
+        res.status(200).json({ message: 'Post deleted successfully!' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Error deleting post', error: err });
+    }
+});
+
+module.exports = router;

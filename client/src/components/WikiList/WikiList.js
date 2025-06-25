@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import './WikiList.css';
 import TipTapEditor from '../TipTapEditor/TipTapEditor';
@@ -7,8 +7,9 @@ const WikiList = () => {
 
 	const [posts, setPosts] = useState([]);
 	const [categories, setCategories] = useState([]);
-	const [formData, setFormData] = useState({ title: '', slug: '', content: '', category_id: '' });
+	const [formData, setFormData] = useState({ title: '', slug: '', content: '', category_id: '', image: null });
 	const [editingId, setEditingId] = useState(null);
+	const formRef = useRef(null);
 
 	useEffect(() => {
 		fetchCategories();
@@ -27,37 +28,77 @@ const WikiList = () => {
 
 	const handleCreate = async () => {
 
-		const { title, slug, content, category_id } = formData;
+		const { title, slug, content, category_id, image } = formData;
 
 		if (!title.trim() || !slug.trim() || !content.trim() || !category_id || isNaN(category_id)) {
 		alert('Please fill out all fields before creating the post.');
 		return;}
 
 		try {
-			await axios.post('http://localhost:5000/api/wiki/create', formData);
+			const data = new FormData();
+			data.append('title', title);
+			data.append('slug', slug);
+			data.append('content', content);
+			data.append('category_id', category_id);
+
+			if (image) {
+				data.append('image', image);
+			}
+
+			await axios.post('http://localhost:5000/api/wiki/create', data, {
+				headers: { 'Content-Type': 'multipart/form-data' }
+			});
+
 			alert('Wiki post created!');
-		
-			setFormData({ title: '', slug: '', content: '', category_id: '' });
+			setFormData({ title: '', slug: '', content: '', category_id: '', image: null });
+			if (formRef.current) {
+				formRef.current.value = '';
+			}
 			fetchPosts();
+
 		} catch (err) {
 			console.error('Error creating post:', err);
 			alert('Failed to create post.');
 		}
-    };
+	};
 
 	const handleEdit = (post) => {
-		setFormData({ title: post.title, slug: post.slug, content: post.content, category_id: post.category_id });
+		setFormData({ 
+			title: post.title,
+			slug: post.slug,
+			content: post.content,
+			category_id: post.category_id,
+			image: null,
+			existingImage: post.image
+		});
 		setEditingId(post.id);
 	}
 
 	const handleUpdate = async () => {
-		try {
-			await axios.put(`http://localhost:5000/api/wiki/${editingId}`, formData);
-			alert('Wiki post updated!');
-			setFormData({ title: '', slug: '', content: '', category_id: '' });
-			setEditingId(null);
+		const { title, slug, content, category_id, image } = formData;
+
+		const data = new FormData();
+		data.append('title', title);
+		data.append('slug', slug);
+		data.append('content', content);
+		data.append('category_id', category_id);
+
+		if (image) {
+			data.append('image', image); // New uploaded image
 		}
-		catch (err) {
+
+		try {
+			await axios.put(`http://localhost:5000/api/wiki/${editingId}`, data, {
+				headers: { 'Content-Type': 'multipart/form-data' }
+			});
+			alert('Wiki post updated!');
+			setFormData({ title: '', slug: '', content: '', category_id: '', image: null });
+			setEditingId(null);
+			if (formRef.current) {
+				formRef.current.value = '';
+			}
+			fetchPosts();
+		} catch (err) {
 			console.error('Error updating post:', err);
 			alert('Failed to update post.');
 		}
@@ -94,8 +135,9 @@ const WikiList = () => {
 					onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
 				/>
 				<TipTapEditor
-  					content={formData.content}
-  					onChange={(html) => setFormData({ ...formData, content: html })}
+  					key={editingId || 'new'}
+					content={formData.content}
+					onChange={(html) => setFormData({ ...formData, content: html })}
 				/>
 				<select
 					value={formData.category_id}
@@ -107,6 +149,17 @@ const WikiList = () => {
 						<option key={category.id} value={category.id}>{category.name}</option>
 					))}
 				</select>
+				<input type="file" accept='image/*' ref={formRef} onChange={(e) => setFormData({ ...formData, image: e.target.files[0]})}/>
+				{formData.existingImage && !formData.image && (
+					<div>
+						<p>Current Image:</p>
+						<img
+							src={`http://localhost:5000${formData.existingImage}`}
+							alt="Current"
+							style={{ maxWidth: '200px', display: 'block', marginBottom: '1em' }}
+						/>
+					</div>
+				)}
 				<button type="submit">{editingId ? 'Update' : 'Create'}</button>
 			</form>
 			<div className='wiki-posts'>

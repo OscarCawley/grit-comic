@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import './WikiList.css';
+import TipTapEditor from '../TipTapEditor/TipTapEditor';
 
 const WikiList = () => {
 
@@ -73,10 +74,6 @@ const WikiList = () => {
 		}
 	}
 	
-
-
-
-
     return (
         <div className='wiki-container'>
 			<h1>Wiki List</h1>
@@ -96,10 +93,9 @@ const WikiList = () => {
 					value={formData.slug}
 					onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
 				/>
-				<textarea
-					placeholder="Content"
-					value={formData.content}
-					onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+				<TipTapEditor
+  					content={formData.content}
+  					onChange={(html) => setFormData({ ...formData, content: html })}
 				/>
 				<select
 					value={formData.category_id}

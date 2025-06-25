@@ -1,0 +1,58 @@
+.editor-wrapper {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: white;
+  font-family: sans-serif;
+  padding: 8px;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.toolbar button {
+  padding: 6px 10px;
+  border: none;
+  background: #eee;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.toolbar button.active {
+  background-color: #007bff;
+  color: white;
+}
+
+.editor {
+  min-height: 150px;      /* or whatever height you want */
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 1rem;
+  background: white;
+  outline: none;
+  
+  /* make child paragraphs fill the height */
+  display: flex;
+  flex-direction: column;
+}
+
+.ProseMirror {
+  /* fill the whole height of .editor */
+  flex-grow: 1;
+  min-height: 100%;
+  outline: none; /* remove default focus outline */
+  white-space: pre-wrap; /* for multiline support */
+  /* optional: add padding so text doesn't touch edges */
+  padding: 4px 0;
+}
+
+.editor p {
+  margin: 0; /* remove default paragraph margin */
+  flex-grow: 1; /* allow paragraphs to fill available space */
+}

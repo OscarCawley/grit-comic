@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Wiki.css';
+import DOMPurify from 'dompurify';
 
 const Wiki = () => {
     const [allPosts, setAllPosts] = useState([]);
@@ -51,7 +52,7 @@ const Wiki = () => {
                             <h2>{post.title}</h2>
                             <span>{post.category_name}</span>
                         </div>
-                        <p>{post.content}</p>
+                        <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}></div>
                         <p className='wiki-item-updated'>{post.updated_at_formatted}</p>
                     </div>
                 ))}

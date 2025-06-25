@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
+import './UserList.css';
 
 
 
@@ -24,13 +25,17 @@ const UserList = () => {
     };
 
     return (
-        <div>{users.map(user => (
-            <li key={user.id}>
-                {user.username} ({user.email})
-                <button onClick={(e) => handleDelete(user.id)}>Delete</button>
-            </li>
-            
-        ))}</div>
+        <div className="user-container">
+            <h1>User List</h1>
+            <ul className="user-list">
+                {users.map(user => (
+                    <li key={user.id}>
+                        <span>{user.username} ({user.email})</span>
+                        <button onClick={() => handleDelete(user.id)}>Delete</button>
+                    </li>
+                ))}
+            </ul>
+        </div>
     );
 };
 

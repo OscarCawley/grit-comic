@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import './WikiList.css';
 
 const WikiList = () => {
 
@@ -77,9 +78,9 @@ const WikiList = () => {
 
 
     return (
-        <div>
+        <div className='wiki-container'>
 			<h1>Wiki List</h1>
-			<form onSubmit={(e) => {
+			<form className='wiki-form' onSubmit={(e) => {
 				e.preventDefault();
 				editingId ? handleUpdate() : handleCreate();
 			}}>
@@ -112,16 +113,16 @@ const WikiList = () => {
 				</select>
 				<button type="submit">{editingId ? 'Update' : 'Create'}</button>
 			</form>
-
-			<ul>
-				{posts.map(post => (
+			<div className='wiki-posts'>
+				<ul>
+					{posts.map(post => (
 					<li key={post.id}>
 						{post.title} ({post.slug})
 						<button onClick={() => handleEdit(post)}>Edit</button>
 						<button onClick={() => handleDelete(post.id)}>Delete</button>
-					</li>
-				))}
-			</ul>
+					</li>))}
+				</ul>
+			</div>
 		</div>
     );
 };

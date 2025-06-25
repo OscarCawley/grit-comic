@@ -5,17 +5,20 @@ import './Wiki.css';
 const Wiki = () => {
     const [allPosts, setAllPosts] = useState([]);
     const [posts, setPosts] = useState([]);
-    const [activeCategory, setActiveCategory] = useState("all");
+    const [activeCategory, setActiveCategory] = useState("All");
 
     useEffect(() => {
         fetchWiki();
+        setActiveCategory("All");
     }, [])
 
     const fetchWiki = async () => {
     try {
         const response = await axios.get('http://localhost:5000/api/wiki');
         setAllPosts(response.data);
+        setPosts(response.data);
         setAllPosts(prevPosts => [...prevPosts].sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at)));
+        setPosts(prevPosts => [...prevPosts].sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at)))
     } catch (error) {
         console.error('Error fetching wiki data:', error);
     }};

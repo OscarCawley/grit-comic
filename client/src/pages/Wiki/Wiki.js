@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import './Wiki.css';
 import DOMPurify from 'dompurify';
@@ -49,7 +50,9 @@ const Wiki = () => {
                 {posts.map((post) => (
                     <div key={post.id} className="wiki-item">
                         <div className='wiki-item-header'>
-                            <h2>{post.title}</h2>
+                            <Link to={`/wiki/${post.slug}`} className='wiki-item-link'>
+                                <h2>{post.title}</h2>
+                            </Link>
                             <span>{post.category_name}</span>
                         </div>
                         <div className='wiki-item-content' dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}></div>

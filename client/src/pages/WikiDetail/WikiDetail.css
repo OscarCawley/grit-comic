@@ -1,0 +1,57 @@
+.wiki-detail {
+    color: white;
+    font-family: Arial, sans-serif;
+    padding: 2rem;
+    max-width: 900px;
+    width: 100%;         /* allows shrinking on small screens */
+    margin: 0 auto;      /* centers horizontally */
+    box-sizing: border-box; /* to include padding in width */
+}
+
+.wiki-detail-article {
+    text-align: left;
+    position: relative;
+    border: 3px solid #AAC7D8;
+    border-radius: 5px;
+    padding: 2rem;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #354555;
+}
+
+.wiki-detail-image {
+    float: right;
+    margin: 0 0 1rem 1rem;
+    max-width: 300px;
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    border: 2px solid #AAC7D8;
+    object-fit: cover;
+}
+.wiki-detail-article h2 {
+    font-size: 2em;
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+.wiki-detail-title {
+    color: #AAC7D8; /* Light blue text */
+}
+
+.wiki-detail-content {
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+    white-space: normal !important;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+.wiki-detail-meta {
+    font-size: 1.2em;
+    color: #AAC7D8;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+}

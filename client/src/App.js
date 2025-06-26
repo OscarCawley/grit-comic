@@ -6,6 +6,7 @@ import Home from './pages/Home/Home.js';
 import Chapters from './pages/Chapters/Chapters.js';
 import Support from './pages/Support/Support.js';
 import Wiki from './pages/Wiki/Wiki.js';
+import WikiDetail from './pages/WikiDetail/WikiDetail.js';
 import Updates from './pages/Updates/Updates.js';
 import LogInPage from './pages/LogInPage/LogInPage.js';
 import SignUpPage from './pages/SignUpPage/SignUpPage.js'
@@ -19,7 +20,6 @@ function App() {
     <Router>
 		<Routes>
 			<Route path="/admin" element={<Admin />} />
-
 			<Route path="*" element={
 				<div className="App">
 					<Header />
@@ -28,6 +28,7 @@ function App() {
 						<Route path="/" element={<Home />} />
 						<Route path="/chapters" element={<Chapters />} />
 						<Route path="/wiki" element={<Wiki />} />
+						<Route path="/wiki/:slug" element={<WikiDetail />} />
 						<Route path="/updates" element={<Updates />} />
 						<Route path="/support" element={<Support />} />
 						<Route path="/login" element={<LogInPage />} />

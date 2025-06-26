@@ -56,6 +56,7 @@
 .wiki-item {
     text-align: left;
     border: 1px solid #AAC7D8; /* Light blue border */
+    background-color: #354555;
     border-radius: 5px;
     border-width: 3px;
     padding: 10px;
@@ -83,6 +84,12 @@
     font-size: 2em;
     margin: 0;
 }
+
+.wiki-item-link {
+    text-decoration: none;
+    color: #AAC7D8; /* Light blue text */
+}
+    
 
 .wiki-item-updated {
     font-size: 0.8em;

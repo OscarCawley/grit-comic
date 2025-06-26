@@ -39,6 +39,30 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.get('/:slug', async (req, res) => {
+    const { slug } = req.params;
+    try {
+        const [post] = await db.query(`
+            SELECT wiki.*, wiki.image, categories.name AS category_name, 
+            DATE_FORMAT(wiki.created_at, '%d/%m/%Y %H:%i') AS created_at_formatted, 
+            DATE_FORMAT(wiki.updated_at, '%d/%m/%Y %H:%i') AS updated_at_formatted 
+            FROM wiki JOIN categories ON wiki.category_id = categories.id 
+            WHERE wiki.slug = ?
+        `, [slug]);
+
+        if (post.length === 0) {
+            return res.status(404).send('Post not found');
+        }
+
+        console.log('Post fetched:', post[0]);
+
+        res.json(post[0]);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Database error');
+    }
+});
+
 router.get('/categories', async (req, res) => {
     try {
         const [results] = await db.query('SELECT * FROM categories');

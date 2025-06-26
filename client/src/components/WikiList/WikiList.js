@@ -9,6 +9,7 @@ const WikiList = () => {
 	const [categories, setCategories] = useState([]);
 	const [formData, setFormData] = useState({ title: '', slug: '', content: '', category_id: '', image: null });
 	const [editingId, setEditingId] = useState(null);
+	const [isSlugEdited, setIsSlugEdited] = useState(false);
 	const formRef = useRef(null);
 
 	useEffect(() => {
@@ -62,6 +63,12 @@ const WikiList = () => {
 		}
 	};
 
+	useEffect(() => {
+  		if (!isSlugEdited) {
+    		setFormData((prev) => ({ ...prev, slug: slugify(prev.title) }));
+  		}
+	}, [formData.title, isSlugEdited]);
+
 	const handleEdit = (post) => {
 		setFormData({ 
 			title: post.title,
@@ -114,6 +121,15 @@ const WikiList = () => {
 			alert('Failed to delete post.');
 		}
 	}
+
+	const slugify = (text) => {
+  		return text
+			.toLowerCase()
+			.trim()
+			.replace(/[^\w\s-]/g, '')   // remove invalid chars
+			.replace(/\s+/g, '-')       // replace spaces with hyphens
+			.replace(/--+/g, '-');      // replace multiple hyphens with single
+		};
 	
     return (
         <div className='wiki-container'>
@@ -126,16 +142,21 @@ const WikiList = () => {
 					type="text"
 					placeholder="Title"
 					value={formData.title}
-					onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+					onChange={(e) => {
+						setFormData({ ...formData, title: e.target.value })
+						setIsSlugEdited(false);
+					}}
 				/>
 				<input
 					type="text"
 					placeholder="Slug"
 					value={formData.slug}
-					onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+					onChange={(e) => {
+						setFormData({ ...formData, slug: e.target.value })
+						setIsSlugEdited(true);
+					}}
 				/>
 				<TipTapEditor
-  					key={editingId || 'new'}
 					content={formData.content}
 					onChange={(html) => setFormData({ ...formData, content: html })}
 				/>

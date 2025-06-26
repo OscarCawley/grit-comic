@@ -1,15 +1,26 @@
+import React, { useEffect } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
+import Underline from '@tiptap/extension-underline';
 import './TipTapEditor.css';
 
 const TipTapEditor = ({ content, onChange }) => {
     const editor = useEditor({
-        extensions: [StarterKit],
+        extensions: [
+            StarterKit,
+            Underline,
+        ],
         content,
         onUpdate: ({ editor }) => {
             onChange(editor.getHTML());
         },
     });
+
+    useEffect(() => {
+        if (editor && content !== editor.getHTML()) {
+            editor.commands.setContent(content, false); // false = don't emit `onUpdate`
+        }
+    }, [content, editor]);
 
     if (!editor) return null;
 
@@ -29,13 +40,18 @@ const TipTapEditor = ({ content, onChange }) => {
                 <button
                     type="button"
                     onClick={() => editor.chain().focus().toggleStrike().run()}
-                    className={editor.isActive('strike') ? 'active' : ''}>Strike
-                </button>
+                    className={editor.isActive('strike') ? 'active' : ''}
+                >Strike</button>
+                <button
+                    type="button"
+                    onClick={() => editor.chain().focus().toggleUnderline().run()}
+                    className={editor.isActive('underline') ? 'active' : ''}
+                >Underline</button>
                 <button
                     type="button"
                     onClick={() => editor.chain().focus().toggleBulletList().run()}
-                    className={editor.isActive('bulletList') ? 'active' : ''}>• List
-                </button>
+                    className={editor.isActive('bulletList') ? 'active' : ''}
+                >• List</button>
                 <button
                     type='button'
                     onClick={() => editor.chain().focus().toggleOrderedList().run()}

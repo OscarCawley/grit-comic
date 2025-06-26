@@ -61,6 +61,9 @@
     padding: 10px;
     width: 100%;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    text-overflow: ellipsis;
 }
 
 .wiki-item p {
@@ -77,7 +80,7 @@
 }
 
 .wiki-item-header h2 {
-    font-size: 1.5em;
+    font-size: 2em;
     margin: 0;
 }
 
@@ -86,4 +89,15 @@
     color: #AAC7D8; /* Light blue text */
     text-align: right;
     margin: 0;
+}
+
+.wiki-item-content {
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    line-clamp: 5;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    box-sizing: border-box;
+    margin-bottom: 0.5rem;
 }

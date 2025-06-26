@@ -52,7 +52,7 @@ const Wiki = () => {
                             <h2>{post.title}</h2>
                             <span>{post.category_name}</span>
                         </div>
-                        <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}></div>
+                        <div className='wiki-item-content' dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}></div>
                         <p className='wiki-item-updated'>{post.updated_at_formatted}</p>
                     </div>
                 ))}

@@ -24,7 +24,7 @@ const upload = multer({ storage });
 // Serve static images
 router.use('/uploads', express.static(uploadDir));
 
-router.get('/', async (req, res) => {
+router.get('/posts', async (req, res) => {
     try {
         const [results] = await db.query(`
             SELECT wiki.*, wiki.image, categories.name AS category_name, 
@@ -39,7 +39,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.get('/:slug', async (req, res) => {
+router.get('/posts/:slug', async (req, res) => {
     const { slug } = req.params;
     try {
         const [post] = await db.query(`
@@ -54,8 +54,6 @@ router.get('/:slug', async (req, res) => {
             return res.status(404).send('Post not found');
         }
 
-        console.log('Post fetched:', post[0]);
-
         res.json(post[0]);
     } catch (err) {
         console.error(err);
@@ -66,6 +64,7 @@ router.get('/:slug', async (req, res) => {
 router.get('/categories', async (req, res) => {
     try {
         const [results] = await db.query('SELECT * FROM categories');
+        console.log('Categories fetched:', results);
         res.json(results);
     } catch (err) {
         console.error(err);

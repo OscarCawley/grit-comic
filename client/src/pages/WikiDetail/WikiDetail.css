@@ -9,14 +9,15 @@
 }
 
 .wiki-detail-article {
-    text-align: left;
-    position: relative;
+    display: flex;
+    flex-direction: column;
     border: 3px solid #AAC7D8;
     border-radius: 5px;
     padding: 2rem;
     width: 100%;
     box-sizing: border-box;
     background-color: #354555;
+    overflow: auto; /* keep this to contain floated image */
 }
 
 .wiki-detail-image {
@@ -29,6 +30,7 @@
     border: 2px solid #AAC7D8;
     object-fit: cover;
 }
+
 .wiki-detail-article h2 {
     font-size: 2em;
     margin-top: 0;
@@ -54,4 +56,10 @@
     display: flex;
     justify-content: space-between;
     margin-top: 1rem;
+}
+
+.wiki-detail-main-content {
+    overflow: auto; /* contains float */
+    flex-grow: 1;
+    text-align: left; /* ensure text aligns left */
 }

@@ -16,7 +16,7 @@ const Wiki = () => {
 
     const fetchWiki = async () => {
     try {
-        const response = await axios.get('http://localhost:5000/api/wiki');
+        const response = await axios.get('http://localhost:5000/api/wiki/posts');
         setAllPosts(response.data);
         setPosts(response.data);
         setAllPosts(prevPosts => [...prevPosts].sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at)));

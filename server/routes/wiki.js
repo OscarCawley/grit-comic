@@ -64,7 +64,6 @@ router.get('/posts/:slug', async (req, res) => {
 router.get('/categories', async (req, res) => {
     try {
         const [results] = await db.query('SELECT * FROM categories');
-        console.log('Categories fetched:', results);
         res.json(results);
     } catch (err) {
         console.error(err);

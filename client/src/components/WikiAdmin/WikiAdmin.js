@@ -1,9 +1,9 @@
 import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
-import './WikiList.css';
+import './WikiAdmin.css';
 import TipTapEditor from '../TipTapEditor/TipTapEditor';
 
-const WikiList = () => {
+const WikiAdmin = () => {
 
 	const [posts, setPosts] = useState([]);
 	const [categories, setCategories] = useState([]);
@@ -197,4 +197,4 @@ const WikiList = () => {
     );
 };
 
-export default WikiList;
+export default WikiAdmin;

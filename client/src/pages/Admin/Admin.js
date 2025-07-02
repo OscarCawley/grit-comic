@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import UserList from '../../components/UserList/UserList.js';
-import WikiList from '../../components/WikiList/WikiList.js';
+import UserAdmin from '../../components/UserAdmin/UserAdmin.js';
+import WikiAdmin from '../../components/WikiAdmin/WikiAdmin.js';
 import './Admin.css';
 
 const Admin = () => {
@@ -14,8 +14,8 @@ const Admin = () => {
             </div>
 
             <div className="section-content">
-                {view === 'wiki' && <WikiList />}
-                {view === 'users' && <UserList />}
+                {view === 'wiki' && <WikiAdmin />}
+                {view === 'users' && <UserAdmin />}
             </div>
         </div>
     );

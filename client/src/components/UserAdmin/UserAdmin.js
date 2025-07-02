@@ -1,10 +1,10 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-import './UserList.css';
+import './UserAdmin.css';
 
 
 
-const UserList = () => {
+const UserAdmin = () => {
 
     const [users, setUsers] = useState([]);
 
@@ -39,4 +39,4 @@ const UserList = () => {
     );
 };
 
-export default UserList;
+export default UserAdmin;

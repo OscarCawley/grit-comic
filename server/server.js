@@ -10,12 +10,15 @@ app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Import routes
-const userRoutes = require('./routes/users');
+const chapterRoutes = require('./routes/chapters');
 const wikiRoutes = require('./routes/wiki');
+const userRoutes = require('./routes/users');
+
 
 // Mount routes
-app.use('/api/users', userRoutes);
+app.use('/api/chapters', chapterRoutes);
 app.use('/api/wiki', wikiRoutes);
+app.use('/api/users', userRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

@@ -20,3 +20,17 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage });
+
+router.use('/uploads', express.static(uploadDir));
+
+router.get('/', async (req, res) => {
+    try {
+        const [results] = await db.query(`SELECT * FROM chapters`);
+        res.json(results);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Database error');
+    }
+});
+
+module.exports = router;

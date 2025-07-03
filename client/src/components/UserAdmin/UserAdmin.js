@@ -17,11 +17,13 @@ const UserAdmin = () => {
     }, []);
 
     const handleDelete = (userId) => {
-        axios.delete(`http://localhost:5000/api/users/${userId}`).then(() => {
-            setUsers(users.filter(user => user.id !== userId));
-        }).catch(err => {
-            console.error(err);
-        });
+        if (window.confirm('Are you sure you want to delete this user?')) {
+            axios.delete(`http://localhost:5000/api/users/${userId}`).then(() => {
+                setUsers(users.filter(user => user.id !== userId));
+            }).catch(err => {
+                console.error(err);
+            });
+        }
     };
 
     return (

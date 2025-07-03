@@ -25,7 +25,13 @@ router.use('/uploads', express.static(uploadDir));
 
 router.get('/', async (req, res) => {
     try {
-        const [results] = await db.query(`SELECT * FROM chapters`);
+        const [results] = await db.query(`
+            SELECT c.chapterNum, c.title, COUNT(p.pageNum) AS pageCount
+            FROM chapters c
+            LEFT JOIN pages p ON c.chapterNum = p.chapterNum
+            GROUP BY c.chapterNum, c.title
+            ORDER BY c.chapterNum ASC
+        `);
         res.json(results);
     } catch (err) {
         console.error(err);

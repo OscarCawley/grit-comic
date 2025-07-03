@@ -112,13 +112,15 @@ const WikiAdmin = () => {
 	}
 
 	const handleDelete = async (postId) => {
-		try {
-			await axios.delete(`http://localhost:5000/api/wiki/${postId}`);
-			alert('Wiki post deleted!');
-			setPosts(posts.filter(post => post.id !== postId));
-		} catch (err) {
-			console.error('Error deleting post:', err);
-			alert('Failed to delete post.');
+		if (window.confirm('Are you sure you want to delete this post?')) {
+			try {
+				await axios.delete(`http://localhost:5000/api/wiki/${postId}`);
+				alert('Wiki post deleted!');
+				setPosts(posts.filter(post => post.id !== postId));
+			} catch (err) {
+				console.error('Error deleting post:', err);
+				alert('Failed to delete post.');
+			}
 		}
 	}
 
@@ -140,6 +142,7 @@ const WikiAdmin = () => {
 			}}>
 				<input
 					type="text"
+					maxLength={120}
 					placeholder="Title"
 					value={formData.title}
 					onChange={(e) => {
@@ -149,6 +152,7 @@ const WikiAdmin = () => {
 				/>
 				<input
 					type="text"
+					maxLength={120}
 					placeholder="Slug"
 					value={formData.slug}
 					onChange={(e) => {
@@ -188,8 +192,10 @@ const WikiAdmin = () => {
 					{posts.map(post => (
 					<li key={post.id}>
 						{post.title} ({post.slug})
-						<button onClick={() => handleEdit(post)}>Edit</button>
-						<button onClick={() => handleDelete(post.id)}>Delete</button>
+						<span>
+							<button onClick={() => handleEdit(post)}>Edit</button>
+							<button onClick={() => handleDelete(post.id)}>Delete</button>
+						</span>
 					</li>))}
 				</ul>
 			</div>

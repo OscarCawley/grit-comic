@@ -39,4 +39,95 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.post('/create', upload.none(), async (req, res) => {
+    const { chapterNum, title } = req.body;
+
+    if (!chapterNum || !title) {
+        return res.status(400).json('Chapter number and title are required');
+    }
+
+    try {
+        console.log('Inserting chapter:', chapterNum, title);
+        await db.query('INSERT INTO chapters (chapterNum, title) VALUES (?, ?)', [chapterNum, title]);
+
+        res.status(201).json({ message: 'Chapter created successfully!' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Error inserting chapter', error: err });
+    }
+});
+
+router.put('/update/:oldChapterNum', upload.none(), async (req, res) => {
+    const { oldChapterNum } = req.params;
+    const { chapterNum, title } = req.body;
+    const newChapterNum = chapterNum;
+    
+    console.log(req.body)
+    console.log('Updating chapter:', oldChapterNum, 'to', newChapterNum, title);
+
+    if (!title || !newChapterNum) {
+        return res.status(400).send('Chapter number and title are required');
+    }
+
+    try {
+        const [result] = await db.query('UPDATE chapters SET chapterNum = ?, title = ? WHERE chapterNum = ?', [newChapterNum, title, oldChapterNum]);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).send('Chapter not found');
+        }
+
+        res.sendStatus(204);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Database error');
+    }
+});
+
+router.delete('/delete/:chapterNum', async (req, res) => {
+    const { chapterNum } = req.params;
+
+    try {
+        // Delete images from the upload directory
+        const [images] = await db.query('SELECT image FROM pages WHERE chapterNum = ?', [chapterNum]);
+        for (const img of images) {
+            const filePath = path.join(__dirname, '..', img.image);
+            try {
+                if (fs.existsSync(filePath)) {
+                    fs.unlinkSync(filePath);
+                }
+            } catch (e) {
+                console.error(`Failed to delete image ${img.image}:`, e);
+            }
+        }
+
+        // Delete all pages associated with this chapter
+        await db.query('DELETE FROM pages WHERE chapterNum = ?', [chapterNum]);
+
+        // Delete the chapter itself
+        const [result] = await db.query('DELETE FROM chapters WHERE chapterNum = ?', [chapterNum]);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).send('Chapter not found');
+        }
+
+        res.sendStatus(204);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).send('Database error');
+    }
+});
+
+router.get('/:chapterNum/pages', async (req, res) => {
+    const { chapterNum } = req.params;
+
+    try {
+        const [pages] = await db.query('SELECT * FROM pages WHERE chapterNum = ? ORDER BY pageNum ASC', [chapterNum]);
+        res.json(pages);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Database error');
+    }
+});
+
 module.exports = router;

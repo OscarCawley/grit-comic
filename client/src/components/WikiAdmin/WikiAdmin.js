@@ -17,6 +17,12 @@ const WikiAdmin = () => {
 		fetchPosts();
 	}, []);
 
+	useEffect(() => {
+  		if (!isSlugEdited) {
+    		setFormData((prev) => ({ ...prev, slug: slugify(prev.title) }));
+  		}
+	}, [formData.title, isSlugEdited]);
+
 	const fetchCategories = async () => {
 		const res = await axios.get('http://localhost:5000/api/wiki/categories');
 		setCategories(res.data);
@@ -32,8 +38,8 @@ const WikiAdmin = () => {
 		const { title, slug, content, category_id, image } = formData;
 
 		if (!title.trim() || !slug.trim() || !content.trim() || !category_id || isNaN(category_id)) {
-		alert('Please fill out all fields before creating the post.');
-		return;}
+			alert('Please fill out all fields before creating the post.');
+			return;}
 
 		try {
 			const data = new FormData();
@@ -63,12 +69,6 @@ const WikiAdmin = () => {
 		}
 	};
 
-	useEffect(() => {
-  		if (!isSlugEdited) {
-    		setFormData((prev) => ({ ...prev, slug: slugify(prev.title) }));
-  		}
-	}, [formData.title, isSlugEdited]);
-
 	const handleEdit = (post) => {
 		setFormData({ 
 			title: post.title,
@@ -79,6 +79,9 @@ const WikiAdmin = () => {
 			existingImage: post.image
 		});
 		setEditingId(post.id);
+		if (formRef.current) {
+            formRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
 	}
 
 	const handleUpdate = async () => {

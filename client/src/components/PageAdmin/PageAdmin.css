@@ -1,0 +1,12 @@
+.page-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.page-item img {
+    width: 200px;
+    height: auto;
+    object-fit: cover;
+    margin: 5px;
+}

@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import ChapterAdmin from '../../components/ChapterAdmin/ChapterAdmin.js';
 import WikiAdmin from '../../components/WikiAdmin/WikiAdmin.js';
 import UserAdmin from '../../components/UserAdmin/UserAdmin.js';
+import PageAdmin from '../../components/PageAdmin/PageAdmin.js';
 import './Admin.css';
 
 const Admin = () => {
     const [view, setView] = useState('wiki');
+    const [selectedChapter, setSelectedChapter] = useState(null);
 
     return (
         <div className="admin-container">
@@ -16,9 +18,10 @@ const Admin = () => {
             </div>
 
             <div className="section-content">
-                {view === 'chapters' && <ChapterAdmin />}
+                {view === 'chapters' && <ChapterAdmin setView={setView} setSelectedChapter={setSelectedChapter}/>}
                 {view === 'wiki' && <WikiAdmin />}
                 {view === 'users' && <UserAdmin />}
+                {view === 'pages' && <PageAdmin selectedChapter={selectedChapter}/>}
             </div>
         </div>
     );

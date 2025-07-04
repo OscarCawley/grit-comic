@@ -150,7 +150,7 @@ router.delete('/:id', async (req, res) => {
                     fs.unlinkSync(fullPath);
                 }
             } catch (e) {
-                console.warn('Failed to delete old image:', e);
+                console.warn(`Failed to delete image ${imagePath}:`, e);
             }
         }
 

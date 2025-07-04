@@ -84,21 +84,23 @@ const ChapterAdmin = ({ setView, setSelectedChapter }) => {
     }
 
     return (
-        <div>
+        <div className='chapter-container'>
             <h1>Chapters</h1>
             <form className='chapter-form' onSubmit={(e) => {
                 e.preventDefault();
                 editingId ? handleUpdate() : handleCreate();
             }}>
                 <input
+                className='chapter-num-input'
                     type='text'
                     name='chapterNum'
-                    placeholder='Chapter Number'
+                    placeholder='Number'
                     value={formData.chapterNum}
                     onChange={(e) => setFormData({ ...formData, chapterNum: e.target.value })}
                     required
                 />
                 <input
+                    className='chapter-title-input'
                     type='text'
                     name='title'
                     placeholder='Chapter Title'

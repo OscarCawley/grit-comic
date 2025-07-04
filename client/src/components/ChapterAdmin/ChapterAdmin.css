@@ -1,4 +1,4 @@
-.wiki-container {
+.chapter-container {
   background-color: white;
   border-radius: 8px;
   padding: 2rem;
@@ -6,34 +6,42 @@
   font-family: Arial, sans-serif;
 }
 
-.wiki-container h1 {
+.chapter-container h1 {
   font-size: 1.8rem;
   margin-bottom: 1.5rem;
   color: #333;
 }
 
-.wiki-form {
+.chapter-form {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 1rem;
   margin-bottom: 2rem;
 }
 
-.wiki-form input,
-.wiki-form textarea,
-.wiki-form select {
+.chapter-num-input {
+  width: 60px;
+}
+
+.chapter-title-input {
+  flex: 1;
+}
+
+.chapter-form input,
+.chapter-form textarea,
+.chapter-form select {
   padding: 0.75rem 1rem;
   border: 1px solid #ccc;
   border-radius: 6px;
   font-size: 1rem;
 }
 
-.wiki-form textarea {
+.chapter-form textarea {
   resize: vertical;
   min-height: 100px;
 }
 
-.wiki-form button {
+.chapter-form button {
   align-self: flex-start;
   background-color: #388e3c;
   color: white;
@@ -45,7 +53,7 @@
   transition: background-color 0.2s ease-in-out;
 }
 
-.wiki-form button:hover {
+.chapter-form button:hover {
   background-color: #2e7d32;
 }
 

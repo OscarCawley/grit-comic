@@ -130,4 +130,31 @@ router.get('/:chapterNum/pages', async (req, res) => {
     }
 });
 
+router.post('/upload/:chapterNum', upload.array('images'), async (req, res) => {
+    const { chapterNum } = req.params;
+
+    if (!req.files || req.files.length === 0) {
+        return res.status(400).send('No files uploaded');
+    }
+
+    try {
+        const [result] = await db.query(
+            'SELECT MAX(pageNum) AS maxPage FROM pages WHERE chapterNum = ?',
+            [chapterNum]
+        );
+
+        let nextPageNum = result[0].maxPage ? result[0].maxPage + 1 : 1;
+
+        for (const file of req.files) {
+            const imagePath = path.join('/uploads/', file.filename);
+            await db.query('INSERT INTO pages (pageNum, chapterNum, image) VALUES (?, ?, ?)', [nextPageNum, chapterNum, imagePath]);
+            nextPageNum++;
+        }
+        res.status(201).json({ message: 'Images uploaded successfully' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Database error');
+    }
+});
+
 module.exports = router;

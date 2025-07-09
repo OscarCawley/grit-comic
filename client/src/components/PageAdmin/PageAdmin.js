@@ -37,28 +37,80 @@ const PageAdmin = ({ selectedChapter }) => {
         }
     }
 
+    const handleReorder = (direction, page) => {
+        const currentIndex = pages.findIndex(p => p.pageNum === page.pageNum);
+        let newIndex = direction === 'left' ? currentIndex - 1 : currentIndex + 1;
+
+        if (newIndex < 0 || newIndex >= pages.length) return; // Out of bounds
+
+        const updatedPages = [...pages];
+        [updatedPages[currentIndex], updatedPages[newIndex]] = [updatedPages[newIndex], updatedPages[currentIndex]];
+        setPages(updatedPages);
+    }
+
+    const handleDelete = async (page) => {
+        try {
+            await axios.delete(`http://localhost:5000/api/chapters/delete/${selectedChapter.chapterNum}/page/${page.pageNum}`);
+            setPages(pages.filter(p => p.pageNum !== page.pageNum));
+            alert('Page deleted successfully!');
+        } catch (err) {
+            console.error('Error deleting page:', err);
+            alert('Failed to delete page.');
+        }
+    }
+
+    const handleSave = async () => {
+    try {
+        // Optional: ensure correct page numbers before saving
+        const reorderedPages = pages.map((page, index) => ({
+            ...page,
+            pageNum: index + 1,
+        }));
+
+        await axios.put(`http://localhost:5000/api/chapters/reorder/${selectedChapter.chapterNum}`, {
+            pages: reorderedPages,
+        });
+
+        setPages(reorderedPages); // update state in case pageNums changed
+        alert('Page order saved successfully!');
+    } catch (err) {
+        console.error('Error saving page order:', err);
+        alert('Failed to save page order.');
+    }
+};
+
 
     return (
         <div className='page-container'>
             <h1>Manage Pages for Chapter {selectedChapter.chapterNum}</h1>
             <div className='image-upload'>
+                <label htmlFor='file-upload' className='custom-file-upload'>
+                    Upload Images
+                </label>
                 <input
+                    id='file-upload'
                     type='file'
                     multiple
                     accept='image/*'
                     onChange={handleFileChange}
                 />
             </div>
+            <button className='save-order' onClick={handleSave}>Save Order</button>
+            <button className='delete-all'>Delete All</button>
             <div className='page-list'>
                 {pages.map(page => (
                 <div key={page.pageNum} className="page-item">
-                    <h3>Page {page.pageNum}</h3>
-                    <p>{page.content}</p>
-                    <img src={`http://localhost:5000${page.image}`} alt="image" />
-                    <button onClick={() => alert(`Editing page ${page.pageNum}`)}>Edit</button>
-                    <button onClick={() => alert(`Deleting page ${page.pageNum}`)}>Delete</button>
+                    <div className='page-head'>
+                        <button className='arrow-button-left' onClick={() => handleReorder('left', page)}>&lt;</button>
+                        <h3>Page {page.pageNum}</h3>
+                        <button className='arrow-button-right' onClick={() => handleReorder('right', page)}>&gt;</button>
+                    </div>
+                    <div className='page-content'>
+                        <img src={`http://localhost:5000${page.image}`} alt="image" />
+                        <button onClick={() => handleDelete(page)}>Delete</button>
+                    </div>  
                 </div>
-            ))}
+                ))}
             </div>
         </div>
     );

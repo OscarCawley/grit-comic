@@ -157,4 +157,56 @@ router.post('/upload/:chapterNum', upload.array('images'), async (req, res) => {
     }
 });
 
+router.put('/reorder/:chapterNum', async (req, res) => {
+    const { chapterNum } = req.params;
+    const { pages } = req.body;
+
+    if (!Array.isArray(pages) || pages.length === 0) {
+        return res.status(400).send('Invalid page order');
+    }
+
+    try {
+        const updatePromises = pages.map((page, index) => {
+            return db.query('UPDATE pages SET pageNum = ? WHERE id = ?', [index + 1, page.id]);
+        });
+
+        await Promise.all(updatePromises);
+        res.sendStatus(204);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Database error');
+    }
+});
+
+router.delete('/delete/:chapterNum/page/:pageNum', async (req, res) => {
+    const { chapterNum, pageNum } = req.params;
+
+    try {
+        // Get the image path before deleting
+        const [imageResult] = await db.query('SELECT image FROM pages WHERE chapterNum = ? AND pageNum = ?', [chapterNum, pageNum]);
+        if (imageResult.length === 0) {
+            return res.status(404).send('Page not found');
+        }
+
+        const imagePath = path.join(__dirname, '..', imageResult[0].image);
+        
+        // Delete the page
+        const [result] = await db.query('DELETE FROM pages WHERE chapterNum = ? AND pageNum = ?', [chapterNum, pageNum]);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).send('Page not found');
+        }
+
+        // Delete the image file
+        if (fs.existsSync(imagePath)) {
+            fs.unlinkSync(imagePath);
+        }
+
+        res.sendStatus(204);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Database error');
+    }
+});
+
 module.exports = router;

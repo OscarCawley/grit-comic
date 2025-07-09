@@ -52,7 +52,6 @@ const PageAdmin = ({ selectedChapter }) => {
         try {
             await axios.delete(`http://localhost:5000/api/chapters/delete/${selectedChapter.chapterNum}/page/${page.pageNum}`);
             setPages(pages.filter(p => p.pageNum !== page.pageNum));
-            alert('Page deleted successfully!');
         } catch (err) {
             console.error('Error deleting page:', err);
             alert('Failed to delete page.');
@@ -60,24 +59,37 @@ const PageAdmin = ({ selectedChapter }) => {
     }
 
     const handleSave = async () => {
-    try {
-        // Optional: ensure correct page numbers before saving
-        const reorderedPages = pages.map((page, index) => ({
-            ...page,
-            pageNum: index + 1,
-        }));
+        try {
+            // Optional: ensure correct page numbers before saving
+            const reorderedPages = pages.map((page, index) => ({
+                ...page,
+                pageNum: index + 1,
+            }));
 
-        await axios.put(`http://localhost:5000/api/chapters/reorder/${selectedChapter.chapterNum}`, {
-            pages: reorderedPages,
-        });
+            await axios.put(`http://localhost:5000/api/chapters/reorder/${selectedChapter.chapterNum}`, {
+                pages: reorderedPages,
+            });
 
-        setPages(reorderedPages); // update state in case pageNums changed
-        alert('Page order saved successfully!');
-    } catch (err) {
-        console.error('Error saving page order:', err);
-        alert('Failed to save page order.');
+            setPages(reorderedPages); // update state in case pageNums changed
+            alert('Page order saved successfully!');
+        } catch (err) {
+            console.error('Error saving page order:', err);
+            alert('Failed to save page order.');
+        }
     }
-};
+
+    const deleteAll = async () => {
+        if (!window.confirm('Are you sure you want to delete all pages? This action cannot be undone.')) return;
+
+        try {
+            await axios.delete(`http://localhost:5000/api/chapters/delete/${selectedChapter.chapterNum}/all`);
+            setPages([]);
+            alert('All pages deleted successfully!');
+        } catch (err) {
+            console.error('Error deleting all pages:', err);
+            alert('Failed to delete all pages.');
+        }
+    };
 
 
     return (
@@ -96,7 +108,7 @@ const PageAdmin = ({ selectedChapter }) => {
                 />
             </div>
             <button className='save-order' onClick={handleSave}>Save Order</button>
-            <button className='delete-all'>Delete All</button>
+            <button className='delete-all' onClick={deleteAll}>Delete All</button>
             <div className='page-list'>
                 {pages.map(page => (
                 <div key={page.pageNum} className="page-item">

@@ -209,4 +209,29 @@ router.delete('/delete/:chapterNum/page/:pageNum', async (req, res) => {
     }
 });
 
+router.delete('/delete/:chapterNum/all', async (req, res) => {
+    const { chapterNum } = req.params;
+
+    try {
+        // Get all images for the chapter
+        const [images] = await db.query('SELECT image FROM pages WHERE chapterNum = ?', [chapterNum]);
+
+        // Delete all pages in the chapter
+        await db.query('DELETE FROM pages WHERE chapterNum = ?', [chapterNum]);
+
+        // Delete image files from the server
+        for (const img of images) {
+            const filePath = path.join(__dirname, '..', img.image);
+            if (fs.existsSync(filePath)) {
+                fs.unlinkSync(filePath);
+            }
+        }
+
+        res.sendStatus(204);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Database error');
+    }
+});
+
 module.exports = router;

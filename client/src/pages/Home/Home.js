@@ -4,6 +4,7 @@ import axios from 'axios';
 import './Home.css';
 import leftArrow from '../../assets/icons/left-arrow.png';
 import rightArrow from '../../assets/icons/right-arrow.png';
+import PageAnimation from '../../components/PageAnimation/PageAnimation.js';
 
 const Home = () => {
     const [searchParams] = useSearchParams(); // Initialize useSearchParams
@@ -86,20 +87,22 @@ const Home = () => {
 
     return (
         chapters.length > 0 && chapters[currentChapter]?.pages?.length > 0 ? (
-            <div className='comic-viewer-container'>
-                <div className="comic-chapter-title">
-                    <button onClick={ () => handleChapterChange('prev')}><img src={leftArrow}/></button>
-                    {chapters[currentChapter].title}
-                    <button onClick={ () => handleChapterChange('next')}><img src={rightArrow}/></button>
+            <PageAnimation>
+                <div className='comic-viewer-container'>
+                    <div className="comic-chapter-title">
+                        <button onClick={ () => handleChapterChange('prev')}><img src={leftArrow}/></button>
+                        {chapters[currentChapter].title}
+                        <button onClick={ () => handleChapterChange('next')}><img src={rightArrow}/></button>
+                    </div>
+                    <div className="comic-page-indicator">
+                        <p>Page {currentPage + 1} of {chapters[currentChapter]?.pages.length || 0}</p>
+                    </div>
+                    <div className="comic-viewer" onClick={handleImageClick}>
+                        
+                            <img src={`http://localhost:5000${chapters[currentChapter].pages[currentPage].image}`} alt={`Comic page ${currentPage + 1}`}/>
+                    </div>
                 </div>
-                <div className="comic-page-indicator">
-                    <p>Page {currentPage + 1} of {chapters[currentChapter]?.pages.length || 0}</p>
-                </div>
-                <div className="comic-viewer" onClick={handleImageClick}>
-                    
-                        <img src={`http://localhost:5000${chapters[currentChapter].pages[currentPage].image}`} alt={`Comic page ${currentPage + 1}`}/>
-                </div>
-            </div>
+            </PageAnimation>
         ) : (
             <p className='loading'>Loading pages...</p>
         )

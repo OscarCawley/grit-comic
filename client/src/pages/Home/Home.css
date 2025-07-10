@@ -36,3 +36,11 @@
     margin: auto;
     display: block;
 }
+
+.loading {
+    font-family: Arial, sans-serif;
+    color: white;
+    font-size: 20px;
+    text-align: center;
+    margin-top: 20px;
+}

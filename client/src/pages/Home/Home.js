@@ -1,25 +1,50 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import axios from 'axios';
 import './Home.css';
 import leftArrow from '../../assets/icons/left-arrow.png';
 import rightArrow from '../../assets/icons/right-arrow.png';
-import chapters from '../../data.js';
 
 const Home = () => {
     const [searchParams] = useSearchParams(); // Initialize useSearchParams
     const initialChapter = parseInt(searchParams.get('chapter')) || 0; // Get chapter index from query params
     const [currentPage, setCurrentPage] = useState(0);
     const [currentChapter, setCurrentChapter] = useState(0);
-    const [users, setUsers] = useState([]); // State to hold user data
+
+    const [chapters, setChapters] = useState([]); // State to hold chapters data
 
     useEffect(() => {
-        fetch('http://localhost:5000/api/users')
-            .then((res) => res.json())
-            .then((data) => setUsers(data))
-            .catch((err) => console.error(err));
-        setCurrentChapter(initialChapter); // Update chapter when query param changes
-        setCurrentPage(0); // Reset to the first page
-    }, [initialChapter]);
+        fetchChapters(); // Fetch chapters on component mount
+    }, []);
+
+    useEffect(() => {
+        if (chapters.length > 0) {
+            setCurrentChapter(initialChapter || 0);
+            setCurrentPage(0);
+        }
+    }, [chapters, initialChapter]);
+
+    const fetchChapters = async () => {
+        try {
+            const chapterRes = await axios.get('http://localhost:5000/api/chapters');
+            const chapterData = chapterRes.data;
+
+            const chapterWithPages = await Promise.all(
+                chapterData.map(async chapter => {
+                    const pageRes = await axios.get(`http://localhost:5000/api/chapters/${chapter.chapterNum}/pages`);
+                    return {
+                        ...chapter,
+                        pages: pageRes.data,
+                    };
+                })
+            );
+            setChapters(chapterWithPages);
+
+        } catch (err) {
+            console.error('Failed to load chapters or pages:', err);
+        }
+    }
+            
 
     const handleImageClick = (e) => {
         const { left, width } = e.target.getBoundingClientRect();
@@ -60,19 +85,24 @@ const Home = () => {
 
 
     return (
-        <div className='comic-viewer-container'>
-            <div className="comic-chapter-title">
-                <button onClick={ () => handleChapterChange('prev')}><img src={leftArrow}/></button>
-                {chapters[currentChapter].title}
-                <button onClick={ () => handleChapterChange('next')}><img src={rightArrow}/></button>
+        chapters.length > 0 && chapters[currentChapter]?.pages?.length > 0 ? (
+            <div className='comic-viewer-container'>
+                <div className="comic-chapter-title">
+                    <button onClick={ () => handleChapterChange('prev')}><img src={leftArrow}/></button>
+                    {chapters[currentChapter].title}
+                    <button onClick={ () => handleChapterChange('next')}><img src={rightArrow}/></button>
+                </div>
+                <div className="comic-page-indicator">
+                    <p>Page {currentPage + 1} of {chapters[currentChapter]?.pages.length || 0}</p>
+                </div>
+                <div className="comic-viewer" onClick={handleImageClick}>
+                    
+                        <img src={`http://localhost:5000${chapters[currentChapter].pages[currentPage].image}`} alt={`Comic page ${currentPage + 1}`}/>
+                </div>
             </div>
-            <div className="comic-page-indicator">
-                Page {currentPage + 1} of {chapters[currentChapter].pages.length}
-            </div>
-            <div className="comic-viewer" onClick={handleImageClick}>
-                <img src={chapters[currentChapter].pages[currentPage]} alt={`Comic page ${currentPage + 1}`} />
-            </div>
-        </div>
+        ) : (
+            <p>Loading pages...</p>
+        )
     );
 };
 

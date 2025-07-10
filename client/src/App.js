@@ -13,11 +13,13 @@ import SignUpPage from './pages/SignUpPage/SignUpPage.js'
 import ForgotPasswordPage from './pages/ForgotPasswordPage/ForgotPasswordPage.js';
 import ResetPasswordPage from './pages/ResetPasswordPage/ResetPasswordPage.js';
 import Admin from './pages/Admin/Admin.js';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import ScrollToTop from './components/ScrollToTop/ScrollToTop.js';
+import { BrowserRouter as Router, Route, Routes, } from 'react-router-dom';
 
 function App() {
   return (
     <Router>
+		<ScrollToTop />
 		<Routes>
 			<Route path="/admin" element={<Admin />} />
 			<Route path="*" element={

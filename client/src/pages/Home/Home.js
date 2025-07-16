@@ -16,15 +16,17 @@ const Home = () => {
     const [chapters, setChapters] = useState([]); // State to hold chapters data
 
     useEffect(() => {
-        fetchChapters(); // Fetch chapters on component mount
+        if (chapters.length === 0) {
+            fetchChapters(); // Only fetch if chapters aren't loaded
+        }
     }, []);
 
     useEffect(() => {
-        if (!loading && chapters.length > 0) {
+        if (chapters.length > 0) {
             setCurrentChapter(initialChapter || 0);
             setCurrentPage(0);
         }
-    }, [loading, chapters, initialChapter]);
+    }, [chapters, initialChapter]);
 
     const fetchChapters = async () => {
         try {

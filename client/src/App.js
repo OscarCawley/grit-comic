@@ -25,14 +25,14 @@ function AppContent() {
     	<>
 			<ScrollToTop />
 			<AnimatePresence mode='wait'>
-			<Routes location={location} key={location.pathname}>
+			<Routes location={location}>
 				<Route path="/admin" element={<Admin />} />
 				<Route path="*" element={
 					<div className="App">
 						<Header />
 						<Navigation />
 						<AnimatePresence mode='wait'>
-						<Routes location={location} key={location.pathname}>
+						<Routes location={location}>
 							<Route path="/" element={<Home />} />
 							<Route path="/chapters" element={<Chapters />} />
 							<Route path="/wiki" element={<Wiki />} />

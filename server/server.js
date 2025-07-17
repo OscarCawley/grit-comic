@@ -13,12 +13,14 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 const chapterRoutes = require('./routes/chapters');
 const wikiRoutes = require('./routes/wiki');
 const userRoutes = require('./routes/users');
+const assetRoutes = require('./routes/assets');
 
 
 // Mount routes
 app.use('/api/chapters', chapterRoutes);
 app.use('/api/wiki', wikiRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/assets', assetRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

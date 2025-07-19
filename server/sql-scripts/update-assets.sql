@@ -1,0 +1,1 @@
+UPDATE assets SET page = 'chapters';

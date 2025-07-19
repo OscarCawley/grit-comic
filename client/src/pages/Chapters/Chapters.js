@@ -1,16 +1,20 @@
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import qs from 'qs';
 import './Chapters.css';
-import volumeCover from '../../assets/volume-cover.png';
 import PageAnimation from '../../components/PageAnimation/PageAnimation.js';
 
 const Chapters = () => {
     const navigate = useNavigate();
     const [chapters, setChapters] = useState([]);
+    const [assets, setAssets] = useState([])
+    const volumeCover = assets.find(asset => asset.name === 'Volume Cover');
+    const chapterDescription = assets.find(asset => asset.name === 'Chapter Page Description');
 
     useEffect(() => {
         fetchChapters();
+        fetchAssets();
     }, []);
 
     const fetchChapters = async () => {
@@ -19,6 +23,18 @@ const Chapters = () => {
             setChapters(res.data);
         } catch (err) {
             console.error('Error fetching chapters:', err);
+        }
+    }
+
+    const fetchAssets = async () => {
+        try {
+            const res = await axios.get('http://localhost:5000/api/assets/', {
+                params: {names: ['Volume Cover', 'Chapter Page Description']},
+                paramsSerializer: params => qs.stringify(params, { arrayFormat: 'repeat' })
+            })
+            setAssets(res.data)
+        } catch (err) {
+            console.error('Error fetching assets:', err);
         }
     }
 
@@ -31,7 +47,12 @@ const Chapters = () => {
         <PageAnimation>
             <div className='chapters-page'>
                 <div className='volume-covers'>
-                    <img src={volumeCover} alt="Volume Cover" />
+                    {volumeCover && (
+                        <img
+                            src={`http://localhost:5000${volumeCover.content}`}
+                            alt="Volume Cover"
+                        />
+                    )}
                 </div>
                 <ul className='chapters-list'>
                     <h1>Chapters</h1>
@@ -43,7 +64,11 @@ const Chapters = () => {
                     ))}
                 </ul>
                 <div className='description'>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                    {chapterDescription && (
+                        <div
+                            dangerouslySetInnerHTML={{ __html: chapterDescription.content }}
+                        />
+                    )}
                 </div>
             </div>
         </PageAnimation>

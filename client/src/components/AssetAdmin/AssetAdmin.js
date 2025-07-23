@@ -68,13 +68,13 @@ const AssetAdmin = () => {
     };
 
     return (
-        <div className="asset-admin">
+        <div className="asset-container">
             <h1>Asset Admin</h1>
             <div className="asset-list">
                 <h2>Images</h2>
                 <ul>
                     {images.map((image) => (
-                        <li key={image.id}>
+                        <li key={image.id} className='image-asset'>
                             <p>{image.name}</p>
                             <img src={`http://localhost:5000${image.content}`} alt="" />
                             <input
@@ -88,7 +88,7 @@ const AssetAdmin = () => {
                 </ul>
                 <ul>
                     { textAssets.map((text) => (
-                        <li key={text.id}>
+                        <li key={text.id} className='text-asset'>
                             <p>{text.name}</p>
                                 <TipTapEditor
                                     content={editedTextAssets[text.id] ?? text.content}

@@ -17,6 +17,8 @@
   padding: 6px 10px;
   border: none;
   background: #707070;
+  color: white;
+  align-self: flex-start;
   border-radius: 4px;
   cursor: pointer;
   font-weight: bold;

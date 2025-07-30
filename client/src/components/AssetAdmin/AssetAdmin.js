@@ -75,14 +75,14 @@ const AssetAdmin = () => {
                 <ul>
                     {images.map((image) => (
                         <li key={image.id} className='image-asset'>
-                            <p>{image.name}</p>
+                            <h3>{image.name}</h3>
                             <img src={`http://localhost:5000${image.content}`} alt="" />
                             <input
                                 type='file'
                                 accept='image/*'
                                 onChange={(e) => handleFileChange(image.id, e.target.files[0])}
                             />
-                            <button onClick={() => handleImageEdit(image)}>Edit</button>
+                            <button className='edit-button' onClick={() => handleImageEdit(image)}>Save</button>
                         </li>
                     ))}
                 </ul>
@@ -94,7 +94,7 @@ const AssetAdmin = () => {
                                     content={editedTextAssets[text.id] ?? text.content}
                                     onChange={(newContent) => handleTextChange(text.id, newContent)}
                                 />
-                            <button onClick={() => handleTextEdit(text)}>Save</button>
+                            <button className='edit-button' onClick={() => handleTextEdit(text)}>Save</button>
                         </li>
                     ))}
                 </ul>

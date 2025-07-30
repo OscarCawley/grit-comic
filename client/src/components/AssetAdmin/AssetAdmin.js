@@ -71,8 +71,8 @@ const AssetAdmin = () => {
         <div className="asset-container">
             <h1>Asset Admin</h1>
             <div className="asset-list">
-                <h2>Images</h2>
-                <ul>
+                <h2>Image Assets</h2>
+                <ul className='image-list'>
                     {images.map((image) => (
                         <li key={image.id} className='image-asset'>
                             <h3>{image.name}</h3>
@@ -86,15 +86,18 @@ const AssetAdmin = () => {
                         </li>
                     ))}
                 </ul>
-                <ul>
+                <h2>Text Assets</h2>
+                <ul className='text-list'>
                     { textAssets.map((text) => (
                         <li key={text.id} className='text-asset'>
-                            <p>{text.name}</p>
-                                <TipTapEditor
-                                    content={editedTextAssets[text.id] ?? text.content}
-                                    onChange={(newContent) => handleTextChange(text.id, newContent)}
-                                />
-                            <button className='edit-button' onClick={() => handleTextEdit(text)}>Save</button>
+                            <div className='text-asset-header'>
+                                <h3>{text.name}</h3>
+                                <button className='edit-button' onClick={() => handleTextEdit(text)}>Save</button>
+                            </div>
+                            <TipTapEditor
+                                content={editedTextAssets[text.id] ?? text.content}
+                                onChange={(newContent) => handleTextChange(text.id, newContent)}
+                            />
                         </li>
                     ))}
                 </ul>

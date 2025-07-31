@@ -40,7 +40,6 @@ router.get('/', async (req, res) => {
 
         const [rows] = await db.query(query, params);
         res.json(rows);
-        console.log(rows);
     } catch (err) {
         console.error('Error fetching chapter assets:', err);
         res.status(500).send('Server error');

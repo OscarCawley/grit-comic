@@ -68,14 +68,6 @@
     text-overflow: ellipsis;
 }
 
-.wiki-item p {
-    white-space: normal !important;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    word-break: break-word;
-    margin-bottom: 1em;
-    width: 100%;
-}
 .wiki-item-header {
     display: flex;
     justify-content: space-between;
@@ -100,6 +92,11 @@
 }
 
 .wiki-item-content {
+    white-space: normal !important;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    width: 100%;
     display: -webkit-box;
     -webkit-line-clamp: 5;
     line-clamp: 5;

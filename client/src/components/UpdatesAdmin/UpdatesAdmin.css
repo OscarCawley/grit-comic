@@ -33,7 +33,7 @@
   min-height: 100px;
 }
 
-.updates-form button {
+.updates-form .submit-button {
   align-self: flex-start;
   background-color: #388e3c;
   color: white;
@@ -45,7 +45,7 @@
   transition: background-color 0.2s ease-in-out;
 }
 
-.updates-form button:hover {
+.updates-form .submit-button:hover {
   background-color: #2e7d32;
 }
 
@@ -91,3 +91,6 @@
 .updates-posts button:last-of-type:hover {
   background-color: #9a0007;
 }
+
+
+/* fix green buttons */

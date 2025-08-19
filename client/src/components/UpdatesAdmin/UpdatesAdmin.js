@@ -95,8 +95,9 @@ const UpdatesAdmin = () => {
 				<TipTapEditor
 					content={formData.content}
 					onChange={(html) => setFormData({ ...formData, content: html })}
+                    limit={1000} // Set a limit if needed
 				/>
-				<button type="submit">{editingId ? 'Update' : 'Create'}</button>
+				<button className='submit-button' type="submit">{editingId ? 'Update' : 'Create'}</button>
 			</form>
 			<div className='updates-posts'>
 				<ul>

@@ -37,7 +37,7 @@
     display: flex;
     flex-direction: column;
     text-overflow: ellipsis;
-    max-width: 800px;
+    max-width: 80%;
     margin: 0 auto;
 }
 
@@ -61,17 +61,6 @@
 }
 
 .updates-item-content {
-    display: -webkit-box;
-    -webkit-line-clamp: 5;
-    line-clamp: 5;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    box-sizing: border-box;
-    white-space: normal !important;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    word-break: break-word;
     margin-bottom: 1em;
     width: 100%;
 }

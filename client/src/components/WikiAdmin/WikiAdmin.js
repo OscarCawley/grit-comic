@@ -188,7 +188,7 @@ const WikiAdmin = () => {
 						/>
 					</div>
 				)}
-				<button type="submit">{editingId ? 'Update' : 'Create'}</button>
+				<button className="submit-button" type="submit">{editingId ? 'Update' : 'Create'}</button>
 			</form>
 			<div className='wiki-posts'>
 				<ul>

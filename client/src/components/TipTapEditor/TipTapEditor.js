@@ -1,18 +1,26 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
+import CharacterCount from '@tiptap/extension-character-count';
 import './TipTapEditor.css';
 
-const TipTapEditor = ({ content, onChange }) => {
+const TipTapEditor = ({ content, onChange, limit }) => {
+    const [charCount, setCharCount] = useState(0);
+
     const editor = useEditor({
         extensions: [
             StarterKit,
             Underline,
+            ...(limit ? [CharacterCount.configure({ limit })] : []),
         ],
         content,
         onUpdate: ({ editor }) => {
             onChange(editor.getHTML());
+            
+            const text = editor.state.doc.textBetween(0, editor.state.doc.content.size, '', '');
+            setCharCount(text.length);
         },
     });
 
@@ -76,7 +84,14 @@ const TipTapEditor = ({ content, onChange }) => {
                     onClick={() => editor.chain().focus().redo().run()}
                 >Redo</button>
             </div>
-        <EditorContent editor={editor} className="editor" />
+
+            <EditorContent editor={editor} className="editor" />
+
+            {limit && (
+                <div className="character-count">
+                    {charCount}/{limit}
+                </div>
+            )}
         </div>
     );
 };

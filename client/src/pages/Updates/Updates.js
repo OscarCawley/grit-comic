@@ -15,8 +15,6 @@ const Updates = () => {
     const fetchUpdates = async () => {
         try {
             const response = await axios.get('http://localhost:5000/api/updates');
-            console.log('API raw response:', response);
-            console.log('API response data:', response.data);
             setUpdates(response.data);
         } catch (error) {
             console.error('Error fetching updates:', error);

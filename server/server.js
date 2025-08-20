@@ -15,6 +15,7 @@ const wikiRoutes = require('./routes/wiki');
 const userRoutes = require('./routes/users');
 const assetRoutes = require('./routes/assets');
 const updateRoutes = require('./routes/updates');
+const faqRoutes = require('./routes/faq');
 
 
 // Mount routes
@@ -23,6 +24,7 @@ app.use('/api/wiki', wikiRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/assets', assetRoutes);
 app.use('/api/updates', updateRoutes);
+app.use('/api/faq', faqRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

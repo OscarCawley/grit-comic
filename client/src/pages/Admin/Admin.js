@@ -5,6 +5,7 @@ import WikiAdmin from '../../components/WikiAdmin/WikiAdmin.js';
 import UpdatesAdmin from '../../components/UpdatesAdmin/UpdatesAdmin.js';
 import UserAdmin from '../../components/UserAdmin/UserAdmin.js';
 import AssetAdmin from '../../components/AssetAdmin/AssetAdmin.js';
+import SupportAdmin from '../../components/SupportAdmin/SupportAdmin.js';
 import './Admin.css';
 
 const Admin = () => {
@@ -19,6 +20,7 @@ const Admin = () => {
                 <button onClick={() => setView('updates')} className={view === 'updates' ? 'active' : ''}>UPDATES</button>
                 <button onClick={() => setView('users')} className={view === 'users' ? 'active' : ''}>USERS</button>
                 <button onClick={() => setView('assets')} className={view === 'assets' ? 'active' : ''}>ASSETS</button>
+                <button onClick={() => setView('support')} className={view === 'support' ? 'active' : ''}>SUPPORT</button>
             </div>
 
             <div className="section-content">
@@ -28,6 +30,7 @@ const Admin = () => {
                 {view === 'updates' && <UpdatesAdmin />}
                 {view === 'users' && <UserAdmin />}
                 {view === 'assets' && <AssetAdmin />}
+                {view === 'support' && <SupportAdmin />}
                 
             </div>
         </div>

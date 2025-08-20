@@ -15,8 +15,12 @@ const UpdatesAdmin = () => {
 	}, []);
 
 	const fetchUpdates = async () => {
-		const res = await axios.get('http://localhost:5000/api/updates');
-		setUpdates(res.data);
+		try {
+            const response = await axios.get('http://localhost:5000/api/updates');
+            setUpdates(response.data);
+        } catch (error) {
+            console.error('Error fetching Updates:', error);
+        }
 	};
 
     const handleCreate = async () => {

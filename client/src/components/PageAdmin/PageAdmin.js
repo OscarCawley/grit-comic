@@ -1,15 +1,11 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import './PageAdmin.css';
 
 const PageAdmin = ({ selectedChapter }) => {
     const [pages, setPages] = useState([]);
 
-    useEffect(() => {
-		fetchPages();
-	}, []);
-
-    const fetchPages = async () => {
+        const fetchPages = useCallback(async () => {
         if (!selectedChapter) return;
 
         try {
@@ -18,7 +14,11 @@ const PageAdmin = ({ selectedChapter }) => {
         } catch (err) {
             console.error('Error fetching pages:', err);
         }
-    }
+    }, [selectedChapter]);
+
+    useEffect(() => {
+		fetchPages();
+	}, [fetchPages]);
 
     const handleFileChange = async (e) => {
         const files = Array.from(e.target.files);
@@ -118,7 +118,7 @@ const PageAdmin = ({ selectedChapter }) => {
                         <button className='arrow-button-right' onClick={() => handleReorder('right', page)}>&gt;</button>
                     </div>
                     <div className='page-content'>
-                        <img src={`${process.env.REACT_APP_API_URL}${page.image}`} alt="image" />
+                        <img src={`${process.env.REACT_APP_API_URL}${page.image}`} alt={`Page ${page.pageNum} of Chapter ${page.chapterNum}`} />
                         <button onClick={() => handleDelete(page)}>Delete</button>
                     </div>  
                 </div>

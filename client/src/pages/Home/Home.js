@@ -11,7 +11,6 @@ const Home = () => {
     const initialChapter = parseInt(searchParams.get('chapter')) || 0; // Get chapter index from query params
     const [currentPage, setCurrentPage] = useState(0);
     const [currentChapter, setCurrentChapter] = useState(0);
-    const [loading, setLoading] = useState(true); // Loading state
 
     const [chapters, setChapters] = useState([]); // State to hold chapters data
 
@@ -19,7 +18,7 @@ const Home = () => {
         if (chapters.length === 0) {
             fetchChapters(); // Only fetch if chapters aren't loaded
         }
-    }, []);
+    }, [chapters.length]);
 
     useEffect(() => {
         if (chapters.length > 0) {
@@ -92,11 +91,15 @@ const Home = () => {
         <PageAnimation>
             <div className='comic-viewer-container'>
                 <div className="comic-chapter-title">
-                    <button onClick={() => handleChapterChange('prev')}><img src={leftArrow} /></button>
-                    {chapters.length > 0 && chapters[currentChapter]?.title
-                        ? chapters[currentChapter].title
-                        : <span className="loading">Loading chapter title...</span>}
-                    <button onClick={() => handleChapterChange('next')}><img src={rightArrow} /></button>
+                    <button onClick={() => handleChapterChange('prev')} disabled={chapters.length === 0}>
+                        <img src={leftArrow} alt="Previous chapter" />
+                    </button>
+
+                    {chapters[currentChapter]?.title ?? <span className="loading">Loading chapter title...</span>}
+
+                    <button onClick={() => handleChapterChange('next')} disabled={chapters.length === 0}>
+                        <img src={rightArrow} alt="Next chapter" />
+                    </button>
                 </div>
 
                 <div className="comic-page-indicator">

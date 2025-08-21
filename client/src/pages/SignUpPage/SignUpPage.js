@@ -16,7 +16,7 @@ const SignUpPage = () => {
         setError('');
 
         try {
-            const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/users/signup`, {
+            await axios.post(`${process.env.REACT_APP_API_URL}/api/users/signup`, {
                 email,
                 password,
                 username

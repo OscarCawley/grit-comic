@@ -60,9 +60,9 @@ const SupportAdmin = () => {
         }
     };
 
-    const handleEdit = (update) => {
-        setEditingId(update.id);
-        setFormData({ question: update.title, answer: update.content });
+    const handleEdit = (faq) => {
+        setEditingId(faq.id);
+        setFormData({ question: faq.question, answer: faq.answer });
         if (formRef.current) {
             formRef.current.scrollIntoView({ behavior: 'smooth' });
         }
@@ -107,7 +107,7 @@ const SupportAdmin = () => {
 				<ul>
 					{faqs.map(faq => (
 					<li key={faq.id}>
-						{faq.quetion}
+						{faq.question}
 						<span>
 							<button onClick={() => handleEdit(faq)}>Edit</button>
 							<button onClick={() => handleDelete(faq.id)}>Delete</button>

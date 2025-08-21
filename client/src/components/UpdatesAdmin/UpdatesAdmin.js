@@ -16,7 +16,7 @@ const UpdatesAdmin = () => {
 
 	const fetchUpdates = async () => {
 		try {
-            const response = await axios.get('http://localhost:5000/api/updates');
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/updates`);
             setUpdates(response.data);
         } catch (error) {
             console.error('Error fetching Updates:', error);
@@ -32,7 +32,7 @@ const UpdatesAdmin = () => {
         }
 
         try {
-            await axios.post('http://localhost:5000/api/updates/create', { title, content });
+            await axios.post(`${process.env.REACT_APP_API_URL}/api/updates/create`, { title, content });
             alert('Update created!');
             setFormData({ title: '', content: '' });
             fetchUpdates();
@@ -50,7 +50,7 @@ const UpdatesAdmin = () => {
         }
 
         try {
-            await axios.put(`http://localhost:5000/api/updates/${editingId}`, { title, content });
+            await axios.put(`${process.env.REACT_APP_API_URL}/api/updates/${editingId}`, { title, content });
             alert('Update edited!');
             setFormData({ title: '', content: '' });
             setEditingId(null);
@@ -71,7 +71,7 @@ const UpdatesAdmin = () => {
     const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this update?')) {
             try {
-                await axios.delete(`http://localhost:5000/api/updates/${id}`);
+                await axios.delete(`${process.env.REACT_APP_API_URL}/api/updates/${id}`);
                 alert('Update deleted!');
                 fetchUpdates();
             } catch (error) {

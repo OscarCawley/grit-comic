@@ -30,12 +30,12 @@ const Home = () => {
 
     const fetchChapters = async () => {
         try {
-            const chapterRes = await axios.get('http://localhost:5000/api/chapters');
+            const chapterRes = await axios.get(`${process.env.REACT_APP_API_URL}/api/chapters`);
             const chapterData = chapterRes.data;
 
             const chapterWithPages = await Promise.all(
                 chapterData.map(async chapter => {
-                    const pageRes = await axios.get(`http://localhost:5000/api/chapters/${chapter.chapterNum}/pages`);
+                    const pageRes = await axios.get(`${process.env.REACT_APP_API_URL}/api/chapters/${chapter.chapterNum}/pages`);
                     return {
                         ...chapter,
                         pages: pageRes.data,
@@ -110,7 +110,7 @@ const Home = () => {
                 <div className="comic-viewer" onClick={handleImageClick}>
                     {chapters.length > 0 && chapters[currentChapter]?.pages?.length > 0 ? (
                         <img
-                            src={`http://localhost:5000${chapters[currentChapter].pages[currentPage].image}`}
+                            src={`${process.env.REACT_APP_API_URL}${chapters[currentChapter].pages[currentPage].image}`}
                             alt={`Comic page ${currentPage + 1}`}
                         />
                     ) : (

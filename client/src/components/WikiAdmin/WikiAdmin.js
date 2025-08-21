@@ -24,12 +24,12 @@ const WikiAdmin = () => {
 	}, [formData.title, isSlugEdited]);
 
 	const fetchCategories = async () => {
-		const res = await axios.get('http://localhost:5000/api/wiki/categories');
+		const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/wiki/categories`);
 		setCategories(res.data);
 	};
 
 	const fetchPosts = async () => {
-		const res = await axios.get('http://localhost:5000/api/wiki/posts');
+		const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/wiki/posts`);
 		setPosts(res.data);
 	};
 
@@ -52,7 +52,7 @@ const WikiAdmin = () => {
 				data.append('image', image);
 			}
 
-			await axios.post('http://localhost:5000/api/wiki/create', data, {
+			await axios.post(`${process.env.REACT_APP_API_URL}/api/wiki/create`, data, {
 				headers: { 'Content-Type': 'multipart/form-data' }
 			});
 
@@ -98,7 +98,7 @@ const WikiAdmin = () => {
 		}
 
 		try {
-			await axios.put(`http://localhost:5000/api/wiki/${editingId}`, data, {
+			await axios.put(`${process.env.REACT_APP_API_URL}/api/wiki/${editingId}`, data, {
 				headers: { 'Content-Type': 'multipart/form-data' }
 			});
 			alert('Wiki post updated!');
@@ -117,7 +117,7 @@ const WikiAdmin = () => {
 	const handleDelete = async (postId) => {
 		if (window.confirm('Are you sure you want to delete this post?')) {
 			try {
-				await axios.delete(`http://localhost:5000/api/wiki/${postId}`);
+				await axios.delete(`${process.env.REACT_APP_API_URL}/api/wiki/${postId}`);
 				alert('Wiki post deleted!');
 				setPosts(posts.filter(post => post.id !== postId));
 			} catch (err) {
@@ -182,7 +182,7 @@ const WikiAdmin = () => {
 					<div>
 						<p>Current Image:</p>
 						<img
-							src={`http://localhost:5000${formData.existingImage}`}
+							src={`${process.env.REACT_APP_API_URL}${formData.existingImage}`}
 							alt="Current"
 							style={{ maxWidth: '200px', display: 'block', marginBottom: '1em' }}
 						/>

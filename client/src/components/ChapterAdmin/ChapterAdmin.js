@@ -15,7 +15,7 @@ const ChapterAdmin = ({ setView, setSelectedChapter }) => {
 
     const fetchChapters = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/chapters');
+            const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/chapters`);
             setChapters(res.data);
         } catch (err) {
             console.error('Error fetching chapters:', err);
@@ -30,7 +30,7 @@ const ChapterAdmin = ({ setView, setSelectedChapter }) => {
 			return;}
 
         try {
-            await axios.post('http://localhost:5000/api/chapters/create', formData, {
+            await axios.post(`${process.env.REACT_APP_API_URL}/api/chapters/create`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
             alert('Chapter created!');
@@ -56,7 +56,7 @@ const ChapterAdmin = ({ setView, setSelectedChapter }) => {
     const handleUpdate = async () => {
 
         try {
-			await axios.put(`http://localhost:5000/api/chapters/update/${editingId}`, formData, {
+			await axios.put(`${process.env.REACT_APP_API_URL}/api/chapters/update/${editingId}`, formData, {
 				headers: { 'Content-Type': 'multipart/form-data' }
 			});
 			alert('Chapter updated!');
@@ -75,7 +75,7 @@ const ChapterAdmin = ({ setView, setSelectedChapter }) => {
     const handleDelete = async (chapterId) => {
         if (window.confirm('Are you sure you want to delete this chapter?')) {
             try {
-                await axios.delete(`http://localhost:5000/api/chapters/delete/${chapterId}`);
+                await axios.delete(`${process.env.REACT_APP_API_URL}/api/chapters/delete/${chapterId}`);
                 setChapters(chapters.filter(ch => ch.chapterNum !== chapterId));
             } catch (err) {
                 console.error('Error deleting chapter:', err);

@@ -16,7 +16,7 @@ function WikiDetailPage() {
 
     const fetchPostBySlug = async (slug) => {
         try {
-            const response = await axios.get(`http://localhost:5000/api/wiki/posts/${slug}`);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/wiki/posts/${slug}`);
             setPost(response.data);
         } catch (error) {
             console.error('Error fetching wiki data:', error);
@@ -29,7 +29,7 @@ function WikiDetailPage() {
                 <div className="wiki-detail-article">
                     <div className="wiki-detail-main-content">
                         <img
-                            src={`http://localhost:5000${post.image}`}
+                            src={`${process.env.REACT_APP_API_URL}${post.image}`}
                             alt={post.title} 
                             className="wiki-detail-image"
                         />

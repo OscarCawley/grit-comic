@@ -15,9 +15,9 @@ const AssetAdmin = () => {
     }, []);
 
     const fetchAssets = async () => {
-        const res1 = await axios.get('http://localhost:5000/api/assets/images');
+        const res1 = await axios.get(`${process.env.REACT_APP_API_URL}/api/assets/images`);
         setImages(res1.data);
-        const res2 = await axios.get('http://localhost:5000/api/assets/text-assets');
+        const res2 = await axios.get(`${process.env.REACT_APP_API_URL}/api/assets/text-assets`);
         setTextAssets(res2.data);
     };
 
@@ -41,7 +41,7 @@ const AssetAdmin = () => {
         formData.append('image', file);
 
         try {
-            await axios.put(`http://localhost:5000/api/assets/images/${image.id}`, formData, {
+            await axios.put(`${process.env.REACT_APP_API_URL}/api/assets/images/${image.id}`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
             fetchAssets(); // Refresh the image list
@@ -58,7 +58,7 @@ const AssetAdmin = () => {
         }
 
         try {
-            await axios.put(`http://localhost:5000/api/assets/text-assets/${textAsset.id}`, {
+            await axios.put(`${process.env.REACT_APP_API_URL}/api/assets/text-assets/${textAsset.id}`, {
                 content: updatedContent,
             });
             fetchAssets(); // Refresh the text asset list
@@ -76,7 +76,7 @@ const AssetAdmin = () => {
                     {images.map((image) => (
                         <li key={image.id} className='image-asset'>
                             <h3>{image.name}</h3>
-                            <img src={`http://localhost:5000${image.content}`} alt="" />
+                            <img src={`${process.env.REACT_APP_API_URL}${image.content}`} alt="" />
                             <input
                                 type='file'
                                 accept='image/*'

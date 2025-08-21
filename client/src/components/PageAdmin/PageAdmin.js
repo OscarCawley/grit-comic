@@ -13,7 +13,7 @@ const PageAdmin = ({ selectedChapter }) => {
         if (!selectedChapter) return;
 
         try {
-            const res = await axios.get(`http://localhost:5000/api/chapters/${selectedChapter.chapterNum}/pages`);
+            const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/chapters/${selectedChapter.chapterNum}/pages`);
             setPages(res.data);
         } catch (err) {
             console.error('Error fetching pages:', err);
@@ -26,7 +26,7 @@ const PageAdmin = ({ selectedChapter }) => {
         files.forEach(file => formData.append('images', file));
 
         try {
-            await axios.post(`http://localhost:5000/api/chapters/upload/${selectedChapter.chapterNum}`, formData, {
+            await axios.post(`${process.env.REACT_APP_API_URL}/api/chapters/upload/${selectedChapter.chapterNum}`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
             fetchPages();
@@ -50,7 +50,7 @@ const PageAdmin = ({ selectedChapter }) => {
 
     const handleDelete = async (page) => {
         try {
-            await axios.delete(`http://localhost:5000/api/chapters/delete/${selectedChapter.chapterNum}/page/${page.pageNum}`);
+            await axios.delete(`${process.env.REACT_APP_API_URL}/api/chapters/delete/${selectedChapter.chapterNum}/page/${page.pageNum}`);
             setPages(pages.filter(p => p.pageNum !== page.pageNum));
         } catch (err) {
             console.error('Error deleting page:', err);
@@ -66,7 +66,7 @@ const PageAdmin = ({ selectedChapter }) => {
                 pageNum: index + 1,
             }));
 
-            await axios.put(`http://localhost:5000/api/chapters/reorder/${selectedChapter.chapterNum}`, {
+            await axios.put(`${process.env.REACT_APP_API_URL}/api/chapters/reorder/${selectedChapter.chapterNum}`, {
                 pages: reorderedPages,
             });
 
@@ -82,7 +82,7 @@ const PageAdmin = ({ selectedChapter }) => {
         if (!window.confirm('Are you sure you want to delete all pages? This action cannot be undone.')) return;
 
         try {
-            await axios.delete(`http://localhost:5000/api/chapters/delete/${selectedChapter.chapterNum}/all`);
+            await axios.delete(`${process.env.REACT_APP_API_URL}/api/chapters/delete/${selectedChapter.chapterNum}/all`);
             setPages([]);
             alert('All pages deleted successfully!');
         } catch (err) {
@@ -118,7 +118,7 @@ const PageAdmin = ({ selectedChapter }) => {
                         <button className='arrow-button-right' onClick={() => handleReorder('right', page)}>&gt;</button>
                     </div>
                     <div className='page-content'>
-                        <img src={`http://localhost:5000${page.image}`} alt="image" />
+                        <img src={`${process.env.REACT_APP_API_URL}${page.image}`} alt="image" />
                         <button onClick={() => handleDelete(page)}>Delete</button>
                     </div>  
                 </div>

@@ -16,7 +16,7 @@ const SupportAdmin = () => {
 
 	const fetchFaqs = async () => {
 		try {
-            const response = await axios.get('http://localhost:5000/api/faq');
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/faq`);
             setFaqs(response.data);
         } catch (error) {
             console.error('Error fetching FAQ:', error);
@@ -32,7 +32,7 @@ const SupportAdmin = () => {
         }
 
         try {
-            await axios.post('http://localhost:5000/api/faq/create', { question, answer });
+            await axios.post(`${process.env.REACT_APP_API_URL}/api/faq/create`, { question, answer });
             alert('FAQ created!');
             setFormData({ question: '', answer: '' });
             fetchFaqs();
@@ -50,7 +50,7 @@ const SupportAdmin = () => {
         }
 
         try {
-            await axios.put(`http://localhost:5000/api/faq/${editingId}`, { question, answer });
+            await axios.put(`${process.env.REACT_APP_API_URL}/api/faq/${editingId}`, { question, answer });
             alert('FAQ edited!');
             setFormData({ question: '', answer: '' });
             setEditingId(null);
@@ -71,7 +71,7 @@ const SupportAdmin = () => {
     const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this FAQ?')) {
             try {
-                await axios.delete(`http://localhost:5000/api/faq/${id}`);
+                await axios.delete(`${process.env.REACT_APP_API_URL}/api/faq/${id}`);
                 alert('FAQ deleted!');
                 fetchFaqs();
             } catch (error) {

@@ -19,7 +19,7 @@ const Chapters = () => {
 
     const fetchChapters = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/chapters');
+            const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/chapters`);
             setChapters(res.data);
         } catch (err) {
             console.error('Error fetching chapters:', err);
@@ -28,7 +28,7 @@ const Chapters = () => {
 
     const fetchAssets = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/assets/', {
+            const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/assets/`, {
                 params: {names: ['Volume Cover', 'Chapter Page Description']},
                 paramsSerializer: params => qs.stringify(params, { arrayFormat: 'repeat' })
             })
@@ -49,7 +49,7 @@ const Chapters = () => {
                 <div className='volume-covers'>
                     {volumeCover && (
                         <img
-                            src={`http://localhost:5000${volumeCover.content}`}
+                            src={`${process.env.REACT_APP_API_URL}${volumeCover.content}`}
                             alt="Volume Cover"
                         />
                     )}

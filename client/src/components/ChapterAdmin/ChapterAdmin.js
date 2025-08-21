@@ -45,14 +45,6 @@ const ChapterAdmin = ({ setView, setSelectedChapter }) => {
         }
     };
 
-    const handleEdit = (chapter) => {
-        setFormData({ chapterNum: chapter.chapterNum, title: chapter.title });
-        setEditingId(chapter.chapterNum);
-        if (formRef.current) {
-            formRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
-    }
-
     const handleUpdate = async () => {
 
         try {

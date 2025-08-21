@@ -1,5 +1,6 @@
 # server folder
-/.env
-/node_modules
-/uploads/*
-/sql-scripts
+.env
+node_modules
+uploads/*
+!uploads/.gitkeep
+sql-scripts

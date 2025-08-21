@@ -58,3 +58,9 @@
   margin: 0; /* remove default paragraph margin */
   flex-grow: 1; /* allow paragraphs to fill available space */
 }
+
+.character-count {
+  font-size: 0.875rem; /* smaller font size for character count */
+  color: #666; /* lighter color for character count */
+  margin-top: 8px;
+}

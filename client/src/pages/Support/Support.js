@@ -1,36 +1,39 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import DOMPurify from 'dompurify';
+import PageAnimation from '../../components/PageAnimation/PageAnimation';
 import './Support.css';
 
 const Support = () => {
-    const [faq, setFaq] = useState([]);
+    const [faqs, setFaqs] = useState([]);
 
     useEffect (() => {
-        fetchFaq();
+        fetchFaqs();
     }, []);
 
-    const fetchFaq = async () => {
+    const fetchFaqs = async () => {
         try {
             const response = await axios.get('http://localhost:5000/api/faq');
-            setFaq(response.data);
+            setFaqs(response.data);
         } catch (error) {
             console.error('Error fetching FAQ:', error);
         }
     }
 
     return (
-        <div>
-            <h1>Support</h1>
-            <div className="faq-list">
-                {faq.map((item) => (
-                    <div key={item.id} className="faq-item">
-                        <h2 className='faq-item-question'>{item.question}</h2>
-                        <div className='faq-item-answer' dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(item.answer) }}></div>
-                    </div>
-                ))}
+        <PageAnimation>
+            <div className='faq'>
+                <h1>FAQ</h1>
+                <div className="faq-list">
+                    {faqs.map((faq) => (
+                        <div key={faq.id} className="faq-item">
+                            <h2 className='faq-item-question'>{faq.question}</h2>
+                            <div className='faq-item-answer' dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(faq.answer) }}></div>
+                        </div>
+                    ))}
+                </div>
             </div>
-        </div>
+        </PageAnimation>
     );
 };
 

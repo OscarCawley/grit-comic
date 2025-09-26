@@ -16,6 +16,7 @@ const userRoutes = require('./routes/users');
 const assetRoutes = require('./routes/assets');
 const updateRoutes = require('./routes/updates');
 const faqRoutes = require('./routes/faq');
+const commentRoutes = require('./routes/comments');
 
 
 // Mount routes
@@ -25,6 +26,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/assets', assetRoutes);
 app.use('/api/updates', updateRoutes);
 app.use('/api/faq', faqRoutes);
+app.use('/api/comments', commentRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

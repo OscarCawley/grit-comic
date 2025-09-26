@@ -23,3 +23,10 @@ A dynamic web platform created to showcase the comic book *GRIT*, offering fans 
 
 - **Support Page**  
   A dedicated support section for feedback, questions, and other inquiries.
+
+
+- **TODO**
+  Wiki search bar
+  Comment section
+  Email forum
+  Updates newsletter with unsubscribe

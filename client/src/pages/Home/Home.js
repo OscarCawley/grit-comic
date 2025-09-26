@@ -11,12 +11,14 @@ const Home = () => {
     const initialChapter = parseInt(searchParams.get('chapter')) || 0; // Get chapter index from query params
     const [currentPage, setCurrentPage] = useState(0);
     const [currentChapter, setCurrentChapter] = useState(0);
+    const [comments, setComments] = useState([]); // State to hold comments data
 
     const [chapters, setChapters] = useState([]); // State to hold chapters data
 
     useEffect(() => {
         if (chapters.length === 0) {
             fetchChapters(); // Only fetch if chapters aren't loaded
+            fetchComments(); // Fetch comments data
         }
     }, [chapters.length]);
 
@@ -47,7 +49,21 @@ const Home = () => {
             console.error('Failed to load chapters or pages:', err);
         }
     }
-            
+    
+    const fetchComments = async () => {
+        try {
+            const commentsRes = await axios.get(`${process.env.REACT_APP_API_URL}/api/comments`);
+            setComments(commentsRes.data);
+        } catch (err) {
+            console.error('Failed to load comments:', err);
+        }
+    }
+
+    const filteredComments = comments.filter((comment) => {
+        const matchesChapter = comment.chapter_id === currentChapter + 1;
+        console.log('Comment chapter_id:', comment.chapter_id, 'Current chapter:', currentChapter, 'Matches:', matchesChapter);
+        return matchesChapter;
+    });
 
     const handleImageClick = (e) => {
         const { left, width } = e.target.getBoundingClientRect();
@@ -120,6 +136,15 @@ const Home = () => {
                         <div className="image-placeholder loading">Loading page image...</div>
                     )}
                 </div>
+            </div>
+            <div className='comment-section'>
+                <h2>Comments</h2>
+                {filteredComments.map(comment => (
+                    <div key={comment.id} className="comment">
+                        <p><strong>{comment.username}</strong> <em>({new Date(comment.created_at).toLocaleString()})</em></p>
+                        <p>{comment.content}</p>
+                    </div>
+                ))}
             </div>
         </PageAnimation>
     );

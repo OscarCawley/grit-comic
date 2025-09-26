@@ -26,7 +26,5 @@ A dynamic web platform created to showcase the comic book *GRIT*, offering fans 
 
 
 - **TODO**
-  Wiki search bar
-  Comment section
-  Email forum
+  Email form
   Updates newsletter with unsubscribe

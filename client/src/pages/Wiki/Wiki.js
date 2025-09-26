@@ -6,36 +6,41 @@ import DOMPurify from 'dompurify';
 import PageAnimation from '../../components/PageAnimation/PageAnimation.js';
 
 const Wiki = () => {
-    const [allPosts, setAllPosts] = useState([]);
     const [posts, setPosts] = useState([]);
     const [activeCategory, setActiveCategory] = useState("All");
+    const [searchTerm, setSearchTerm] = useState("");
 
     useEffect(() => {
         fetchWiki();
         setActiveCategory("All");
-    }, [])
+    }, []);
 
     const fetchWiki = async () => {
-    try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/wiki/posts`);
-        setAllPosts(response.data);
-        setPosts(response.data);
-        setAllPosts(prevPosts => [...prevPosts].sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at)));
-        setPosts(prevPosts => [...prevPosts].sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at)))
-    } catch (error) {
-        console.error('Error fetching wiki data:', error);
-    }};
-    
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/wiki/posts`);
+            const sortedData = [...response.data].sort(
+                (a, b) => new Date(b.updated_at) - new Date(a.updated_at)
+            );
+            setPosts(sortedData);
+        } catch (error) {
+            console.error('Error fetching wiki data:', error);
+        }
+    };
 
     const handleCategoryClick = (category) => {
         setActiveCategory(category);
-        if (category === "All") {
-            setPosts(allPosts);
-        } else {
-            setPosts(allPosts.filter(post => post.category_name === category));
-        }
-        return;
-    }
+    };
+
+    const filteredPosts = posts.filter((post) => {
+        const matchesCategory =
+            activeCategory === "All" || post.category_name === activeCategory;
+
+        const matchesSearch =
+            post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            post.content.toLowerCase().includes(searchTerm.toLowerCase());
+
+        return matchesCategory && matchesSearch;
+    });
 
     return (
         <PageAnimation>
@@ -47,9 +52,19 @@ const Wiki = () => {
                     <button className={`category-button ${activeCategory === "World" ? "active" : ""}`} onClick={() => handleCategoryClick("World")}>World</button>
                     <button className={`category-button ${activeCategory === "Characters" ? "active" : ""}`} onClick={() => handleCategoryClick("Characters")}>Characters</button>
                 </div>
+                
                 <div className="wiki-list">
                     <h1>Wiki</h1>
-                    {posts.map((post) => (
+                    <div className='wiki-search'>
+                        <input 
+                            type="text" 
+                            placeholder="Search..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                    </div>
+
+                    {filteredPosts.map((post) => (
                         <div key={post.id} className="wiki-item">
                             <div className='wiki-item-header'>
                                 <Link to={`/wiki/${post.slug}`} className='wiki-item-link'>

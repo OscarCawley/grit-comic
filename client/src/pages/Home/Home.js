@@ -137,12 +137,17 @@ const Home = () => {
                     )}
                 </div>
             </div>
-            <div className='comment-section'>
-                <h2>Comments</h2>
+            <div className="comment-section">
+                <h2 className="comment-title">Comments</h2>
                 {filteredComments.map(comment => (
                     <div key={comment.id} className="comment">
-                        <p><strong>{comment.username}</strong> <em>({new Date(comment.created_at).toLocaleString()})</em></p>
-                        <p>{comment.content}</p>
+                        <div className="comment-header">
+                            <h3>{comment.username}</h3>
+                        </div>
+                        <div className="comment-content">
+                            {comment.content}
+                        </div>
+                        <p className='comment-date'>{comment.created_at_formatted}</p>
                     </div>
                 ))}
             </div>

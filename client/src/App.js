@@ -17,6 +17,7 @@ import ScrollToTop from './components/ScrollToTop/ScrollToTop.js';
 
 import { AnimatePresence } from 'framer-motion';
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
+import { UserProvider } from './context/UserContext.js';
 
 function AppContent() {
 
@@ -55,9 +56,11 @@ function AppContent() {
 
 function App() {
 	return (
-		<Router>
-			<AppContent />
-		</Router>
+		<UserProvider>
+			<Router>
+				<AppContent />
+			</Router>
+		</UserProvider>
 	);
 }
 

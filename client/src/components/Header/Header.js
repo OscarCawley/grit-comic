@@ -1,50 +1,26 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { jwtDecode } from 'jwt-decode';
-import './Header.css';
-import { useLocation } from 'react-router-dom'; // Import useLocation to get the current path
-
-//TODO: make it so the header updates when the user logs in or out
+import React, { useContext } from "react";
+import { Link } from "react-router-dom";
+import "./Header.css";
+import { UserContext } from "../../context/UserContext";
 
 const Header = () => {
-    const [user, setUser] = useState(null);
-    const location = useLocation();
-
-    useEffect(() => {
-        // Check if the user is logged in by looking for a token in localStorage
-        const token = localStorage.getItem('token');
-
-        if (token) {
-            console.log('Token found:', token);
-            // Here you might want to decode the token or make an API call to get user info
-            const decodedUser = jwtDecode(token); // Use a library to decode the JWT
-            setUser(decodedUser); // Update the user state with decoded user data
-        } else {
-            console.log('No token found, user is not logged in.');
-            setUser(null); // No token, so set user to null
-        }
-    }, [location.pathname]); // Run only once when component mounts
-
-    const handleSignOut = () => {
-        // Remove token and update user state
-        localStorage.removeItem('token');
-        setUser(null);
-        alert('Signed out successfully!');
-    };
+    const { user, signOut } = useContext(UserContext);
 
     return (
-        <div className='header'>
-            <Link to='/' className='header-title-link'>
+        <div className="header">
+            <Link to="/" className="header-title-link">
                 <h1>GRIT COMIC</h1>
             </Link>
-            <div className='account-container'>
+            <div className="account-container">
                 {user ? (
                     <div className="user-info">
                         <span>{user.username}</span>
-                        <button onClick={handleSignOut}>SIGN OUT</button>
+                        <button onClick={signOut}>SIGN OUT</button>
                     </div>
                 ) : (
-                    <Link to="/login"><button>LOGIN</button></Link>
+                    <Link to="/login">
+                        <button>LOGIN</button>
+                    </Link>
                 )}
             </div>
         </div>

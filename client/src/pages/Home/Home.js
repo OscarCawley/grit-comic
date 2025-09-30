@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { useContext } from "react";
+import { UserContext } from "../../context/UserContext";
 import axios from 'axios';
 import './Home.css';
 import leftArrow from '../../assets/icons/left-arrow.png';
@@ -7,13 +9,16 @@ import rightArrow from '../../assets/icons/right-arrow.png';
 import PageAnimation from '../../components/PageAnimation/PageAnimation.js';
 
 const Home = () => {
+    const { user } = useContext(UserContext);
+
     const [searchParams] = useSearchParams(); // Initialize useSearchParams
     const initialChapter = parseInt(searchParams.get('chapter')) || 0; // Get chapter index from query params
     const [currentPage, setCurrentPage] = useState(0);
     const [currentChapter, setCurrentChapter] = useState(0);
     const [comments, setComments] = useState([]); // State to hold comments data
-
     const [chapters, setChapters] = useState([]); // State to hold chapters data
+    const [submitting, setSubmitting] = useState(false); // State to manage submission status
+    const [newComment, setNewComment] = useState(''); // State for new comment input
 
     useEffect(() => {
         if (chapters.length === 0) {
@@ -61,7 +66,6 @@ const Home = () => {
 
     const filteredComments = comments.filter((comment) => {
         const matchesChapter = comment.chapter_id === currentChapter + 1;
-        console.log('Comment chapter_id:', comment.chapter_id, 'Current chapter:', currentChapter, 'Matches:', matchesChapter);
         return matchesChapter;
     });
 
@@ -101,6 +105,27 @@ const Home = () => {
         }
     }
 
+    const handleCommentSubmit = async (e) => {
+        e.preventDefault();
+        if (!newComment.trim()) return; // prevent empty comments
+        setSubmitting(true);
+        try {
+            const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/comments`, {
+                content: newComment,
+                chapter_id: currentChapter + 1,
+                user_id: user?.id,
+            });
+
+            setNewComment(""); // clear textarea
+            setComments([res.data, ...comments]); // adds new comment to the front
+
+        } catch (err) {
+            console.error("Failed to submit comment:", err);
+        } finally {
+            setSubmitting(false);
+        }
+    };
+
 
 
     return (
@@ -139,6 +164,21 @@ const Home = () => {
             </div>
             <div className="comment-section">
                 <h2 className="comment-title">Comments</h2>
+                <form className="comment-form" onSubmit={handleCommentSubmit}>
+                    <textarea
+                        value={newComment}
+                        onChange={(e) => setNewComment(e.target.value)}
+                        placeholder={ !user ? "Log in to post a comment" : "Write your comment here..." }
+                        required
+                        rows={4}
+                        className='comment-textarea'
+                        disabled={!user || submitting}
+                        maxLength={500}
+                    />
+                    <button type="submit" className='comment-submit-button' disabled={!user || submitting}>{submitting ? "Posting..." : "Post Comment"}</button>
+                </form>
+
+
                 {filteredComments.map(comment => (
                     <div key={comment.id} className="comment">
                         <div className="comment-header">

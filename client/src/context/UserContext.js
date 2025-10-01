@@ -3,6 +3,18 @@ import { jwtDecode } from "jwt-decode";
 
 export const UserContext = createContext(null);
 
+export const normalizeUser = (decodedUser) => {
+    if (!decodedUser) {
+        return null;
+    }
+
+    return {
+        id: decodedUser.userId ?? decodedUser.id ?? null,
+        username: decodedUser.username ?? null,
+        email: decodedUser.email ?? null,
+    };
+};
+
 export const UserProvider = ({ children }) => {
     const [user, setUser] = useState(null);
 
@@ -11,11 +23,7 @@ export const UserProvider = ({ children }) => {
         if (token) {
             try {
                 const decodedUser = jwtDecode(token);
-                const normalizedUser = {
-                    id: decodedUser.userId,
-                    username: decodedUser.username
-                };
-                setUser(normalizedUser);
+                setUser(normalizeUser(decodedUser));
             } catch (err) {
                 console.error("Invalid token:", err);
                 localStorage.removeItem("token");

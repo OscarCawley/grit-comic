@@ -164,7 +164,10 @@ const Home = () => {
             </div>
             <div className="comment-section">
                 <h2 className="comment-title">Comments</h2>
-                <form className="comment-form" onSubmit={handleCommentSubmit}>
+                <form className="comment-form" onSubmit={(e) => {
+                    e.preventDefault();
+                    handleCommentSubmit(e);
+                }}>
                     <textarea
                         value={newComment}
                         onChange={(e) => setNewComment(e.target.value)}

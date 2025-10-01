@@ -1,8 +1,8 @@
-import React, { useState, useContext } from 'react';
+﻿import React, { useState, useContext } from 'react';
 import './LogInPage.css';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { UserContext } from '../../context/UserContext';
+import { UserContext, normalizeUser } from '../../context/UserContext';
 import { jwtDecode } from 'jwt-decode';
 
 const LogInPage = () => {
@@ -11,7 +11,7 @@ const LogInPage = () => {
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
-    const { setUser } = useContext(UserContext); // ✅ pull setUser from context
+    const { setUser } = useContext(UserContext); // âœ… pull setUser from context
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -29,7 +29,7 @@ const LogInPage = () => {
 
             // Decode the token and set the user in context
             const decodedUser = jwtDecode(res.data.token);
-            setUser(decodedUser); // ✅ update context immediately
+            setUser(normalizeUser(decodedUser)); // âœ… update context immediately
 
             alert('Logged in successfully!');
             
@@ -68,3 +68,4 @@ const LogInPage = () => {
 };
 
 export default LogInPage;
+

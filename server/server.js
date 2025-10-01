@@ -15,7 +15,7 @@ const wikiRoutes = require('./routes/wiki');
 const userRoutes = require('./routes/users');
 const assetRoutes = require('./routes/assets');
 const updateRoutes = require('./routes/updates');
-const faqRoutes = require('./routes/faq');
+const supportRoutes = require('./routes/support');
 const commentRoutes = require('./routes/comments');
 
 
@@ -25,7 +25,7 @@ app.use('/api/wiki', wikiRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/assets', assetRoutes);
 app.use('/api/updates', updateRoutes);
-app.use('/api/faq', faqRoutes);
+app.use('/api/support', supportRoutes);
 app.use('/api/comments', commentRoutes);
 
 const PORT = process.env.PORT || 5000;

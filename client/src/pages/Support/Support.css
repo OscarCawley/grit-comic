@@ -1,3 +1,71 @@
+.support {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    margin: 0 auto;
+    margin-bottom: 3rem;
+    max-width: 70%;
+    color: white;
+}
+
+.support-form {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 20px;
+}
+
+.support-textarea {
+    resize: none; /* only allow vertical resizing */
+    max-width: 100%;  /* stays responsive */
+    width: 100%;      /* fills the container */
+    box-sizing: border-box; /* include padding/border in width */
+    padding: 10px;
+    font-family: inherit;
+    font-size: 16px;
+    border: 1px solid #AAC7D8;
+    background-color: #354555;
+    border-radius: 5px;
+    border-width: 3px;
+    color: white;
+}
+
+.support-textarea::placeholder {
+    color: white;
+    opacity: 0.7;
+}
+
+.support-textarea:focus {
+    border-color: #fff;
+    background-color: #3c4e5f;
+    outline: none;
+}
+
+.support-submit-button {
+    background-color: #AAC7D8; /* Light blue background */
+    font-family: Arial, sans-serif;
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #29353C;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 0 auto;
+    min-width: 300px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.support-submit-button:hover {
+    background-color: #7a9bb1; /* Darker blue on hover */
+}
+
+.support-submit-button:disabled {
+    background-color: #7a9bb1; /* Darker blue when disabled */
+    cursor: not-allowed;
+}
+
 .faq {
     color: white;
     font-family: Arial, sans-serif;
@@ -51,3 +119,4 @@
     margin-bottom: 1em;
     width: 100%;
 }
+

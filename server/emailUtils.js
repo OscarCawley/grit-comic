@@ -1,4 +1,4 @@
-const nodemailer = require('nodemailer');
+﻿const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -56,6 +56,21 @@ const sendPasswordResetEmail = async (email, resetLink) => {
     await transporter.sendMail(mailOptions);
 };
 
+const sendSupportEmail = async (username, email, message) => {
+    
+    console.log('Preparing to send support email from:', username, email);
+    const mailOptions = {
+        from: `${username}`,
+        replyTo: email,
+        to: process.env.EMAIL_USER,
+        subject: 'Support Request',
+        text: message,
+    };
+
+    await transporter.sendMail(mailOptions);
+};
 
 
-module.exports = { sendPasswordResetEmail };
+
+
+module.exports = { sendPasswordResetEmail, sendSupportEmail };

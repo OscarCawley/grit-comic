@@ -59,7 +59,7 @@ router.post('/login', async (req, res) => {
         }
 
         const token = jwt.sign(
-            { userId: user.id, username: user.username },
+            { userId: user.id, username: user.username, email: user.email },
             process.env.JWT_SECRET,
             { expiresIn: '1h' }
         );
@@ -145,3 +145,5 @@ router.delete('/:id', async (req, res) => {
 });
 
 module.exports = router;
+
+

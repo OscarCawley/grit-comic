@@ -3,15 +3,17 @@ import axios from 'axios';
 import './UpdatesAdmin.css';
 import TipTapEditor from '../TipTapEditor/TipTapEditor';
 
-const UpdatesAdmin = () => {
 
-	const [updates, setUpdates] = useState([]);
+const UpdatesAdmin = () => {
+    const [updates, setUpdates] = useState([]);
+    const [users, setUsers] = useState([]);
 	const [editingId, setEditingId] = useState(null);
     const [formData, setFormData] = useState({title: '', content: ''});
     const formRef = useRef(null);
 
 	useEffect(() => {
 		fetchUpdates();
+        fetchUsers();
 	}, []);
 
 	const fetchUpdates = async () => {
@@ -23,16 +25,36 @@ const UpdatesAdmin = () => {
         }
 	};
 
+    const fetchUsers = async () => {
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/users/subscribers`);
+            setUsers(response.data);
+        }
+        catch (error) {
+            console.error('Error fetching users:', error);
+        }
+    };
+
+    const isEmptyHtml = (html) => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const text = doc.body.textContent.replace(/\u00a0/g, '').trim();
+        const hasMedia = doc.body.querySelector('img, video, audio, iframe, embed');
+        return !text && !hasMedia;
+    };
+
     const handleCreate = async () => {
+        console.log('Does it get here?');
         const { title, content } = formData;
 
-        if (!title.trim() || !content.trim()) {
+        if (!title.trim() || isEmptyHtml(content)) {
+
             alert('Please fill out all fields before creating the update.');
             return;
         }
 
         try {
-            await axios.post(`${process.env.REACT_APP_API_URL}/api/updates/create`, { title, content });
+            await axios.post(`${process.env.REACT_APP_API_URL}/api/updates/create`, { title, content, users: users });
             alert('Update created!');
             setFormData({ title: '', content: '' });
             fetchUpdates();

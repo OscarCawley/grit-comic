@@ -1,5 +1,6 @@
 const express = require('express');
 const db = require('../db');
+const { sendNewsletterEmails } = require('../emailUtils');
 
 const router = express.Router();
 
@@ -19,15 +20,18 @@ router.get('/', async (req, res) => {
 
 // Create a new update
 router.post('/create', async (req, res) => {
-    const { title, content } = req.body;
+    const { title, content, users } = req.body;
 
     if (!title || !content) {
         return res.status(400).json({ message: 'Please provide all fields' });
-    }
-
+    }        
     try {
         const [result] = await db.query('INSERT INTO updates (title, content) VALUES (?, ?)', [title, content]);
         res.status(201).json({ id: result.insertId, title, content });
+
+        if (!users || users.length === 0) return;
+        sendNewsletterEmails(title, content, users);
+
     } catch (err) {
         console.error(err);
         res.status(500).send('Database error');

@@ -1,0 +1,1 @@
+ALTER TABLE users ADD COLUMN unsubscribe_token CHAR(64) NULL;

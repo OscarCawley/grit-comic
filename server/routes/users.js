@@ -19,9 +19,21 @@ router.get('/', async (req, res) => {
     }
 });
 
+// GET subscribers
+router.get('/subscribers', async (req, res) => {
+    try {
+        const [results] = await db.query('SELECT * FROM users WHERE subscribe = 1');
+        res.json(results);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).send('Database error');
+    }
+});
+
 // SIGN UP
 router.post('/signup', async (req, res) => {
-    const { username, email, password } = req.body;
+    const { username, email, password, subscribe } = req.body;
 
     if (!username || !email || !password) {
         return res.status(400).json({ message: 'Please provide all fields (username, email, password)' });
@@ -29,9 +41,10 @@ router.post('/signup', async (req, res) => {
 
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
+        const unsubscribeToken = crypto.randomBytes(32).toString('hex');
         await db.query(
-            'INSERT INTO users (username, email, password) VALUES (?, ?, ?)',
-            [username, email, hashedPassword]
+            'INSERT INTO users (username, email, password, subscribe, unsubscribe_token) VALUES (?, ?, ?, ?, ?)',
+            [username, email, hashedPassword, subscribe, unsubscribeToken]
         );
 
         res.status(201).json({ message: 'User registered successfully!' });
@@ -127,6 +140,40 @@ router.put('/reset-password', async (req, res) => {
     }
 });
 
+router.get('/unsubscribe', async (req, res) => {
+    const { token } = req.query;
+    if (!token) {
+        return res.status(400).json({ message: 'Missing token' });
+    }
+
+    try {
+        const [rows] = await db.query(
+            'SELECT id, subscribe FROM users WHERE unsubscribe_token = ?',
+            [token]
+        );
+
+        if (rows.length === 0) {
+            return res.status(404).json({ message: 'Unsubscribe link is invalid or expired.' });
+        }
+
+        const { id, subscribe } = rows[0];
+
+        if (Number(subscribe) === 0) {
+            return res.json({ message: 'You have been unsubscribed.' });
+        }
+
+        await db.query(
+            'UPDATE users SET subscribe = 0 WHERE id = ?',
+            [id]
+        );
+
+        res.json({ message: 'You have been unsubscribed.' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Unable to process unsubscribe request at the moment.' });
+    }
+});
+
 router.delete('/:id', async (req, res) => {
     const userId = req.params.id;
 
@@ -145,5 +192,6 @@ router.delete('/:id', async (req, res) => {
 });
 
 module.exports = router;
+
 
 

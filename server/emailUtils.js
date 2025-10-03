@@ -57,8 +57,7 @@ const sendPasswordResetEmail = async (email, resetLink) => {
 };
 
 const sendSupportEmail = async (username, email, message) => {
-    
-    console.log('Preparing to send support email from:', username, email);
+
     const mailOptions = {
         from: `${username}`,
         replyTo: email,
@@ -70,7 +69,42 @@ const sendSupportEmail = async (username, email, message) => {
     await transporter.sendMail(mailOptions);
 };
 
+const sendNewsletterEmails = async (title, content, users) => {
+
+    if (!users || users.length === 0) return;
+    if (!title || !content) return;
+    console.log('Sending newsletter to users:', users);
+    for (const user of users) {
+        const mailOptions = {
+            from: `"Grit Comic" <${process.env.EMAIL_USER}>`,
+            to: user.email,
+            subject: `Grit Comic Update: ${title}`,
+            html: `
+                <div style="
+                    font-family: Arial, sans-serif;
+                    line-height: 1.6;
+                    color: #333;
+                    background-color: #f9f9f9;
+                    padding: 20px;
+                    border: 1px solid #ddd;
+                    border-radius: 8px;
+                    max-width: 600px;
+                    margin: 0 auto;
+                ">
+                    <h2 style="color: #29353C; text-align: center;">New Update: ${title}</h2>
+                    <div style="font-size: 16px; margin-top: 20px;">
+                        ${content}
+                    </div>
+                    <p style="font-size: 14px; text-align: center; color: #777; margin-top: 30px;">
+                        – Grit Comic Team
+                    </p>
+                    <a href="${process.env.FRONTEND_URL}/unsubscribe?token=${user.unsubscribe_token}">Unsubscribe</a>;
+                </div>
+            `
+        }
+        await transporter.sendMail(mailOptions);
+    }
+};
 
 
-
-module.exports = { sendPasswordResetEmail, sendSupportEmail };
+module.exports = { sendPasswordResetEmail, sendSupportEmail, sendNewsletterEmails };

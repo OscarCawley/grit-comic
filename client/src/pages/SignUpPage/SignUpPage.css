@@ -37,7 +37,7 @@
     margin: 0 auto; /* Center the form horizontally */
 }
 
-.sign-up-form input {
+.sign-up-input {
     box-sizing: border-box;
     width: 100%;
     padding: 10px;
@@ -47,9 +47,17 @@
     font-size: 16px;
 }
 
-.sign-up-form input:focus {
+.sign-up-input:focus {
     outline: none;
     box-shadow: 0 0 5px #AAC7D8; /* Highlight input on focus */
+}
+
+.sign-up-checkbox {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: #D3D3D3; /* Light gray for checkbox text */
 }
 
 .sign-up-form button {

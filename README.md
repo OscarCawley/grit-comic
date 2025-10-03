@@ -26,7 +26,9 @@ A dynamic web platform created to showcase the comic book *GRIT*, offering fans 
 
 
 - **TODO**
-  Email form
-  Updates newsletter with unsubscribe
+  Unsubscirbe page just needs css
+  Account page with opt in and other account options
   Update chapter UI to be more user friendly
   Make error messages constant across all login pages
+  Make backend admin only
+  Verify email

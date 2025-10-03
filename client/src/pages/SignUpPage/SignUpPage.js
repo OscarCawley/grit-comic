@@ -9,6 +9,7 @@ const SignUpPage = () => {
     const [password, setPassword] = useState('');
     const [username, setUsername] = useState('');
     const [error, setError] = useState('');
+    const [subscribe, setSubscribe] = useState(false);
     const navigate = useNavigate();
 
     const handleSignUp = async (e) => {
@@ -19,12 +20,14 @@ const SignUpPage = () => {
             await axios.post(`${process.env.REACT_APP_API_URL}/api/users/signup`, {
                 email,
                 password,
-                username
+                username,
+                subscribe
             });
 
             setEmail('');
             setPassword('');
             setUsername('');
+            setSubscribe(false);
             navigate('/login');
             
         } catch (err) {
@@ -41,19 +44,31 @@ const SignUpPage = () => {
                     placeholder="Username"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
+                    className='sign-up-input'
                 />
                 <input
                     type="email"
                     placeholder="Email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    className='sign-up-input'
                 />
                 <input
                     type="password"
                     placeholder="Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    className='sign-up-input'
                 />
+                <label className='sign-up-checkbox'>
+                    <input
+                        type="checkbox"
+                        checked={subscribe}
+                        onChange={(e) => setSubscribe(e.target.checked)}
+                    />
+                    I'd like to receive comic updates.
+                </label>
+                
                 <button type="submit">Sign Up</button>
                 {error && <p>{error}</p>}
             </form>

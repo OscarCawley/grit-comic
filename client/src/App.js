@@ -12,6 +12,7 @@ import LogInPage from './pages/LogInPage/LogInPage.js';
 import SignUpPage from './pages/SignUpPage/SignUpPage.js'
 import ForgotPasswordPage from './pages/ForgotPasswordPage/ForgotPasswordPage.js';
 import ResetPasswordPage from './pages/ResetPasswordPage/ResetPasswordPage.js';
+import UnsubscribePage from './pages/UnsubscribePage/UnsubscribePage.js';
 import Admin from './pages/Admin/Admin.js';
 import ScrollToTop from './components/ScrollToTop/ScrollToTop.js';
 
@@ -44,6 +45,7 @@ function AppContent() {
 							<Route path="/signup" element={<SignUpPage />} />
 							<Route path="/forgot-password" element={<ForgotPasswordPage />} />
 							<Route path="/reset-password" element={<ResetPasswordPage />} />
+							<Route path="/unsubscribe" element={<UnsubscribePage />} />
 						</Routes>
 						</AnimatePresence>
 						<Footer />

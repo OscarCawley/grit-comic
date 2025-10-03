@@ -50,6 +50,7 @@ const Support = () => {
         <PageAnimation>
             <div className='support'>
                 <h1>Support</h1>
+                <p>If you have any questions or need assistance, please fill out the form below:</p>
                 <form
                     className='support-form'
                     onSubmit={(e) => {

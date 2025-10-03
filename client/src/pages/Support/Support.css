@@ -9,6 +9,10 @@
     color: white;
 }
 
+.support p {
+    margin-top: 0;
+}
+
 .support-form {
     display: flex;
     flex-direction: column;

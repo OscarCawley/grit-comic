@@ -61,13 +61,15 @@ const Support = () => {
                     <textarea
                         className='support-textarea'
                         name='message'
-                        placeholder='Your Message'
+                        placeholder={!user ? 'Log in to submit a support request.' : 'Describe your issue or question here...'}
                         required
                         rows={10}
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
+                        disabled={!user}
+                        maxLength={2000}
                     ></textarea>
-                    <button type='submit' className='support-submit-button' disabled={!message.trim()}>
+                    <button type='submit' className='support-submit-button' disabled={!message.trim() || !user}>
                         Submit
                     </button>
                     {submitStatus && (

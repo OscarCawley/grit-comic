@@ -4,7 +4,7 @@ import "./Header.css";
 import { UserContext } from "../../context/UserContext";
 
 const Header = () => {
-    const { user, signOut } = useContext(UserContext);
+    const { user } = useContext(UserContext);
 
     return (
         <div className="header">
@@ -13,10 +13,9 @@ const Header = () => {
             </Link>
             <div className="account-container">
                 {user ? (
-                    <div className="user-info">
-                        <span>{user.username}</span>
-                        <button onClick={signOut}>SIGN OUT</button>
-                    </div>
+                    <Link to="/account">
+                        <button className="user">{user.username}</button>
+                    </Link>
                 ) : (
                     <Link to="/login">
                         <button>LOGIN</button>

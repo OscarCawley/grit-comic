@@ -72,7 +72,7 @@ router.post('/login', async (req, res) => {
         }
 
         const token = jwt.sign(
-            { userId: user.id, username: user.username, email: user.email },
+            { userId: user.id, username: user.username, email: user.email, subscribe: Boolean(user.subscribe) },
             process.env.JWT_SECRET,
             { expiresIn: '1h' }
         );
@@ -140,6 +140,39 @@ router.put('/reset-password', async (req, res) => {
     }
 });
 
+router.patch('/:id/subscribe', async (req, res) => {
+    const { id } = req.params;
+    const { subscribe } = req.body;
+
+    if (typeof subscribe !== 'boolean') {
+        return res.status(400).json({ message: 'subscribe must be a boolean.' });
+    }
+
+    try {
+        const [rows] = await db.query('SELECT * FROM users WHERE id = ?', [id]);
+
+        if (rows.length === 0) {
+            return res.status(404).json({ message: 'User not found.' });
+        }
+
+        const subscribeValue = subscribe ? 1 : 0;
+        await db.query('UPDATE users SET subscribe = ? WHERE id = ?', [subscribeValue, id]);
+
+        const user = rows[0];
+
+        const token = jwt.sign(
+            { userId: user.id, username: user.username, email: user.email, subscribe },
+            process.env.JWT_SECRET,
+            { expiresIn: '1h' }
+        );
+
+        res.json({ message: 'Subscription preference updated.', token });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Unable to update subscription at the moment.' });
+    }
+});
+
 router.get('/unsubscribe', async (req, res) => {
     const { token } = req.query;
     if (!token) {
@@ -159,7 +192,7 @@ router.get('/unsubscribe', async (req, res) => {
         const { id, subscribe } = rows[0];
 
         if (Number(subscribe) === 0) {
-            return res.json({ message: 'You have been unsubscribed.' });
+            return res.json({ message: 'You are already unsubscribed.' });
         }
 
         await db.query(
@@ -168,6 +201,7 @@ router.get('/unsubscribe', async (req, res) => {
         );
 
         res.json({ message: 'You have been unsubscribed.' });
+        
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Unable to process unsubscribe request at the moment.' });
@@ -192,6 +226,8 @@ router.delete('/:id', async (req, res) => {
 });
 
 module.exports = router;
+
+
 
 
 

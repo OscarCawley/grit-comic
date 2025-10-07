@@ -12,6 +12,7 @@ export const normalizeUser = (decodedUser) => {
         id: decodedUser.userId ?? decodedUser.id ?? null,
         username: decodedUser.username ?? null,
         email: decodedUser.email ?? null,
+        subscribe: decodedUser.subscribe ?? false,
     };
 };
 

@@ -40,16 +40,9 @@
     color: inherit; /* Inherit the color from the parent */
 }
 
-.user-info {
-    display: flex;
-    align-items: center;
-    gap: 10px; /* Space between icon and text */
-}
-
-.user-info span {
+.user {
     font-family: Arial, sans-serif;
     text-transform: uppercase; /* Capitalizes the first letter of each word */
-    color: white;
     font-weight: 600;
     font-size: 18px;
 }

@@ -83,13 +83,13 @@ const AccountPage = () => {
     return (
         <div className="account-page">
             <h1>My Account</h1>
-            <section className="account-details">
+            <div className="account-details">
                 <h2>Account Details</h2>
                 <p>{user?.username}</p>
                 <p>{user?.email}</p>
                 <p>Newsletter: {user?.subscribe ? 'Subscribed' : 'Not Subscribed'}</p>
-            </section>
-            <section className="account-actions">
+            </div>
+            <div className="account-actions">
                 <button onClick={handleForgotPassword}>Reset Password</button>
                 <Link to="/login">
                     <button onClick={signOut}>Sign Out</button>
@@ -103,7 +103,7 @@ const AccountPage = () => {
                 </button>
                 {message && <p className="success-message">{message}</p>}
                 {error && <p className="error-message">{error}</p>}
-            </section>
+            </div>
         </div>
     );
 };

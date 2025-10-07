@@ -1,0 +1,31 @@
+.account-page {
+    font-family: Arial, sans-serif;
+    color: white;
+}
+
+.account-page h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.account-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.account-actions button {
+    background-color: #AAC7D8; /* Light blue background */
+    font-family: Arial, sans-serif;
+    font-size: 1em;
+    font-weight: 600;
+    color: #29353C;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 0 auto;
+    cursor: pointer;
+    text-align: center;
+}

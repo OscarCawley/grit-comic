@@ -26,8 +26,7 @@ A dynamic web platform created to showcase the comic book *GRIT*, offering fans 
 
 
 - **TODO**
-  CSS for account page, add username changing, fix login issue after reset password from account page
-  Update chapter UI to be more user friendly
+  Turn all loading into a spinning circle
   Make error messages constant across all login pages
   Make backend admin only
   Verify email

@@ -8,17 +8,17 @@ import { jwtDecode } from 'jwt-decode';
 const LogInPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
+    const [message, setMessage] = useState('');
     const navigate = useNavigate();
 
-    const { setUser } = useContext(UserContext); // âœ… pull setUser from context
+    const { setUser } = useContext(UserContext);
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        setError('');
+        setMessage('');
 
         try {
-            // Send login request to the backend
+            // Send login request to backend
             const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/users/login`, {
                 email,
                 password
@@ -27,18 +27,27 @@ const LogInPage = () => {
             // Store the JWT token in localStorage
             localStorage.setItem('token', res.data.token);
 
-            // Decode the token and set the user in context
+            // Decode token and update context
             const decodedUser = jwtDecode(res.data.token);
-            setUser(normalizeUser(decodedUser)); // âœ… update context immediately
+            setUser(normalizeUser(decodedUser));
 
-            alert('Logged in successfully!');
-            
-            setEmail('');
-            setPassword('');
-            navigate('/');
+            // Set success message
+            setMessage('Logged in successfully!');
+
+            // Clear message after 3 seconds
+            setTimeout(() => {
+                setMessage('');
+                setEmail('');
+                setPassword('');
+                navigate('/');
+            }, 2000);
 
         } catch (err) {
-            setError(err.response?.data?.message || err.message || 'Something went wrong');
+            const errorMsg = err.response?.data?.message || err.message || 'Something went wrong';
+            setMessage(errorMsg);
+
+            // Clear message after 3 seconds
+            setTimeout(() => setMessage(''), 3000);
         }
     };
 
@@ -59,7 +68,7 @@ const LogInPage = () => {
                     onChange={(e) => setPassword(e.target.value)}
                 />
                 <button type="submit">Log In</button>
-                {error && <p>{error}</p>}
+                <p className={`message ${message ? 'visible' : 'hidden'}`}>{message || ' '}</p>
             </form>
             <p>Don't have an account? <Link to="/signup"><button>Sign Up</button></Link></p>
             <p>Forgot your password? <Link to="/forgot-password"><button>Reset Password</button></Link></p>
@@ -68,4 +77,3 @@ const LogInPage = () => {
 };
 
 export default LogInPage;
-

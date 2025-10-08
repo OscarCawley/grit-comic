@@ -1,22 +1,23 @@
 import React, { useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom'; // Assuming you're using React Router
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import './ResetPasswordPage.css';
 import axios from 'axios';
 
 const ResetPasswordPage = () => {
     const [searchParams] = useSearchParams();
-    const token = searchParams.get('token'); // Get the token from the URL
+    const token = searchParams.get('token');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [message, setMessage] = useState('');
-    const [error, setError] = useState('');
     const navigate = useNavigate();
 
     const handleResetPassword = async (e) => {
         e.preventDefault();
+        setMessage('');
 
         if (password !== confirmPassword) {
-            setError('Passwords do not match');
+            setMessage('Passwords do not match');
+            setTimeout(() => setMessage(''), 3000);
             return;
         }
 
@@ -27,11 +28,14 @@ const ResetPasswordPage = () => {
             });
 
             setMessage(res.data.message);
-            setError('');
-            setTimeout(() => { navigate('/login') }, 3000); // Redirect to login after 3 seconds
+            setTimeout(() => {
+                setMessage('');
+                navigate('/login');
+            }, 3000);
         } catch (err) {
-            setError(err.response?.data?.message || err.message || 'Something went wrong');
-            setMessage('');
+            const errorMsg = err.response?.data?.message || err.message || 'Something went wrong';
+            setMessage(errorMsg);
+            setTimeout(() => setMessage(''), 3000);
         }
     };
 
@@ -52,9 +56,8 @@ const ResetPasswordPage = () => {
                     onChange={(e) => setConfirmPassword(e.target.value)}
                 />
                 <button type="submit">Reset Password</button>
+                <p className={`message ${message ? 'visible' : 'hidden'}`}>{message || ' '}</p>
             </form>
-            {message && <p>{message}</p>}
-            {error && <p>{error}</p>}
         </div>
     );
 };

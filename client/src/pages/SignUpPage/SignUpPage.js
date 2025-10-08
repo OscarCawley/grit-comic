@@ -4,17 +4,16 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const SignUpPage = () => {
-
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [username, setUsername] = useState('');
-    const [error, setError] = useState('');
+    const [message, setMessage] = useState('');
     const [subscribe, setSubscribe] = useState(false);
     const navigate = useNavigate();
 
     const handleSignUp = async (e) => {
         e.preventDefault();
-        setError('');
+        setMessage('');
 
         try {
             await axios.post(`${process.env.REACT_APP_API_URL}/api/users/signup`, {
@@ -24,14 +23,22 @@ const SignUpPage = () => {
                 subscribe
             });
 
+            setMessage('Account created successfully! Redirecting to login...');
             setEmail('');
             setPassword('');
             setUsername('');
             setSubscribe(false);
-            navigate('/login');
+
+            // Clear message & redirect after 3 seconds
+            setTimeout(() => {
+                setMessage('');
+                navigate('/login');
+            }, 3000);
             
         } catch (err) {
-            setError(err.response?.data?.message || err.message || 'Something went wrong');
+            const errorMsg = err.response?.data?.message || err.message || 'Something went wrong';
+            setMessage(errorMsg);
+            setTimeout(() => setMessage(''), 3000);
         }
     };
 
@@ -68,9 +75,9 @@ const SignUpPage = () => {
                     />
                     I'd like to receive comic updates.
                 </label>
-                
+
                 <button type="submit">Sign Up</button>
-                {error && <p>{error}</p>}
+                <p className={`message ${message ? 'visible' : 'hidden'}`}>{message || ' '}</p>
             </form>
             <p>Already have an account? <Link to="/login"><button>Login</button></Link></p>
         </div>

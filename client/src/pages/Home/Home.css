@@ -10,14 +10,14 @@
     margin-bottom: 10px;
 }
 
-.comic-chapter-title button {
+.next-chapter button {
     background: none;
     border: none;
     cursor: pointer;
     padding: 0 20px;
 }
 
-.comic-chapter-title img {
+.next-chapter img {
     height: 22px;
     width: 40px;
 }
@@ -156,4 +156,25 @@
     font-size: 20px;
     text-align: center;
     margin-top: 20px;
+}
+
+/* Full-page loading spinner */
+.page-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 70vh;
+}
+
+.spinner {
+    width: 56px;
+    height: 56px;
+    border: 6px solid rgba(255, 255, 255, 0.25);
+    border-top-color: #AAC7D8;
+    border-radius: 50%;
+    animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
 }

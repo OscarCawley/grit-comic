@@ -7,9 +7,17 @@ import PageAnimation from '../../components/PageAnimation/PageAnimation.js';
 
 const Updates = () => {
     const [updates, setUpdates] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect (() => {
-        fetchUpdates();
+        const initLoad = async () => {
+            try {
+                await fetchUpdates();
+            } finally {
+                setLoading(false);
+            }
+        };
+        initLoad();
     }, []);
 
     const fetchUpdates = async () => {
@@ -19,6 +27,16 @@ const Updates = () => {
         } catch (error) {
             console.error('Error fetching updates:', error);
         }
+    }
+
+    if (loading) {
+        return (
+            <PageAnimation>
+                <div className="page-loading" role="status" aria-live="polite" aria-label="Loading content">
+                    <div className="spinner" />
+                </div>
+            </PageAnimation>
+        );
     }
 
     return (

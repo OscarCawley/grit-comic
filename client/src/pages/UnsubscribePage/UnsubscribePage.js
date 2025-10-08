@@ -11,6 +11,7 @@ const UnsubscribePage = () => {
 
     if (!token) {
       setStatus('Missing unsubscribe token.');
+      setLoading(false);
       return;
     }
 
@@ -18,13 +19,24 @@ const UnsubscribePage = () => {
       .then(() => setStatus('You are unsubscribed.'))
       .catch((err) => {
         setStatus(err.response?.data?.message || 'Unable to unsubscribe.');
-      });
+      })
+      .finally(() => setLoading(false));
   }, []);
+
+  const [loading, setLoading] = useState(true);
 
   return (
     <div className="unsubscribe-page">
-      <h1>{status}</h1>
-      <a href="/">Return to Grit Comic</a>
+      {loading ? (
+        <div className="page-loading" role="status" aria-live="polite" aria-label="Loading content">
+          <div className="spinner" />
+        </div>
+      ) : (
+        <>
+          <h1>{status}</h1>
+          <a href="/">Return to Grit Comic</a>
+        </>
+      )}
     </div>
   );
 };

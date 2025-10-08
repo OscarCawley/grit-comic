@@ -4,8 +4,6 @@ import { useContext } from "react";
 import { UserContext } from "../../context/UserContext";
 import axios from 'axios';
 import './Home.css';
-import leftArrow from '../../assets/icons/left-arrow.png';
-import rightArrow from '../../assets/icons/right-arrow.png';
 import PageAnimation from '../../components/PageAnimation/PageAnimation.js';
 
 const Home = () => {
@@ -18,12 +16,12 @@ const Home = () => {
     const [comments, setComments] = useState([]); // State to hold comments data
     const [chapters, setChapters] = useState([]); // State to hold chapters data
     const [submitting, setSubmitting] = useState(false); // State to manage submission status
+    const [loading, setLoading] = useState(true); // Page-level loading gate
     const [newComment, setNewComment] = useState(''); // State for new comment input
 
     useEffect(() => {
         if (chapters.length === 0) {
-            fetchChapters(); // Only fetch if chapters aren't loaded
-            fetchComments(); // Fetch comments data
+            initLoad();
         }
     }, [chapters.length]);
 
@@ -64,22 +62,19 @@ const Home = () => {
         }
     }
 
+    // Unified initial load: chapters (with pages) + comments
+    const initLoad = async () => {
+        try {
+            await Promise.all([fetchChapters(), fetchComments()]);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const filteredComments = comments.filter((comment) => {
         const matchesChapter = comment.chapter_id === currentChapter + 1;
         return matchesChapter;
     });
-
-    // Minimal helper to advance to the next page/chapter
-    const goNext = () => {
-        if (chapters.length === 0 || !chapters[currentChapter]?.pages?.length) return;
-        const lastPageIndex = chapters[currentChapter].pages.length - 1;
-        if (currentPage < lastPageIndex) {
-            setCurrentPage(currentPage + 1);
-        } else if (currentChapter < chapters.length - 1) {
-            setCurrentChapter(currentChapter + 1);
-            setCurrentPage(0);
-        }
-    };
 
     const handleImageClick = (e) => {
         const { left, width } = e.target.getBoundingClientRect();
@@ -104,6 +99,14 @@ const Home = () => {
                 setCurrentChapter(currentChapter + 1);
                 setCurrentPage(0); // Go to first page of the next chapter
             }
+        }
+    };
+
+    const handlePageChange = (direction) => {
+        if (direction === 'next' && currentPage < chapters[currentChapter].pages.length - 1) {
+            setCurrentPage(currentPage + 1);
+        } else if (direction === 'prev' && currentPage > 0) {
+            setCurrentPage(currentPage - 1);
         }
     };
 
@@ -140,6 +143,28 @@ const Home = () => {
 
 
 
+    // Navigation availability flags
+    const canGoPrevChapter = currentChapter > 0;
+    const canGoNextChapter = currentChapter < chapters.length - 1;
+    const canGoPrevPage =
+        chapters.length > 0 &&
+        chapters[currentChapter]?.pages?.length > 0 &&
+        (currentPage > 0 || canGoPrevChapter);
+    const canGoNextPage =
+        chapters.length > 0 &&
+        chapters[currentChapter]?.pages?.length > 0 &&
+        (currentPage < chapters[currentChapter].pages.length - 1 || canGoNextChapter);
+
+    if (loading) {
+        return (
+            <PageAnimation>
+                <div className="page-loading" role="status" aria-live="polite" aria-label="Loading content">
+                    <div className="spinner" />
+                </div>
+            </PageAnimation>
+        );
+    }
+
     return (
         <PageAnimation>
             <div className='comic-viewer-container'>
@@ -157,27 +182,23 @@ const Home = () => {
                     )}
                 </div>
                 <div className="comic-page-indicator">
+                    <button className="next-chapter" onClick={() => handleChapterChange('prev')} disabled={!canGoPrevChapter} aria-label="Previous chapter" title="Previous chapter">
+                        <p>|&lt;</p>
+                    </button>
+                    <button className="next-page" onClick={() => handlePageChange('prev')} disabled={!canGoPrevPage} aria-label="Previous page" title="Previous page">
+                        <p>&lt;</p>
+                    </button>
+                    <button className="next-page" onClick={() => handlePageChange('next')} disabled={!canGoNextPage} aria-label="Next page" title="Next page">
+                        <p>&gt;</p>
+                    </button>
+                    <button className="next-chapter" onClick={() => handleChapterChange('next')} disabled={!canGoNextChapter} aria-label="Next chapter" title="Next chapter">
+                        <p>&gt;|</p>
+                    </button>
                     {chapters.length > 0 && chapters[currentChapter]?.pages?.length > 0 ? (
                         <p>Page {currentPage + 1} of {chapters[currentChapter].pages.length}</p>
                     ) : (
                         <p className="loading">Loading page count...</p>
                     )}
-                    <button className="next-chapter" onClick={() => handleChapterChange('prev')} disabled={chapters.length === 0} aria-label="Previous chapter" title="Previous chapter">
-                        <p>|&lt;</p>
-                    </button>
-                    <button
-                        className="next-page"
-                        type="button"
-                        onClick={goNext}
-                        disabled={!(currentPage < chapters[currentChapter].pages.length - 1 || currentChapter < chapters.length - 1)}
-                        aria-label="Next page"
-                        title="Next page"
-                    >
-                        <p>Next Page</p>
-                    </button>
-                    <button className="next-chapter" onClick={() => handleChapterChange('next')} disabled={chapters.length === 0} aria-label="Next chapter" title="Next chapter">
-                        <p>&gt;|</p>
-                    </button>
                 </div>
             </div>
             <div className="comment-section">

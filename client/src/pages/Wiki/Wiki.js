@@ -9,9 +9,17 @@ const Wiki = () => {
     const [posts, setPosts] = useState([]);
     const [activeCategory, setActiveCategory] = useState("All");
     const [searchTerm, setSearchTerm] = useState("");
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetchWiki();
+        const initLoad = async () => {
+            try {
+                await fetchWiki();
+            } finally {
+                setLoading(false);
+            }
+        };
+        initLoad();
         setActiveCategory("All");
     }, []);
 
@@ -41,6 +49,16 @@ const Wiki = () => {
 
         return matchesCategory && matchesSearch;
     });
+
+    if (loading) {
+        return (
+            <PageAnimation>
+                <div className="page-loading" role="status" aria-live="polite" aria-label="Loading content">
+                    <div className="spinner" />
+                </div>
+            </PageAnimation>
+        );
+    }
 
     return (
         <PageAnimation>

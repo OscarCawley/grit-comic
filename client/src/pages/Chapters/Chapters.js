@@ -9,12 +9,19 @@ const Chapters = () => {
     const navigate = useNavigate();
     const [chapters, setChapters] = useState([]);
     const [assets, setAssets] = useState([])
+    const [loading, setLoading] = useState(true);
     const volumeCover = assets.find(asset => asset.name === 'Volume Cover');
     const chapterDescription = assets.find(asset => asset.name === 'Chapter Page Description');
 
     useEffect(() => {
-        fetchChapters();
-        fetchAssets();
+        const initLoad = async () => {
+            try {
+                await Promise.all([fetchChapters(), fetchAssets()]);
+            } finally {
+                setLoading(false);
+            }
+        };
+        initLoad();
     }, []);
 
     const fetchChapters = async () => {
@@ -42,6 +49,16 @@ const Chapters = () => {
         navigate(`/?chapter=${index}`); // Navigate to Home with chapter index as a query parameter
     };
 
+
+    if (loading) {
+        return (
+            <PageAnimation>
+                <div className="page-loading" role="status" aria-live="polite" aria-label="Loading content">
+                    <div className="spinner" />
+                </div>
+            </PageAnimation>
+        );
+    }
 
     return (
         <PageAnimation>

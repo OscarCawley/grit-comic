@@ -7,11 +7,18 @@ import './WikiDetail.css';
 function WikiDetailPage() {
     const { slug } = useParams();
     const [post, setPost] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        if (slug) {
-            fetchPostBySlug(slug);
-        }
+        const initLoad = async () => {
+            if (!slug) return;
+            try {
+                await fetchPostBySlug(slug);
+            } finally {
+                setLoading(false);
+            }
+        };
+        initLoad();
     }, [slug]);
 
     const fetchPostBySlug = async (slug) => {
@@ -21,6 +28,14 @@ function WikiDetailPage() {
         } catch (error) {
             console.error('Error fetching wiki data:', error);
         }
+    }
+
+    if (loading) {
+        return (
+            <div className="page-loading" role="status" aria-live="polite" aria-label="Loading content">
+                <div className="spinner" />
+            </div>
+        );
     }
 
     return (
@@ -44,9 +59,7 @@ function WikiDetailPage() {
                         <span>Last Updated: {new Date(post.updated_at).toLocaleDateString()}</span>
                     </div>
                     </div>
-            ) : (
-                <p>Loading...</p>
-            )}
+            ) : null}
         </div>
     );
 }

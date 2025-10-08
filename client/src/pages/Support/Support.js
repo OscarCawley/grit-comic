@@ -10,9 +10,17 @@ const Support = () => {
     const [message, setMessage] = useState('');
     const [submitStatus, setSubmitStatus] = useState(null);
     const { user } = useContext(UserContext);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetchFaqs();
+        const initLoad = async () => {
+            try {
+                await fetchFaqs();
+            } finally {
+                setLoading(false);
+            }
+        };
+        initLoad();
     }, []);
 
     const fetchFaqs = async () => {
@@ -45,6 +53,16 @@ const Support = () => {
             setSubmitStatus({ type: 'error', text: errorMessage });
         }
     };
+
+    if (loading) {
+        return (
+            <PageAnimation>
+                <div className="page-loading" role="status" aria-live="polite" aria-label="Loading content">
+                    <div className="spinner" />
+                </div>
+            </PageAnimation>
+        );
+    }
 
     return (
         <PageAnimation>

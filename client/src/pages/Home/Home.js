@@ -69,6 +69,18 @@ const Home = () => {
         return matchesChapter;
     });
 
+    // Minimal helper to advance to the next page/chapter
+    const goNext = () => {
+        if (chapters.length === 0 || !chapters[currentChapter]?.pages?.length) return;
+        const lastPageIndex = chapters[currentChapter].pages.length - 1;
+        if (currentPage < lastPageIndex) {
+            setCurrentPage(currentPage + 1);
+        } else if (currentChapter < chapters.length - 1) {
+            setCurrentChapter(currentChapter + 1);
+            setCurrentPage(0);
+        }
+    };
+
     const handleImageClick = (e) => {
         const { left, width } = e.target.getBoundingClientRect();
         const clickX = e.clientX - left;
@@ -132,25 +144,8 @@ const Home = () => {
         <PageAnimation>
             <div className='comic-viewer-container'>
                 <div className="comic-chapter-title">
-                    <button onClick={() => handleChapterChange('prev')} disabled={chapters.length === 0}>
-                        <img src={leftArrow} alt="Previous chapter" />
-                    </button>
-
                     {chapters[currentChapter]?.title ?? <span className="loading">Loading chapter title...</span>}
-
-                    <button onClick={() => handleChapterChange('next')} disabled={chapters.length === 0}>
-                        <img src={rightArrow} alt="Next chapter" />
-                    </button>
                 </div>
-
-                <div className="comic-page-indicator">
-                    {chapters.length > 0 && chapters[currentChapter]?.pages?.length > 0 ? (
-                        <p>Page {currentPage + 1} of {chapters[currentChapter].pages.length}</p>
-                    ) : (
-                        <p className="loading">Loading page count...</p>
-                    )}
-                </div>
-
                 <div className="comic-viewer" onClick={handleImageClick}>
                     {chapters.length > 0 && chapters[currentChapter]?.pages?.length > 0 ? (
                         <img
@@ -160,6 +155,29 @@ const Home = () => {
                     ) : (
                         <div className="image-placeholder loading">Loading page image...</div>
                     )}
+                </div>
+                <div className="comic-page-indicator">
+                    {chapters.length > 0 && chapters[currentChapter]?.pages?.length > 0 ? (
+                        <p>Page {currentPage + 1} of {chapters[currentChapter].pages.length}</p>
+                    ) : (
+                        <p className="loading">Loading page count...</p>
+                    )}
+                    <button className="next-chapter" onClick={() => handleChapterChange('prev')} disabled={chapters.length === 0} aria-label="Previous chapter" title="Previous chapter">
+                        <p>|&lt;</p>
+                    </button>
+                    <button
+                        className="next-page"
+                        type="button"
+                        onClick={goNext}
+                        disabled={!(currentPage < chapters[currentChapter].pages.length - 1 || currentChapter < chapters.length - 1)}
+                        aria-label="Next page"
+                        title="Next page"
+                    >
+                        <p>Next Page</p>
+                    </button>
+                    <button className="next-chapter" onClick={() => handleChapterChange('next')} disabled={chapters.length === 0} aria-label="Next chapter" title="Next chapter">
+                        <p>&gt;|</p>
+                    </button>
                 </div>
             </div>
             <div className="comment-section">

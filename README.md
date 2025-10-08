@@ -26,7 +26,6 @@ A dynamic web platform created to showcase the comic book *GRIT*, offering fans 
 
 
 - **TODO**
-  Turn all loading into a spinning circle
-  Make error messages constant across all login pages
   Make backend admin only
   Verify email
+  change font file

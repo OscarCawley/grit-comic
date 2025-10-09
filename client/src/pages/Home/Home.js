@@ -220,7 +220,6 @@ const Home = () => {
                     <button type="submit" className='comment-submit-button' disabled={!user || submitting}>{submitting ? "Posting..." : "Post Comment"}</button>
                 </form>
 
-
                 {filteredComments.map(comment => (
                     <div key={comment.id} className="comment">
                         <div className="comment-header">

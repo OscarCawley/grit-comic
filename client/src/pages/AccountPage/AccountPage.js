@@ -101,6 +101,11 @@ const AccountPage = () => {
                         ? 'Unsubscribe from Newsletter'
                         : 'Subscribe to Newsletter'}
                 </button>
+                    {user?.auth === true && (
+                        <Link to={`/admin`}>
+                            <button>Admin</button>
+                        </Link>
+                    )}
                 {message && <p className="success-message">{message}</p>}
                 {error && <p className="error-message">{error}</p>}
             </div>

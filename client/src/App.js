@@ -18,8 +18,19 @@ import Admin from './pages/Admin/Admin.js';
 import ScrollToTop from './components/ScrollToTop/ScrollToTop.js';
 
 import { AnimatePresence } from 'framer-motion';
-import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
-import { UserProvider } from './context/UserContext.js';
+import { BrowserRouter as Router, Route, Routes, useLocation, Navigate } from 'react-router-dom';
+import { UserProvider, UserContext } from './context/UserContext.js'
+import { useContext } from 'react';
+
+
+function AdminRoute({ children }) {
+    const { user } = useContext(UserContext);
+    // Adjust this check to match your user object (e.g., user.auth === 1)
+    if (!user || !user?.auth) {
+        return <Navigate to="/" replace />;
+    }
+    return children;
+}
 
 function AppContent() {
 
@@ -29,7 +40,11 @@ function AppContent() {
 			<ScrollToTop />
 			<AnimatePresence mode='wait'>
 			<Routes location={location}>
-				<Route path="/admin" element={<Admin />} />
+				<Route path="/admin" element={
+					<AdminRoute>
+						<Admin />
+					</AdminRoute>
+				} />
 				<Route path="*" element={
 					<div className="App">
 						<Header />

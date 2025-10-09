@@ -11,6 +11,8 @@ const UpdatesAdmin = () => {
     const [formData, setFormData] = useState({title: '', content: ''});
     const formRef = useRef(null);
 
+	const token = localStorage.getItem('token');
+
 	useEffect(() => {
 		fetchUpdates();
         fetchUsers();
@@ -27,7 +29,9 @@ const UpdatesAdmin = () => {
 
     const fetchUsers = async () => {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/users/subscribers`);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/users/subscribers`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
             setUsers(response.data);
         }
         catch (error) {
@@ -54,7 +58,9 @@ const UpdatesAdmin = () => {
         }
 
         try {
-            await axios.post(`${process.env.REACT_APP_API_URL}/api/updates/create`, { title, content, users: users });
+            await axios.post(`${process.env.REACT_APP_API_URL}/api/updates/create`, { title, content, users: users }, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
             alert('Update created!');
             setFormData({ title: '', content: '' });
             fetchUpdates();
@@ -72,7 +78,9 @@ const UpdatesAdmin = () => {
         }
 
         try {
-            await axios.put(`${process.env.REACT_APP_API_URL}/api/updates/${editingId}`, { title, content });
+            await axios.put(`${process.env.REACT_APP_API_URL}/api/updates/${editingId}`, { title, content }, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
             alert('Update edited!');
             setFormData({ title: '', content: '' });
             setEditingId(null);
@@ -93,7 +101,9 @@ const UpdatesAdmin = () => {
     const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this update?')) {
             try {
-                await axios.delete(`${process.env.REACT_APP_API_URL}/api/updates/${id}`);
+                await axios.delete(`${process.env.REACT_APP_API_URL}/api/updates/${id}`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
                 alert('Update deleted!');
                 fetchUpdates();
             } catch (error) {

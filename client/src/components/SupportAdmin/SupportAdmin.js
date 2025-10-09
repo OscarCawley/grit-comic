@@ -9,6 +9,7 @@ const SupportAdmin = () => {
 	const [editingId, setEditingId] = useState(null);
     const [formData, setFormData] = useState({title: '', content: ''});
     const formRef = useRef(null);
+    const token = localStorage.getItem('token');
 
 	useEffect(() => {
 		fetchFaqs();
@@ -32,7 +33,9 @@ const SupportAdmin = () => {
         }
 
         try {
-            await axios.post(`${process.env.REACT_APP_API_URL}/api/support/faq/create`, { question, answer });
+            await axios.post(`${process.env.REACT_APP_API_URL}/api/support/faq/create`, { question, answer }, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
             alert('FAQ created!');
             setFormData({ question: '', answer: '' });
             fetchFaqs();
@@ -50,7 +53,9 @@ const SupportAdmin = () => {
         }
 
         try {
-            await axios.put(`${process.env.REACT_APP_API_URL}/api/support/faq/${editingId}`, { question, answer });
+            await axios.put(`${process.env.REACT_APP_API_URL}/api/support/faq/${editingId}`, { question, answer }, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
             alert('FAQ edited!');
             setFormData({ question: '', answer: '' });
             setEditingId(null);
@@ -71,7 +76,9 @@ const SupportAdmin = () => {
     const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this FAQ?')) {
             try {
-                await axios.delete(`${process.env.REACT_APP_API_URL}/api/support/faq/${id}`);
+                await axios.delete(`${process.env.REACT_APP_API_URL}/api/support/faq/${id}`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
                 alert('FAQ deleted!');
                 fetchFaqs();
             } catch (error) {

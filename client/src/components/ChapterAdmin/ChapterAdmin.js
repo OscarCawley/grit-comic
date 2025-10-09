@@ -8,6 +8,7 @@ const ChapterAdmin = ({ setView, setSelectedChapter }) => {
     const [editingId, setEditingId] = useState(null);
     const [formData, setFormData] = useState({chapterNum: '', title: ''});
     const formRef = useRef(null);
+    const token = localStorage.getItem('token');
 
     useEffect(() => {
 		fetchChapters();
@@ -22,7 +23,8 @@ const ChapterAdmin = ({ setView, setSelectedChapter }) => {
         }
     }
 
-    const handleCreate = async () => {
+    const handleCreate = async (e) => {
+        e.preventDefault();
         const { chapterNum, title } = formData;
 
         if (!chapterNum.trim() || !title.trim()) {
@@ -30,8 +32,8 @@ const ChapterAdmin = ({ setView, setSelectedChapter }) => {
 			return;}
 
         try {
-            await axios.post(`${process.env.REACT_APP_API_URL}/api/chapters/create`, formData, {
-                headers: { 'Content-Type': 'multipart/form-data' }
+            await axios.post(`${process.env.REACT_APP_API_URL}/api/chapters/create`, { chapterNum, title }, {
+                headers: { Authorization: `Bearer ${token}` }
             });
             alert('Chapter created!');
             setFormData({ chapterNum: '', title: '' });
@@ -46,10 +48,11 @@ const ChapterAdmin = ({ setView, setSelectedChapter }) => {
     };
 
     const handleUpdate = async () => {
+        const { chapterNum, title } = formData;
 
         try {
-			await axios.put(`${process.env.REACT_APP_API_URL}/api/chapters/update/${editingId}`, formData, {
-				headers: { 'Content-Type': 'multipart/form-data' }
+			await axios.put(`${process.env.REACT_APP_API_URL}/api/chapters/update/${editingId}`, { chapterNum, title }, {
+				headers: { Authorization: `Bearer ${token}` }
 			});
 			alert('Chapter updated!');
 			setFormData({ chapterNum: '', title: ''});
@@ -67,7 +70,9 @@ const ChapterAdmin = ({ setView, setSelectedChapter }) => {
     const handleDelete = async (chapterId) => {
         if (window.confirm('Are you sure you want to delete this chapter?')) {
             try {
-                await axios.delete(`${process.env.REACT_APP_API_URL}/api/chapters/delete/${chapterId}`);
+                await axios.delete(`${process.env.REACT_APP_API_URL}/api/chapters/delete/${chapterId}`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
                 setChapters(chapters.filter(ch => ch.chapterNum !== chapterId));
             } catch (err) {
                 console.error('Error deleting chapter:', err);

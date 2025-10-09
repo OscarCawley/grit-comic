@@ -29,3 +29,5 @@ A dynamic web platform created to showcase the comic book *GRIT*, offering fans 
   Make backend admin only
   Verify email
   change font file
+  add admin toggle in user admin
+  add comment backend

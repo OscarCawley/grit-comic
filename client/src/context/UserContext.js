@@ -13,6 +13,7 @@ export const normalizeUser = (decodedUser) => {
         username: decodedUser.username ?? null,
         email: decodedUser.email ?? null,
         subscribe: decodedUser.subscribe ?? false,
+        auth: decodedUser.auth ?? false,
     };
 };
 

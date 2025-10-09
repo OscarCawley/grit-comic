@@ -3,6 +3,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const db = require('../db');
+const AdminOnly = require('../middleware/AdminOnly.js');
 
 const router = express.Router();
 
@@ -39,7 +40,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.post('/create', upload.none(), async (req, res) => {
+router.post('/create', AdminOnly, upload.none(), async (req, res) => {
     const { chapterNum, title } = req.body;
 
     if (!chapterNum || !title) {
@@ -57,7 +58,7 @@ router.post('/create', upload.none(), async (req, res) => {
     }
 });
 
-router.put('/update/:oldChapterNum', upload.none(), async (req, res) => {
+router.put('/update/:oldChapterNum', AdminOnly, upload.none(), async (req, res) => {
     const { oldChapterNum } = req.params;
     const { chapterNum, title } = req.body;
     const newChapterNum = chapterNum;
@@ -83,7 +84,7 @@ router.put('/update/:oldChapterNum', upload.none(), async (req, res) => {
     }
 });
 
-router.delete('/delete/:chapterNum', async (req, res) => {
+router.delete('/delete/:chapterNum', AdminOnly, async (req, res) => {
     const { chapterNum } = req.params;
 
     try {
@@ -130,7 +131,7 @@ router.get('/:chapterNum/pages', async (req, res) => {
     }
 });
 
-router.post('/upload/:chapterNum', upload.array('images'), async (req, res) => {
+router.post('/upload/:chapterNum', AdminOnly, upload.array('images'), async (req, res) => {
     const { chapterNum } = req.params;
 
     if (!req.files || req.files.length === 0) {
@@ -157,7 +158,7 @@ router.post('/upload/:chapterNum', upload.array('images'), async (req, res) => {
     }
 });
 
-router.put('/reorder/:chapterNum', async (req, res) => {
+router.put('/reorder/:chapterNum', AdminOnly, async (req, res) => {
     const { chapterNum } = req.params;
     const { pages } = req.body;
 
@@ -178,7 +179,7 @@ router.put('/reorder/:chapterNum', async (req, res) => {
     }
 });
 
-router.delete('/delete/:chapterNum/page/:pageNum', async (req, res) => {
+router.delete('/delete/:chapterNum/page/:pageNum', AdminOnly, async (req, res) => {
     const { chapterNum, pageNum } = req.params;
 
     try {
@@ -209,7 +210,7 @@ router.delete('/delete/:chapterNum/page/:pageNum', async (req, res) => {
     }
 });
 
-router.delete('/delete/:chapterNum/all', async (req, res) => {
+router.delete('/delete/:chapterNum/all', AdminOnly, async (req, res) => {
     const { chapterNum } = req.params;
 
     try {

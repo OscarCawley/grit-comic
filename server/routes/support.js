@@ -1,6 +1,7 @@
 ﻿const express = require('express');
 const db = require('../db');
 const { sendSupportEmail } = require('../emailUtils');
+const AdminOnly = require('../middleware/AdminOnly.js');
 
 const router = express.Router();
 
@@ -16,7 +17,7 @@ router.get('/faq', async (req, res) => {
 });
 
 // Create a new faq
-router.post('/faq/create', async (req, res) => {
+router.post('/faq/create', AdminOnly, async (req, res) => {
     const { question, answer } = req.body;
 
     if (!question || !answer) {
@@ -33,7 +34,7 @@ router.post('/faq/create', async (req, res) => {
 });
 
 // Update an existing faq
-router.put('/faq/:id', async (req, res) => {
+router.put('/faq/:id', AdminOnly, async (req, res) => {
     const { id } = req.params;
     const { question, answer } = req.body;
 
@@ -51,7 +52,7 @@ router.put('/faq/:id', async (req, res) => {
 });
 
 // Delete an faq
-router.delete('/faq/:id', async (req, res) => {
+router.delete('/faq/:id', AdminOnly, async (req, res) => {
     const { id } = req.params;
 
     try {

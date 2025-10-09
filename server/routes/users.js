@@ -5,11 +5,12 @@ const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const db = require('../db');
 const { sendPasswordResetEmail } = require('../emailUtils');
+const AdminOnly = require('../middleware/AdminOnly.js');
 
 const router = express.Router();
 
 // GET all users
-router.get('/', async (req, res) => {
+router.get('/', AdminOnly, async (req, res) => {
     try {
         const [results] = await db.query('SELECT * FROM users');
         res.json(results);
@@ -20,7 +21,7 @@ router.get('/', async (req, res) => {
 });
 
 // GET subscribers
-router.get('/subscribers', async (req, res) => {
+router.get('/subscribers', AdminOnly, async (req, res) => {
     try {
         const [results] = await db.query('SELECT * FROM users WHERE subscribe = 1');
         res.json(results);
@@ -72,7 +73,7 @@ router.post('/login', async (req, res) => {
         }
 
         const token = jwt.sign(
-            { userId: user.id, username: user.username, email: user.email, subscribe: Boolean(user.subscribe) },
+            { userId: user.id, username: user.username, email: user.email, subscribe: Boolean(user.subscribe), auth: Boolean(user.auth) },
             process.env.JWT_SECRET,
             { expiresIn: '1h' }
         );
@@ -208,7 +209,7 @@ router.get('/unsubscribe', async (req, res) => {
     }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', AdminOnly, async (req, res) => {
     const userId = req.params.id;
 
     try {

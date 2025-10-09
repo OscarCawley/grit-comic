@@ -1,6 +1,7 @@
 const express = require('express');
 const db = require('../db');
 const { sendNewsletterEmails } = require('../emailUtils');
+const AdminOnly = require('../middleware/AdminOnly.js');
 
 const router = express.Router();
 
@@ -19,7 +20,7 @@ router.get('/', async (req, res) => {
 });
 
 // Create a new update
-router.post('/create', async (req, res) => {
+router.post('/create', AdminOnly, async (req, res) => {
     const { title, content, users } = req.body;
 
     if (!title || !content) {
@@ -39,7 +40,7 @@ router.post('/create', async (req, res) => {
 });
 
 // Update an existing update
-router.put('/:id', async (req, res) => {
+router.put('/:id', AdminOnly, async (req, res) => {
     const { id } = req.params;
     const { title, content } = req.body;
 
@@ -57,7 +58,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // Delete an update
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', AdminOnly, async (req, res) => {
     const { id } = req.params;
 
     try {

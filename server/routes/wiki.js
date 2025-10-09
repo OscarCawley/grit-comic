@@ -3,6 +3,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const db = require('../db');
+const AdminOnly = require('../middleware/AdminOnly.js');
 
 const router = express.Router();
 
@@ -61,7 +62,7 @@ router.get('/posts/:slug', async (req, res) => {
     }
 });
 
-router.get('/categories', async (req, res) => {
+router.get('/categories', AdminOnly, async (req, res) => {
     try {
         const [results] = await db.query('SELECT * FROM categories');
         res.json(results);
@@ -71,7 +72,7 @@ router.get('/categories', async (req, res) => {
     }
 });
 
-router.post('/create', upload.single('image'), async (req, res) => {
+router.post('/create', AdminOnly, upload.single('image'), async (req, res) => {
     const { title, slug, content, category_id } = req.body;
     const image = req.file ? `/uploads/${req.file.filename}` : null;
 
@@ -92,7 +93,7 @@ router.post('/create', upload.single('image'), async (req, res) => {
     }
 });
 
-router.put('/:id', upload.single('image'), async (req, res) => {
+router.put('/:id', AdminOnly, upload.single('image'), async (req, res) => {
     const { id } = req.params;
     const { title, slug, content, category_id } = req.body;
     const image = req.file ? `/uploads/${req.file.filename}` : null;
@@ -137,7 +138,7 @@ router.put('/:id', upload.single('image'), async (req, res) => {
     }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', AdminOnly, async (req, res) => {
     const { id } = req.params;
 
     try {

@@ -26,6 +26,7 @@ A dynamic web platform created to showcase the comic book *GRIT*, offering fans 
 
 
 - **TODO**
-  change font file
-  add admin toggle in user admin
+  add owner role so that normal admins cant change other admins rights and delete them
   add comment backend
+  add scrollbar to comments, wiki, updates etc to avoid long lists
+  change font file

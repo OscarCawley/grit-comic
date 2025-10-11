@@ -14,6 +14,7 @@ import ForgotPasswordPage from './pages/ForgotPasswordPage/ForgotPasswordPage.js
 import ResetPasswordPage from './pages/ResetPasswordPage/ResetPasswordPage.js';
 import UnsubscribePage from './pages/UnsubscribePage/UnsubscribePage.js';
 import AccountPage from './pages/AccountPage/AccountPage.js';
+import VerifyEmailPage from './pages/VerifyEmailPage/VerifyEmailPage.js';
 import Admin from './pages/Admin/Admin.js';
 import ScrollToTop from './components/ScrollToTop/ScrollToTop.js';
 
@@ -63,6 +64,7 @@ function AppContent() {
 							<Route path="/reset-password" element={<ResetPasswordPage />} />
 							<Route path="/unsubscribe" element={<UnsubscribePage />} />
 							<Route path="/account" element={<AccountPage />} />
+							<Route path="/verify-email" element={<VerifyEmailPage />} />
 						</Routes>
 						</AnimatePresence>
 						<Footer />

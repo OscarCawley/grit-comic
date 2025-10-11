@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import './UnsubscribePage.css';
+import './VerifyEmailPage.css';
 
-const UnsubscribePage = () => {
-	const [status, setStatus] = useState('Checking…');
+const VerifyEmailPage = () => {
+	const [status, setStatus] = useState('Verifying…');
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
@@ -11,21 +11,21 @@ const UnsubscribePage = () => {
 		const token = params.get('token');
 
 		if (!token) {
-			setStatus('Missing unsubscribe token.');
+			setStatus('Missing verification token.');
 			setLoading(false);
 			return;
 		}
 
-		axios.get(`${process.env.REACT_APP_API_URL}/api/users/unsubscribe?token=${token}`)
-			.then(() => setStatus('You are unsubscribed.'))
+		axios.get(`${process.env.REACT_APP_API_URL}/api/users/verify-email?token=${token}`)
+			.then(() => setStatus('Your email is verified! You can now log in.'))
 			.catch((err) => {
-				setStatus(err.response?.data?.message || 'Unable to unsubscribe.');
+				setStatus(err.response?.data?.message || 'Unable to verify email.');
 			})
 			.finally(() => setLoading(false));
 	}, []);
 
 	return (
-		<div className="unsubscribe-page">
+		<div className="verify-email-page">
 			{loading ? (
 				<div className="page-loading" role="status" aria-live="polite" aria-label="Loading content">
 					<div className="spinner" />
@@ -33,11 +33,11 @@ const UnsubscribePage = () => {
 			) : (
 				<>
 					<h1>{status}</h1>
-					<a href="/">Return to Grit Comic</a>
+					<a href="/login">Go to Login</a>
 				</>
 			)}
 		</div>
 	);
 };
 
-export default UnsubscribePage;
+export default VerifyEmailPage;

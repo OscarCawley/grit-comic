@@ -23,7 +23,7 @@ const SignUpPage = () => {
                 subscribe
             });
 
-            setMessage('Account created successfully! Redirecting to login...');
+            setMessage('Check your email to verify your account!');
             setEmail('');
             setPassword('');
             setUsername('');
@@ -33,7 +33,7 @@ const SignUpPage = () => {
             setTimeout(() => {
                 setMessage('');
                 navigate('/login');
-            }, 3000);
+            }, 5000);
             
         } catch (err) {
             const errorMsg = err.response?.data?.message || err.message || 'Something went wrong';

@@ -106,5 +106,53 @@ const sendNewsletterEmails = async (title, content, users) => {
     }
 };
 
+const sendVerificationEmail = async (email, token) => {
 
-module.exports = { sendPasswordResetEmail, sendSupportEmail, sendNewsletterEmails };
+    const verificationLink = `${process.env.FRONTEND_URL}/verify-email?token=${token}`;
+
+    const mailOptions = {
+        from: `"Grit Comic" <${process.env.EMAIL_USER}>`,
+        to: email,
+        subject: 'Verify Your Email Address',
+        html: `
+            <div style="
+                font-family: Arial, sans-serif;
+                line-height: 1.6;
+                color: #333;
+                background-color: #f9f9f9;
+                padding: 20px;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                max-width: 600px;
+                margin: 0 auto;
+            ">
+                <h2 style="color: #29353C; text-align: center;">Verify Email</h2>
+                <div style="font-size: 16px; margin-top: 20px;">
+                    Please verify your email address by clicking the button below:
+                </div>
+                <div style="text-align: center; margin: 20px 0;">
+                    <a href="${verificationLink}" style="
+                        display: inline-block;
+                        padding: 10px 20px;
+                        font-size: 16px;
+                        font-weight: bold;
+                        color: #29353C;
+                        background-color: #AAC7D8;
+                        text-decoration: none;
+                        border-radius: 5px;
+                    ">Verify Email</a>
+                </div>
+                <p style="font-size: 14px; color: #555;">
+                    If you did not create an account, please ignore this email.
+                </p>
+                <p style="font-size: 14px; text-align: center; color: #777; margin-top: 30px;">
+                    – Grit Comic Team
+                </p>
+            </div>
+        `
+    };
+
+    await transporter.sendMail(mailOptions);
+};
+
+module.exports = { sendPasswordResetEmail, sendSupportEmail, sendNewsletterEmails, sendVerificationEmail };

@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const db = require('../db');
-const { sendPasswordResetEmail } = require('../emailUtils');
+const { sendPasswordResetEmail, sendVerificationEmail } = require('../emailUtils');
 const AdminOnly = require('../middleware/AdminOnly.js');
 
 const router = express.Router();
@@ -41,12 +41,22 @@ router.post('/signup', async (req, res) => {
     }
 
     try {
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const unsubscribeToken = crypto.randomBytes(32).toString('hex');
-        await db.query(
-            'INSERT INTO users (username, email, password, subscribe, unsubscribe_token) VALUES (?, ?, ?, ?, ?)',
-            [username, email, hashedPassword, subscribe, unsubscribeToken]
+        const [existing] = await db.query(
+            'SELECT id FROM users WHERE email = ? UNION SELECT id FROM pending_users WHERE email = ?',
+            [email, email]
         );
+        if (existing.length > 0) {
+            return res.status(400).json({ message: 'Email already registered or pending verification.' });
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const verificationToken = crypto.randomBytes(32).toString('hex');
+        await db.query(
+            'INSERT INTO pending_users (username, email, password, subscribe, verification_token) VALUES (?, ?, ?, ?, ?)',
+            [username, email, hashedPassword, subscribe, verificationToken]
+        );
+
+        await sendVerificationEmail(email, verificationToken);
 
         res.status(201).json({ message: 'User registered successfully!' });
     } catch (err) {
@@ -206,6 +216,37 @@ router.get('/unsubscribe', async (req, res) => {
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Unable to process unsubscribe request at the moment.' });
+    }
+});
+
+router.get('/verify-email', async (req, res) => {
+    const { token } = req.query;
+    if (!token) {
+        return res.status(400).json({ message: 'Missing token' });
+    }
+    try {
+        const [rows] = await db.query(
+            'SELECT * FROM pending_users WHERE verification_token = ?',
+            [token]
+        ); 
+        if (rows.length === 0) {
+            return res.status(404).json({ message: 'Verification link is invalid or expired.' });
+        }
+        const pendingUser = rows[0];
+
+        const unsubscribeToken = crypto.randomBytes(32).toString('hex');
+        await db.query(
+            'INSERT INTO users (username, email, password, subscribe, unsubscribe_token) VALUES (?, ?, ?, ?, ?)',
+            [pendingUser.username, pendingUser.email, pendingUser.password, pendingUser.subscribe, unsubscribeToken]
+        );
+        await db.query(
+            'DELETE FROM pending_users WHERE id = ?',
+            [pendingUser.id]
+        );
+        res.json({ message: 'Email verified successfully! You can now log in.' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Unable to verify email at the moment.' });
     }
 });
 

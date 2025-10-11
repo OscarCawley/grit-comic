@@ -255,6 +255,26 @@ router.get('/verify-email', async (req, res) => {
     }
 });
 
+// TOGGLE ADMIN
+router.put('/:id/admin', AdminOnly, async (req, res) => {
+    const userId = req.params.id;
+    const { auth } = req.body;
+    if (typeof auth !== 'boolean') {
+        return res.status(400).json({ message: 'auth must be a boolean.' });
+    }
+    try {
+        const [result] = await db.query('UPDATE users SET auth = ? WHERE id = ?', [auth ? 1 : 0, userId]);
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        res.json({ message: 'User admin status updated successfully' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Database error', error: err });
+    }
+});
+
+// DELETE user
 router.delete('/:id', AdminOnly, async (req, res) => {
     const userId = req.params.id;
 

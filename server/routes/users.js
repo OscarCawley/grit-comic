@@ -70,13 +70,18 @@ router.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        const [results] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
-
-        if (results.length === 0) {
+        // Check users table first
+        const [users] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
+        if (users.length === 0) {
+            // If not found, check pending_users table
+            const [pending] = await db.query('SELECT * FROM pending_users WHERE email = ?', [email]);
+            if (pending.length > 0) {
+                return res.status(403).json({ message: 'Please verify your account before logging in.' });
+            }
             return res.status(400).json({ message: 'User not found' });
         }
 
-        const user = results[0];
+        const user = users[0];
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(400).json({ message: 'Incorrect password' });

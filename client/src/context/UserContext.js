@@ -14,7 +14,38 @@ export const normalizeUser = (decodedUser) => {
         email: decodedUser.email ?? null,
         subscribe: decodedUser.subscribe ?? false,
         auth: decodedUser.auth ?? false,
+        owner: decodedUser.owner ?? false,
     };
+};
+
+// Utility to ensure token is valid, refresh if needed
+export const ensureValidToken = async () => {
+    const token = localStorage.getItem('token');
+    const refreshToken = localStorage.getItem('refreshToken');
+    if (!token) return false;
+
+    try {
+        const decoded = jwtDecode(token);
+        const now = Date.now() / 1000;
+        if (decoded.exp < now) {
+            // Token expired, try to refresh
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/users/refresh-token`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ refreshToken }),
+            });
+            const data = await response.json();
+            if (data.accessToken) {
+                localStorage.setItem('token', data.accessToken);
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return true;
+    } catch {
+        return false;
+    }
 };
 
 export const UserProvider = ({ children }) => {
@@ -39,7 +70,7 @@ export const UserProvider = ({ children }) => {
     };
 
     return (
-        <UserContext.Provider value={{ user, setUser, signOut }}>
+        <UserContext.Provider value={{ user, setUser, signOut, ensureValidToken }}>
             {children}
         </UserContext.Provider>
     );

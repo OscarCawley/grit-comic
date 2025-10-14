@@ -5,11 +5,11 @@ import { Link } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 
 const AccountPage = () => {
-    const { user, signOut, setUser } = useContext(UserContext);
+    const { user, signOut, setUser, ensureValidToken } = useContext(UserContext);
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
     const [isUpdatingSubscribe, setIsUpdatingSubscribe] = useState(false);
-
+    
     const handleForgotPassword = async () => {
         if (!user?.email) {
             setError('Email address not available.');
@@ -102,7 +102,16 @@ const AccountPage = () => {
                         : 'Subscribe to Newsletter'}
                 </button>
                     {user?.auth === true && (
-                        <Link to={`/admin`}>
+                        <Link
+                            to="/admin"
+                            onClick={async (e) => {
+                                const valid = await ensureValidToken();
+                                if (!valid) {
+                                    e.preventDefault();
+                                    window.location.href = '/login';
+                                }
+                            }}
+                        >
                             <button>Admin</button>
                         </Link>
                     )}

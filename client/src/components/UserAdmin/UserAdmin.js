@@ -14,7 +14,6 @@ const UserAdmin = () => {
 
     useEffect (() => {
         fetchUsers();
-        console.log('Current user:', user?.owner);
     }, []);
 
     const fetchUsers = async () => {

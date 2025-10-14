@@ -28,4 +28,18 @@ router.post('/', async (req, res) => {
     }
 });
 
+router.delete('/:id', async (req, res) => {
+    const commentId = req.params.id;
+    try {
+        const [result] = await db.query('DELETE FROM comments WHERE id = ?', [commentId]);
+        if (result.affectedRows === 0) {
+            return res.status(404).send('Comment not found');
+        }
+        res.sendStatus(204);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Database error');
+    }
+});
+
 module.exports = router;

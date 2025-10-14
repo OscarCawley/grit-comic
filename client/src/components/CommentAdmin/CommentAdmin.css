@@ -1,0 +1,81 @@
+/* ...existing code... */
+.comment-container {
+  background-color: white;
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  font-family: Arial, sans-serif;
+}
+
+.filters {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  align-items: center;
+}
+
+.filters select,
+.filters input[type="text"] {
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  font-size: 1rem;
+  background-color: #f9f9f9;
+  color: #333;
+  transition: border-color 0.2s;
+}
+
+.filters select:focus,
+.filters input[type="text"]:focus {
+  outline: none;
+  border-color: #aac7d8;
+}
+
+.filters select {
+  min-width: 180px;
+}
+
+.filters input[type="text"] {
+  min-width: 160px;
+}
+
+.comment-container h1 {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.comment-list {
+  list-style: none;
+  padding: 0;
+}
+
+.comment-list li {
+  background-color: #f9f9f9;
+  margin-bottom: 0.75rem;
+  padding: 1rem;
+  border-radius: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.comment-list li span {
+  font-weight: bold;
+  color: #333;
+}
+
+.comment-list button {
+  background-color: #d32f2f;
+  color: white;
+  padding: 0.4rem 0.75rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.comment-list button:hover {
+  background-color: #9a0007;
+}

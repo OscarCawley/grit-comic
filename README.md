@@ -26,7 +26,5 @@ A dynamic web platform created to showcase the comic book *GRIT*, offering fans 
 
 
 - **TODO**
-  add scrollbar to comments, wiki, updates etc to avoid long lists
   create random assets to go onto the side columns
-  change font file
   figure out if password hashing needs to be hidden from github

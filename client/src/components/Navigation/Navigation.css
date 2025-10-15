@@ -1,3 +1,8 @@
+@font-face {
+    font-family: 'Grit Font';
+    src: url('../../assets/grit-font-lowerK.otf') format('opentype');
+}
+
 .navigation {
     display: flex;
     justify-content: center; /* Center the main buttons */
@@ -17,7 +22,6 @@
     right: 20px; /* Push the socials to the right */
     display: flex;
     gap: 20px; /* Add spacing between social links */
-    font-family: Arial, sans-serif;
     margin: 0;
 }
 
@@ -32,9 +36,9 @@
     border: none;
     color: white;
     padding: 10px 20px;
-    font-weight: 600;
-    font-size: 18px;
+    font-size: 30px;
     cursor: pointer;
+    font-family: 'Grit Font';
 }
 
 .navigation a {

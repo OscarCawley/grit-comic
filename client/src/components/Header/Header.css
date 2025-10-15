@@ -1,6 +1,6 @@
 @font-face {
-    font-family: 'Grit Press';
-    src: url('../../assets/GritPress_TB.otf') format('opentype');
+    font-family: 'Grit Font';
+    src: url('../../assets/grit-font-lowerK.otf') format('opentype');
 }
 
 .header {
@@ -12,7 +12,7 @@
 }
 
 .header h1 {
-    font-family: 'Grit Press';
+    font-family: 'Grit Font';
     font-size: 180px;
     margin: 0;
     color: #AAC7D8;
@@ -30,8 +30,6 @@
     border: none;
     color: #AAC7D8;
     padding: 10px 20px;
-    font-weight: 600;
-    font-size: 18px;
     cursor: pointer;
 }
 
@@ -41,8 +39,7 @@
 }
 
 .user {
-    font-family: Arial, sans-serif;
+    font-family: 'Grit Font';
     text-transform: uppercase; /* Capitalizes the first letter of each word */
-    font-weight: 600;
-    font-size: 18px;
+    font-size: 25px;
 }

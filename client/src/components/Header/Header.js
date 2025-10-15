@@ -9,7 +9,7 @@ const Header = () => {
     return (
         <div className="header">
             <Link to="/" className="header-title-link">
-                <h1>GRIT COMIC</h1>
+                <h1>GRIT</h1>
             </Link>
             <div className="account-container">
                 {user ? (

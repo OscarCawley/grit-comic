@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { throttle } from 'lodash';
 import { useSearchParams } from 'react-router-dom';
 import { useContext } from "react";
 import { UserContext } from "../../context/UserContext";
 import axios from 'axios';
 import './Home.css';
 import PageAnimation from '../../components/PageAnimation/PageAnimation.js';
+import pageIcon from '../../assets/icons/page.png';
+import chapterIcon from '../../assets/icons/chapter.png';
 
 const Home = () => {
     const { user } = useContext(UserContext);
@@ -31,6 +34,20 @@ const Home = () => {
             setCurrentPage(0);
         }
     }, [chapters, initialChapter]);
+
+    useEffect(() => {
+        const handleKeyDown = throttle((event) => {
+            if (event.key === 'ArrowRight') {
+                handlePageChange('next');
+            } else if (event.key === 'ArrowLeft') {
+                handlePageChange('prev');
+            }
+        }, 200);
+        window.addEventListener('keydown', handleKeyDown);
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [currentPage, currentChapter, chapters]);
 
     const fetchChapters = async () => {
         try {
@@ -102,13 +119,21 @@ const Home = () => {
         }
     };
 
-    const handlePageChange = (direction) => {
+    const handlePageChange = useCallback((direction) => {
+        if (!chapters.length) return;
+
         if (direction === 'next' && currentPage < chapters[currentChapter].pages.length - 1) {
             setCurrentPage(currentPage + 1);
         } else if (direction === 'prev' && currentPage > 0) {
             setCurrentPage(currentPage - 1);
+        } else if (direction === 'next' && currentPage === chapters[currentChapter].pages.length - 1 && currentChapter < chapters.length - 1) {
+            setCurrentChapter(currentChapter + 1);
+            setCurrentPage(0); // Reset to first page of the new chapter
+        } else if (direction === 'prev' && currentPage === 0 && currentChapter > 0) {
+            setCurrentChapter(currentChapter - 1);
+            setCurrentPage(chapters[currentChapter - 1].pages.length - 1); // Go to last page of the previous chapter
         }
-    };
+    }, [currentPage, currentChapter, chapters]);
 
     const handleChapterChange = (direction) => {
         if (direction === 'next' && currentChapter < chapters.length - 1) {
@@ -118,7 +143,7 @@ const Home = () => {
             setCurrentChapter(currentChapter - 1);
             setCurrentPage(0); // Reset to first page of the new chapter
         }
-    }
+    };
 
     const handleCommentSubmit = async (e) => {
         e.preventDefault();
@@ -140,8 +165,6 @@ const Home = () => {
             setSubmitting(false);
         }
     };
-
-
 
     // Navigation availability flags
     const canGoPrevChapter = currentChapter > 0;
@@ -182,18 +205,20 @@ const Home = () => {
                     )}
                 </div>
                 <div className="comic-page-indicator">
-                    <button className="next-chapter" onClick={() => handleChapterChange('prev')} disabled={!canGoPrevChapter} aria-label="Previous chapter" title="Previous chapter">
-                        <p>|&lt;</p>
-                    </button>
-                    <button className="next-page" onClick={() => handlePageChange('prev')} disabled={!canGoPrevPage} aria-label="Previous page" title="Previous page">
-                        <p>&lt;</p>
-                    </button>
-                    <button className="next-page" onClick={() => handlePageChange('next')} disabled={!canGoNextPage} aria-label="Next page" title="Next page">
-                        <p>&gt;</p>
-                    </button>
-                    <button className="next-chapter" onClick={() => handleChapterChange('next')} disabled={!canGoNextChapter} aria-label="Next chapter" title="Next chapter">
-                        <p>&gt;|</p>
-                    </button>
+                    <div className="navigation-buttons">
+                        <button className="page-button" onClick={() => handleChapterChange('prev')} disabled={!canGoPrevChapter} aria-label="Previous chapter" title="Previous chapter">
+                            <img className="left-icon" src={chapterIcon} alt="" />
+                        </button>
+                        <button className="page-button" onClick={() => handlePageChange('prev')} disabled={!canGoPrevPage} aria-label="Previous page" title="Previous page">
+                            <img className="left-icon" src={pageIcon} alt="" />
+                        </button>
+                        <button className="page-button" onClick={() => handlePageChange('next')} disabled={!canGoNextPage} aria-label="Next page" title="Next page">
+                            <img className="right-icon" src={pageIcon} alt="" />
+                        </button>
+                        <button className="page-button" onClick={() => handleChapterChange('next')} disabled={!canGoNextChapter} aria-label="Next chapter" title="Next chapter">
+                            <img className="right-icon" src={chapterIcon} alt="" />
+                        </button>
+                    </div>
                     {chapters.length > 0 && chapters[currentChapter]?.pages?.length > 0 ? (
                         <p>Page {currentPage + 1} of {chapters[currentChapter].pages.length}</p>
                     ) : null}

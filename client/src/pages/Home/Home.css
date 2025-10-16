@@ -31,7 +31,15 @@
     color: white;
     font-size: 20px;
     font-weight: bold;
-    margin-bottom: 15px;
+    margin: 15px 0 15px 0;
+}
+
+.navigation-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    margin: 15px 0;
 }
 
 .comic-viewer img {
@@ -39,6 +47,46 @@
     max-height: 80vh;
     margin: auto;
     display: block;
+}
+
+.page-button {
+    font-size: 48px;
+    font-weight: 600;
+    border: 4px solid #32FFB0;
+    border-radius: 10px;
+    background: #222222;
+    cursor: pointer;
+    padding: 0 15px;
+    transition: color 0.2s;
+}
+
+.page-button:disabled {
+    border-color: #555555;
+    color: #555555;
+    cursor: not-allowed;
+}
+
+.page-button:not(:disabled):hover {
+    border-color: #32FFB0;
+    color: #32FFB0;
+}
+
+.page-button:active {
+    transform: scale(0.95);
+}
+
+.page-button:focus {
+    outline: 3px solid #AAC7D8;
+    outline-offset: 2px;
+}
+
+.page-button img {
+    height: 36px;
+    width: auto;
+}
+
+.page-button .left-icon {
+    transform: rotate(180deg);
 }
 
 .comment-section {

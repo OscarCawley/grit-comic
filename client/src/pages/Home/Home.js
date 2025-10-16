@@ -169,7 +169,7 @@ const Home = () => {
         <PageAnimation>
             <div className='comic-viewer-container'>
                 <div className="comic-chapter-title">
-                    {chapters[currentChapter]?.title ?? <span className="loading">Loading chapter title...</span>}
+                    {chapters[currentChapter]?.title}
                 </div>
                 <div className="comic-viewer" onClick={handleImageClick}>
                     {chapters.length > 0 && chapters[currentChapter]?.pages?.length > 0 ? (
@@ -178,7 +178,7 @@ const Home = () => {
                             alt={`Comic page ${currentPage + 1}`}
                         />
                     ) : (
-                        <div className="image-placeholder loading">Loading page image...</div>
+                        <div className="image-placeholder"><div className="spinner" /></div>
                     )}
                 </div>
                 <div className="comic-page-indicator">
@@ -196,9 +196,7 @@ const Home = () => {
                     </button>
                     {chapters.length > 0 && chapters[currentChapter]?.pages?.length > 0 ? (
                         <p>Page {currentPage + 1} of {chapters[currentChapter].pages.length}</p>
-                    ) : (
-                        <p className="loading">Loading page count...</p>
-                    )}
+                    ) : null}
                 </div>
             </div>
             <div className="comment-section">

@@ -1,12 +1,16 @@
+@font-face {
+    font-family: 'Grit Font';
+    src: url('../../assets/grit-font-lowerK.otf') format('opentype');
+}
+
 .comic-viewer-container {
     margin: 20px auto;
 }
 
 .comic-chapter-title {
-    font-family: Arial, sans-serif;
-    color: white;
-    font-size: 30px;
-    font-weight: bold;
+    font-family: 'Grit Font';
+    color: #939393;
+    font-size: 60px;
     margin-bottom: 10px;
 }
 

@@ -51,21 +51,26 @@ function AppContent() {
 						<Header />
 						<Navigation />
 						<AnimatePresence mode='wait'>
-						<Routes location={location}>
-							<Route path="/" element={<Home />} />
-							<Route path="/chapters" element={<Chapters />} />
-							<Route path="/wiki" element={<Wiki />} />
-							<Route path="/wiki/:slug" element={<WikiDetail />} />
-							<Route path="/updates" element={<Updates />} />
-							<Route path="/support" element={<Support />} />
-							<Route path="/login" element={<LogInPage />} />
-							<Route path="/signup" element={<SignUpPage />} />
-							<Route path="/forgot-password" element={<ForgotPasswordPage />} />
-							<Route path="/reset-password" element={<ResetPasswordPage />} />
-							<Route path="/unsubscribe" element={<UnsubscribePage />} />
-							<Route path="/account" element={<AccountPage />} />
-							<Route path="/verify-email" element={<VerifyEmailPage />} />
-						</Routes>
+						<div className='page-background'>
+							<div class="dots-layer"></div>
+							<div className='App-content'>
+								<Routes location={location}>
+									<Route path="/" element={<Home />} />
+									<Route path="/chapters" element={<Chapters />} />
+									<Route path="/wiki" element={<Wiki />} />
+									<Route path="/wiki/:slug" element={<WikiDetail />} />
+									<Route path="/updates" element={<Updates />} />
+									<Route path="/support" element={<Support />} />
+									<Route path="/login" element={<LogInPage />} />
+									<Route path="/signup" element={<SignUpPage />} />
+									<Route path="/forgot-password" element={<ForgotPasswordPage />} />
+									<Route path="/reset-password" element={<ResetPasswordPage />} />
+									<Route path="/unsubscribe" element={<UnsubscribePage />} />
+									<Route path="/account" element={<AccountPage />} />
+									<Route path="/verify-email" element={<VerifyEmailPage />} />
+								</Routes>
+							</div>
+						</div>
 						</AnimatePresence>
 						<Footer />
 					</div>}/>

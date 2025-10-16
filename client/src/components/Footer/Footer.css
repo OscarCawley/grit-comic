@@ -1,8 +1,9 @@
 footer {
-    background-color: #354555;
+    background-color: #0F0F0F;
     padding: 20px 0;
     text-align: center;
     margin-top: auto;
+    border-top: 6px solid #32FFB0;
 }
 
 footer p {

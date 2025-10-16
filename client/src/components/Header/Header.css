@@ -7,15 +7,14 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #29353C;
+    background-color: #222222;
     position: relative;
 }
 
-.header h1 {
-    font-family: 'Grit Font';
-    font-size: 180px;
-    margin: 0;
-    color: #AAC7D8;
+.grit-logo {
+    width: 24rem;
+    height: auto;
+    margin: 1.5rem 0;
 }
 
 .account-container {
@@ -28,7 +27,7 @@
 .account-container button {
     background: none;
     border: none;
-    color: #AAC7D8;
+    color: #939393;
     padding: 10px 20px;
     cursor: pointer;
 }

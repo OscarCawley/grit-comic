@@ -7,14 +7,15 @@
     display: flex;
     justify-content: center; /* Center the main buttons */
     align-items: center; /* Vertically center items */
-    background-color: #354555;
+    background-color: #0F0F0F;
     padding: 10px 20px;
     position: relative; /* Enable positioning for child elements */
+    border-bottom: 6px solid #32FFB0;
 }
 
 .main-buttons {
     display: flex;
-    gap: 15px; /* Add spacing between buttons */
+    gap: 20px; /* Add spacing between buttons */
 }
 
 .socials {
@@ -34,15 +35,15 @@
 .navigation button {
     background: none;
     border: none;
-    color: white;
-    padding: 10px 20px;
-    font-size: 30px;
+    color: #939393;
+    padding: 5px 10px;
+    font-size: 36px;
     cursor: pointer;
     font-family: 'Grit Font';
 }
 
 .navigation a {
-    color: white;
+    color: #939393;
     text-decoration: none;
     font-weight: 600;
     font-size: 16px;

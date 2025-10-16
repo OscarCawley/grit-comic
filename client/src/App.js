@@ -52,7 +52,8 @@ function AppContent() {
 						<Navigation />
 						<AnimatePresence mode='wait'>
 						<div className='page-background'>
-							<div class="dots-layer"></div>
+							<div className="dots-layer"></div>
+							<div className="dots-fade-top"></div>
 							<div className='App-content'>
 								<Routes location={location}>
 									<Route path="/" element={<Home />} />

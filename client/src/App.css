@@ -26,8 +26,17 @@
     background-size: 30px 30px, 30px 30px;
     background-position: 0 0, 15px 15px;
     background-repeat: repeat;
-    mask-image: linear-gradient(to top, black 30%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to top, black 30%, transparent 100%);
+}
+
+.dots-fade-top {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100vh; /* only fade top 100px */
+    background: linear-gradient(to bottom, #0F0F0F 0%, transparent 100%);
+    z-index: 1; /* above dots, below App-content */
+    pointer-events: none; /* lets clicks go through */
 }
 
 .App-content {
@@ -35,7 +44,7 @@
     max-width: 70%;
     width: 100%;
     background-color: #0F0F0F;
-    z-index: 1;
+    z-index: 2;
 }
 
 body {

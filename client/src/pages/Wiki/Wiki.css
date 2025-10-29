@@ -1,15 +1,25 @@
 .wiki {
     color: white;
     font-family: Arial, sans-serif;
-    display: grid;
-    grid-template-columns: 400px auto 400px;
-    gap: 20px;
 }
 
 .wiki h1 {
+    font-size: 5em;
+    margin: 2.5rem 0;
+    text-align: center;
+}
+
+.wiki-content {
+    display: grid;
+    grid-template-columns: 20% auto;
+    width: 80%;
+    margin: 2.5rem auto;
+    gap: 3rem;
+}
+
+.wiki-content h2 {
     font-size: 2.5em;
     margin: 0;
-    margin-top: 2rem;
     text-align: center;
 }
 
@@ -17,39 +27,49 @@
     grid-column: 1;
     display: flex;
     flex-direction: column;
-    margin: 0 auto;
+    align-items: center;
+    box-sizing: border-box;
     width: 100%;
     gap: 30px;
 }
 
 .category-button {
-    background-color: #AAC7D8; /* Light blue background */
+    background-color: #939393; /* Light blue background */
     font-family: Arial, sans-serif;
     font-size: 1.2em;
     font-weight: 600;
-    color: #29353C;
+    color: #222222;
     border: none;
     border-radius: 5px;
     padding: 10px;
     margin: 0 auto;
-    min-width: 300px;
+    min-width: 100%;
     cursor: pointer;
     text-align: center;
+    box-sizing: border-box;
+}
+
+.category-button:hover {
+    background-color: #bbbbbb;
 }
 
 .category-button.active {
-    background-color: #29353C; /* Darker blue for active category */
-    color: #AAC7D8; /* Light blue text for active category */
+    /* Visible border around the active category with a small gap */
+    outline: 3px solid #bbbbbb; /* border color */
+    outline-offset: 3px; /* gap between button and outline */
+    border-radius: 6px; /* match button rounding */
+    background-color: #bbbbbb;
 }
 
 .wiki-list {
     grid-column: 2;
     display: flex;
     flex-direction: column;
-    align-items: stretch;
+    align-items: center;
     margin: 0 auto;
     margin-bottom: 3rem;
     color: white;
+    box-sizing: border-box;
     gap: 30px;
     width: 100%;
 }
@@ -57,7 +77,6 @@
 .wiki-search {
     display: flex;
     justify-content: center;
-    margin: 20px 0;
     width: 100%;
 }
 
@@ -66,28 +85,29 @@
     max-width: 600px;
     padding: 10px 15px;
     font-size: 1.1em;
-    border: 2px solid #AAC7D8;
+    border: 2px solid #939393;
     border-radius: 5px;
-    background-color: #354555;
-    color: #AAC7D8;
+    background-color: #222222;
+    color: white;
     outline: none;
     transition: all 0.2s ease-in-out;
 }
 
 .wiki-search input::placeholder {
-    color: #AAC7D8; 
+    color: white;
     opacity: 0.7;
 }
 
 .wiki-search input:focus {
-    border-color: #fff;
-    background-color: #3c4e5f;
+    border-color: #bbbbbb;
+    background-color: #303030;
+    outline: none;
 }
 
 .wiki-item {
     text-align: left;
-    border: 1px solid #AAC7D8;
-    background-color: #354555;
+    border: 1px solid #939393;
+    background-color: #222222;
     border-radius: 5px;
     border-width: 3px;
     padding: 10px;
@@ -108,15 +128,19 @@
     margin: 0;
 }
 
+.wiki-item-header span {
+    font-size: 1em;
+    color: #bbbbbb;
+}    
+
 .wiki-item-link {
     text-decoration: none;
-    color: #AAC7D8; /* Light blue text */
+    color: #bbbbbb; /* Light blue text */
 }
-    
 
 .wiki-item-updated {
     font-size: 0.8em;
-    color: #AAC7D8; /* Light blue text */
+    color: #bbbbbb; /* Light blue text */
     text-align: right;
     margin: 0;
 }

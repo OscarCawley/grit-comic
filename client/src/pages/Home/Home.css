@@ -4,8 +4,8 @@
 
 .comic-chapter-title {
     color: white;
-    font-size: 3.5em;
-    margin: 2rem 0;
+    font-size: 5em;
+    margin: 2.5rem 0;
 }
 
 .comic-page-indicator {
@@ -120,7 +120,7 @@
 }
 
 .comment-submit-button {
-    background-color: #939393; /* Light blue background */
+    background-color: #939393;
     font-family: Arial, sans-serif;
     font-size: 1.2em;
     font-weight: 600;
@@ -135,7 +135,7 @@
 }
 
 .comment-submit-button:hover {
-    background-color: #bbbbbb; /* Darker blue on hover */
+    background-color: #bbbbbb;
 }
 
 .comment-submit-button:disabled {
@@ -170,12 +170,12 @@
 .comment-header h3 {
     font-size: 1.5em;
     margin: 0;
-    color: #939393;
+    color: #bbbbbb;
 }
 
 .comment-date {
     font-size: 0.8em;
-    color: #939393;
+    color: #bbbbbb;
     text-align: right;
     margin: 0;
 }

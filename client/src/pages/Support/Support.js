@@ -87,7 +87,7 @@ const Support = () => {
                         disabled={!user}
                         maxLength={2000}
                     ></textarea>
-                    <button type='submit' className='support-submit-button' disabled={!message.trim() || !user}>
+                    <button type='submit' className='support-submit-button' disabled={!user}>
                         Submit
                     </button>
                     {submitStatus && (

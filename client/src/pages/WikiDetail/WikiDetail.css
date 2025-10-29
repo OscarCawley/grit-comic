@@ -2,8 +2,7 @@
     color: white;
     font-family: Arial, sans-serif;
     padding: 2rem;
-    max-width: 1000px;
-    width: 100%;         /* allows shrinking on small screens */
+    width: 80%;         /* allows shrinking on small screens */
     margin: 0 auto;      /* centers horizontally */
     box-sizing: border-box; /* to include padding in width */
 }
@@ -11,12 +10,13 @@
 .wiki-detail-article {
     display: flex;
     flex-direction: column;
-    border: 3px solid #AAC7D8;
+    border: 3px solid #939393;
     border-radius: 5px;
+    border-width: 3px;
     padding: 2rem;
     width: 100%;
     box-sizing: border-box;
-    background-color: #354555;
+    background-color: #222222;
     overflow: auto; /* keep this to contain floated image */
 }
 
@@ -27,13 +27,13 @@
     width: 100%;
     height: auto;
     border-radius: 8px;
-    border: 2px solid #AAC7D8;
+    border: 2px solid #939393;
     object-fit: cover;
 }
 
 .wiki-detail-title {
-    color: #AAC7D8; /* Light blue text */
-    font-size: 2em;
+    color: #bbbbbb; /* Light blue text */
+    font-size: 3em;
     margin-top: 0;
     margin-bottom: 1rem;
 }
@@ -47,9 +47,18 @@
     word-break: break-word;
 }
 
+.wiki-detail-content h2 {
+    font-size: 1.8rem;
+    margin: 1.5rem 0 0.8rem 0;
+}
+
+.wiki-detail-content p {
+    margin: 0.5rem 0;
+}
+
 .wiki-detail-meta {
-    font-size: 1.2em;
-    color: #AAC7D8;
+    font-size: 1em;
+    color: #bbbbbb;
     display: flex;
     justify-content: space-between;
     margin-top: 1rem;

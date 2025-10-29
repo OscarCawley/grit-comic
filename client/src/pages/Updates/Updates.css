@@ -3,13 +3,11 @@
     font-family: Arial, sans-serif;
     display: flex;
     flex-direction: column;
-    gap: 20px;
 }
 
 .updates h1 {
-    font-size: 2.5em;
-    margin: 0;
-    margin-top: 2rem;
+    font-size: 4.5em;
+    margin: 2.5rem 0;
     text-align: center;
 }
 
@@ -27,8 +25,8 @@
 
 .updates-item {
     text-align: left;
-    border: 1px solid #AAC7D8; /* Light blue border */
-    background-color: #354555;
+    border: 1px solid #939393; /* Light blue border */
+    background-color: #222222;
     border-radius: 5px;
     border-width: 3px;
     padding: 10px;
@@ -44,18 +42,18 @@
 .updates-item-header {
     font-size: 2em;
     margin: 0;
-    color: #AAC7D8;
+    color: #bbbbbb;
 }
 
 .updates-item-link {
     text-decoration: none;
-    color: #AAC7D8; /* Light blue text */
+    color: #bbbbbb; /* Light blue text */
 }
     
 
 .updates-item-updated {
     font-size: 0.8em;
-    color: #AAC7D8; /* Light blue text */
+    color: #bbbbbb; /* Light blue text */
     text-align: right;
     margin: 0;
 }

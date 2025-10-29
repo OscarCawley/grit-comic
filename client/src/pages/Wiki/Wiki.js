@@ -63,37 +63,39 @@ const Wiki = () => {
     return (
         <PageAnimation>
             <div className='wiki'>
-                <div className="category-list">
-                    <h1>Category</h1>
-                    <button className={`category-button ${activeCategory === "All" ? "active" : ""}`} onClick={() => handleCategoryClick("All")}>All</button>
-                    <button className={`category-button ${activeCategory === "General" ? "active" : ""}`} onClick={() => handleCategoryClick("General")}>General</button>
-                    <button className={`category-button ${activeCategory === "World" ? "active" : ""}`} onClick={() => handleCategoryClick("World")}>World</button>
-                    <button className={`category-button ${activeCategory === "Characters" ? "active" : ""}`} onClick={() => handleCategoryClick("Characters")}>Characters</button>
-                </div>
-                
-                <div className="wiki-list">
-                    <h1>Wiki</h1>
-                    <div className='wiki-search'>
-                        <input 
-                            type="text" 
-                            placeholder="Search..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                        />
+                <h1>Wiki</h1>
+                <div className="wiki-content">
+                    <div className="category-list">
+                        <h2>Category</h2>
+                        <button className={`category-button ${activeCategory === "All" ? "active" : ""}`} onClick={() => handleCategoryClick("All")}>All</button>
+                        <button className={`category-button ${activeCategory === "General" ? "active" : ""}`} onClick={() => handleCategoryClick("General")}>General</button>
+                        <button className={`category-button ${activeCategory === "World" ? "active" : ""}`} onClick={() => handleCategoryClick("World")}>World</button>
+                        <button className={`category-button ${activeCategory === "Characters" ? "active" : ""}`} onClick={() => handleCategoryClick("Characters")}>Characters</button>
                     </div>
-
-                    {filteredPosts.map((post) => (
-                        <div key={post.id} className="wiki-item">
-                            <div className='wiki-item-header'>
-                                <Link to={`/wiki/${post.slug}`} className='wiki-item-link'>
-                                    <h2>{post.title}</h2>
-                                </Link>
-                                <span>{post.category_name}</span>
-                            </div>
-                            <div className='wiki-item-content' dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}></div>
-                            <p className='wiki-item-updated'>{post.updated_at_formatted}</p>
+                    
+                    <div className="wiki-list">
+                        <div className='wiki-search'>
+                            <input 
+                                type="text" 
+                                placeholder="Search..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                            />
                         </div>
-                    ))}
+
+                        {filteredPosts.map((post) => (
+                            <div key={post.id} className="wiki-item">
+                                <div className='wiki-item-header'>
+                                    <Link to={`/wiki/${post.slug}`} className='wiki-item-link'>
+                                        <h2>{post.title}</h2>
+                                    </Link>
+                                    <span>{post.category_name}</span>
+                                </div>
+                                <div className='wiki-item-content' dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}></div>
+                                <p className='wiki-item-updated'>{post.updated_at_formatted}</p>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
         </PageAnimation>

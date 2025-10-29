@@ -26,9 +26,9 @@ const sendPasswordResetEmail = async (email, resetLink) => {
                 max-width: 600px; 
                 margin: 0 auto;
             ">
-                <h2 style="color: #29353C; text-align: center;">Password Reset Request</h2>
-                <p style="font-size: 16px;">Hello,</p>
-                <p style="font-size: 16px;">
+                <h2 style="color: #222222; text-align: center; margin: 0;">Password Reset Request</h2>
+                <p style="font-size: 16px; text-align: center;">Hello,</p>
+                <p style="font-size: 16px; text-align: center;">
                     You requested a password reset. Click the button below to reset it:
                 </p>
                 <div style="text-align: center; margin: 20px 0;">
@@ -37,13 +37,13 @@ const sendPasswordResetEmail = async (email, resetLink) => {
                         padding: 10px 20px; 
                         font-size: 16px;
                         font-weight: bold; 
-                        color: #29353C; 
-                        background-color: #AAC7D8; 
+                        color: #222222; 
+                        background-color: #bbbbbb; 
                         text-decoration: none; 
                         border-radius: 5px;
                     ">Reset Password</a>
                 </div>
-                <p style="font-size: 14px; color: #555;">
+                <p style="font-size: 14px; color: #555; text-align: center;">
                     If you did not request this, please ignore this email. This link will expire in 1 hour.
                 </p>
                 <p style="font-size: 14px; text-align: center; color: #777;">
@@ -91,14 +91,22 @@ const sendNewsletterEmails = async (title, content, users) => {
                     max-width: 600px;
                     margin: 0 auto;
                 ">
-                    <h2 style="color: #29353C; text-align: center;">New Update: ${title}</h2>
-                    <div style="font-size: 16px; margin-top: 20px;">
+                    <h2 style="color: #222222; text-align: center; margin: 0;">New Update: ${title}</h2>
+                    <div style="font-size: 16px; margin-top: 20px; text-align: center;">
                         ${content}
                     </div>
                     <p style="font-size: 14px; text-align: center; color: #777; margin-top: 30px;">
                         – Grit Comic Team
                     </p>
-                    <a href="${process.env.FRONTEND_URL}/unsubscribe?token=${user.unsubscribe_token}">Unsubscribe</a>;
+                    <div style="margin-top: 10px; font-size: 12px; color: #999; text-align: center;">
+                        If you wish to unsubscribe from these emails, please click 
+                        <a href="${process.env.FRONTEND_URL}/unsubscribe?token=${user.unsubscribe_token}" style="
+                            display: inline-block; 
+                            font-size: 12px;
+                            font-weight: bold; 
+                            color: #222222;  
+                        ">Unsubscribe</a>.
+                    </div>
                 </div>
             `
         }
@@ -126,23 +134,23 @@ const sendVerificationEmail = async (email, token) => {
                 max-width: 600px;
                 margin: 0 auto;
             ">
-                <h2 style="color: #29353C; text-align: center;">Verify Email</h2>
-                <div style="font-size: 16px; margin-top: 20px;">
+                <h2 style="color: #222222; text-align: center;">Verify Email</h2>
+                <div style="font-size: 16px; margin-top: 20px; text-align: center;">
                     Please verify your email address by clicking the button below:
                 </div>
                 <div style="text-align: center; margin: 20px 0;">
                     <a href="${verificationLink}" style="
-                        display: inline-block;
-                        padding: 10px 20px;
+                        display: inline-block; 
+                        padding: 10px 20px; 
                         font-size: 16px;
-                        font-weight: bold;
-                        color: #29353C;
-                        background-color: #AAC7D8;
-                        text-decoration: none;
+                        font-weight: bold; 
+                        color: #222222; 
+                        background-color: #bbbbbb; 
+                        text-decoration: none; 
                         border-radius: 5px;
                     ">Verify Email</a>
                 </div>
-                <p style="font-size: 14px; color: #555;">
+                <p style="font-size: 14px; color: #555; text-align: center;">
                     If you did not create an account, please ignore this email.
                 </p>
                 <p style="font-size: 14px; text-align: center; color: #777; margin-top: 30px;">

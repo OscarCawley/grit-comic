@@ -87,10 +87,12 @@
 }
 
 .comment-form {
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
     align-items: stretch;
     gap: 20px;
+    width: 90%;
 }
 
 .comment-textarea {

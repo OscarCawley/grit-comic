@@ -47,8 +47,8 @@ const Chapters = () => {
     return (
         <PageAnimation>
             <div className='chapters-page'>
+                <h1>Chapters</h1>
                 <ul className='chapters-list'>
-                    <h1>Chapters</h1>
                     {chapters.map(chapter => (
                         <li key={chapter.chapterNum} className='chapter-item' onClick={() => handleChapterClick(chapter.chapterNum - 1)}>
                             <h2>{chapter.title}</h2>

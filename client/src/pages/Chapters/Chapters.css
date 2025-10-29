@@ -4,8 +4,12 @@
     align-items: center;
     font-family: Arial, sans-serif;
     color: white;
+}
+
+.chapters-page h1 {
+    font-size: 3.5em;
     margin: 2rem 0;
-    gap: 5rem;
+    text-align: center;
 }
 
 .chapters-list {
@@ -13,8 +17,10 @@
     flex-direction: column;
     align-items: center;
     padding: 0;
-    width: 500px;
+    max-width: 70%;
+    width: 100%;
     margin: 0;
+    gap: 1rem;
 }
 
 .chapter-item {
@@ -23,11 +29,11 @@
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    border: 1px solid #AAC7D8; /* Light blue border */
+    border: 1px solid #939393; /* Light blue border */
     border-radius: 5px;
     border-width: 3px;
+    background-color: #222222;
     padding: 10px;
-    margin-bottom: 1rem;
     cursor: pointer;
 }
 
@@ -41,6 +47,7 @@
     justify-content: center;
     width: 100%;
     margin : 0;
+    font-size: 2em;
 }
 
 .chapter-item p {

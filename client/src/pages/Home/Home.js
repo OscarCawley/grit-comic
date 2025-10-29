@@ -191,9 +191,7 @@ const Home = () => {
     return (
         <PageAnimation>
             <div className='comic-viewer-container'>
-                <div className="comic-chapter-title">
-                    {chapters[currentChapter]?.title}
-                </div>
+                <h1 className="comic-chapter-title">{chapters[currentChapter]?.title}</h1>
                 <div className="comic-viewer" onClick={handleImageClick}>
                     {chapters.length > 0 && chapters[currentChapter]?.pages?.length > 0 ? (
                         <img

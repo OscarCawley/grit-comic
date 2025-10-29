@@ -1,3 +1,8 @@
+@font-face {
+    font-family: 'Grit Font';
+    src: url('./assets/grit-font-lowerK.otf') format('opentype');
+}
+
 .App {
     display: flex;
     flex-direction: column;
@@ -6,11 +11,19 @@
     min-height: 100vh;
 }
 
+.App h1,
+.App h2,
+.App h3 {
+    font-family: 'Grit Font';
+    font-weight: normal;
+}
+
 .page-background {
+    flex: 1;
     position: relative;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: stretch; /* ensures child fills full height */
     overflow: hidden;
     background-color: #0F0F0F;
 }
@@ -41,14 +54,19 @@
 
 .App-content {
     position: relative;
+    z-index: 2;
     max-width: 70%;
     width: 100%;
+    min-height: 100%; /* ensures it fills .page-background vertically */
     background-color: #0F0F0F;
-    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
 }
 
 body {
     margin: 0;
+    overflow-y: scroll;
 }
 
 
@@ -64,7 +82,7 @@ body {
     width: 56px;
     height: 56px;
     border: 6px solid rgba(255, 255, 255, 0.25);
-    border-top-color: #AAC7D8;
+    border-top-color: #bbbbbb;
     border-radius: 50%;
     animation: spin 0.9s linear infinite;
 }
@@ -73,3 +91,7 @@ body {
     to { transform: rotate(360deg); }
 }
 
+* {
+  scrollbar-width: thin; /* auto | thin | none */
+  scrollbar-color: #939393 #0F0F0F; /* thumb color | track color */
+}

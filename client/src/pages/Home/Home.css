@@ -1,42 +1,24 @@
-@font-face {
-    font-family: 'Grit Font';
-    src: url('../../assets/grit-font-lowerK.otf') format('opentype');
-}
-
 .comic-viewer-container {
     margin: 20px auto;
 }
 
 .comic-chapter-title {
-    font-family: 'Grit Font';
-    color: #939393;
-    font-size: 60px;
-    margin-bottom: 10px;
-}
-
-.next-chapter button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0 20px;
-}
-
-.next-chapter img {
-    height: 22px;
-    width: 40px;
+    color: white;
+    font-size: 3.5em;
+    margin: 2rem 0;
 }
 
 .comic-page-indicator {
     font-family: Arial, sans-serif;
     color: white;
-    font-size: 20px;
+    font-size: 1.25em;
     font-weight: bold;
     margin: 15px 0 15px 0;
 }
 
 .navigation-buttons {
     display: flex;
-    gap: 20px;
+    gap: 12px;
     justify-content: center;
     align-items: center;
     margin: 15px 0;
@@ -50,14 +32,12 @@
 }
 
 .page-button {
-    font-size: 48px;
-    font-weight: 600;
-    border: 4px solid #32FFB0;
-    border-radius: 10px;
+    border: 3px solid #32FFB0;
+    border-radius: 8px;
     background: #222222;
     cursor: pointer;
-    padding: 0 15px;
     transition: color 0.2s;
+    padding: 6px 10px;
 }
 
 .page-button:disabled {
@@ -66,23 +46,28 @@
     cursor: not-allowed;
 }
 
+.page-button:disabled img {
+    filter: grayscale(100%) opacity(0.5);
+}
+
 .page-button:not(:disabled):hover {
     border-color: #32FFB0;
     color: #32FFB0;
 }
 
-.page-button:active {
+.page-button:not(:disabled):active {
     transform: scale(0.95);
 }
 
 .page-button:focus {
-    outline: 3px solid #AAC7D8;
+    outline: 3px solid #939393;
     outline-offset: 2px;
 }
 
 .page-button img {
-    height: 36px;
+    height: 28px;
     width: auto;
+    
 }
 
 .page-button .left-icon {
@@ -116,8 +101,8 @@
     padding: 10px;
     font-family: inherit;
     font-size: 16px;
-    border: 1px solid #AAC7D8;
-    background-color: #354555;
+    border: 1px solid #939393;
+    background-color: #222222;
     border-radius: 5px;
     border-width: 3px;
     color: white;
@@ -129,17 +114,17 @@
 }
 
 .comment-textarea:focus {
-    border-color: #fff;
-    background-color: #3c4e5f;
+    border-color: #bbbbbb;
+    background-color: #303030;
     outline: none;
 }
 
 .comment-submit-button {
-    background-color: #AAC7D8; /* Light blue background */
+    background-color: #939393; /* Light blue background */
     font-family: Arial, sans-serif;
     font-size: 1.2em;
     font-weight: 600;
-    color: #29353C;
+    color: #222222;
     border: none;
     border-radius: 5px;
     padding: 10px;
@@ -150,12 +135,11 @@
 }
 
 .comment-submit-button:hover {
-    background-color: #7a9bb1; /* Darker blue on hover */
+    background-color: #bbbbbb; /* Darker blue on hover */
 }
 
 .comment-submit-button:disabled {
-    background-color: #7a9bb1; /* Darker blue when disabled */
-    cursor: not-allowed;
+    visibility: hidden;
 }
 
 .comment-title {
@@ -167,8 +151,8 @@
 
 .comment {
     text-align: left;
-    border: 1px solid #AAC7D8;
-    background-color: #354555;
+    border: 1px solid #939393;
+    background-color: #222222;
     border-radius: 5px;
     border-width: 3px;
     padding: 10px;
@@ -186,12 +170,12 @@
 .comment-header h3 {
     font-size: 1.5em;
     margin: 0;
-    color: #AAC7D8;
+    color: #939393;
 }
 
 .comment-date {
     font-size: 0.8em;
-    color: #AAC7D8;
+    color: #939393;
     text-align: right;
     margin: 0;
 }
@@ -222,7 +206,7 @@
     width: 56px;
     height: 56px;
     border: 6px solid rgba(255, 255, 255, 0.25);
-    border-top-color: #AAC7D8;
+    border-top-color: #bbbbbb;
     border-radius: 50%;
     animation: spin 0.9s linear infinite;
 }

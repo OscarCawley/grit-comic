@@ -29,9 +29,9 @@
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    border: 1px solid #939393; /* Light blue border */
+    border: 3px solid #939393; /* Light blue border */
     border-radius: 5px;
-    border-width: 3px;
+    
     background-color: #222222;
     padding: 10px;
     cursor: pointer;

@@ -1,31 +1,71 @@
 .account-page {
     font-family: Arial, sans-serif;
     color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .account-page h1 {
-    font-size: 2rem;
+    font-size: 4.5rem;
+    margin: 2.5rem 0;
+}
+
+.account-details {
+    background-color: #222222;
+    border: 3px solid #939393;
+    border-radius: 5px;
+    width: 70%;
+    padding: 1.5rem;
+}
+
+.account-info {
+    text-align: left;
+    font-size: 1.2em;
+    margin-bottom: 2rem;
+}
+
+.account-info h2 {
+    margin-top: 0;
     margin-bottom: 1rem;
+    font-size: 2rem;
+    color: #bbbbbb;
+}
+
+.account-info p span {
+    color: #bbbbbb;
 }
 
 .account-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    max-width: 300px;
-    margin: 0 auto;
+    text-align: center;
+
+}
+
+.account-actions a {
+    text-decoration: none;
 }
 
 .account-actions button {
-    background-color: #AAC7D8; /* Light blue background */
-    font-family: Arial, sans-serif;
-    font-size: 1em;
-    font-weight: 600;
-    color: #29353C;
-    border: none;
-    border-radius: 5px;
-    padding: 10px;
-    margin: 0 auto;
+    background: none;
     cursor: pointer;
-    text-align: center;
+    padding: 0;
+    border: none;
+    outline: none;
+    color: #bbbbbb;
+    font-size: 1em;
+}
+
+.account-actions button:hover {
+    color: white;
+}
+
+.account-actions button:disabled {
+    visibility: hidden;
+}
+
+.account-actions > *:not(:last-child)::after {
+    content: "|";
+    color: #bbbbbb;
+    margin: 0 0.5rem;
+    pointer-events: none;
 }

@@ -25,10 +25,10 @@
 
 .updates-item {
     text-align: left;
-    border: 1px solid #939393; /* Light blue border */
+    border: 3px solid #939393; /* Light blue border */
     background-color: #222222;
     border-radius: 5px;
-    border-width: 3px;
+    
     padding: 10px;
     width: 100%;
     box-sizing: border-box;

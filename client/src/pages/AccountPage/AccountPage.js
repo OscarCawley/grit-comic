@@ -83,40 +83,41 @@ const AccountPage = () => {
     return (
         <div className="account-page">
             <h1>My Account</h1>
-            <div className="account-details">
-                <h2>Account Details</h2>
-                <p>{user?.username}</p>
-                <p>{user?.email}</p>
-                <p>Newsletter: {user?.subscribe ? 'Subscribed' : 'Not Subscribed'}</p>
-            </div>
-            <div className="account-actions">
-                <button onClick={handleForgotPassword}>Reset Password</button>
-                <Link to="/login">
-                    <button onClick={signOut}>Sign Out</button>
-                </Link>
-                <button onClick={handleToggleSubscribe} disabled={isUpdatingSubscribe}>
-                    {isUpdatingSubscribe
-                        ? 'Updating...'
-                        : user?.subscribe
-                        ? 'Unsubscribe from Newsletter'
-                        : 'Subscribe to Newsletter'}
-                </button>
-                    {user?.auth === true && (
-                        <Link
-                            to="/admin"
-                            onClick={async (e) => {
-                                const valid = await ensureValidToken();
-                                if (!valid) {
-                                    e.preventDefault();
-                                    window.location.href = '/login';
-                                }
-                            }}
-                        >
-                            <button>Admin</button>
-                        </Link>
-                    )}
-                {message && <p className="success-message">{message}</p>}
-                {error && <p className="error-message">{error}</p>}
+            <div className='account-details'>
+                <div className="account-info">
+                    <h2>Account Info</h2>
+                    <p><span>Username:</span> {user?.username}</p>
+                    <p><span>Email:</span> {user?.email}</p>
+                </div>
+                <div className="account-actions">
+                    <button onClick={handleForgotPassword}>Reset Password</button>
+                    <Link to="/login">
+                        <button onClick={signOut}>Sign Out</button>
+                    </Link>
+                    <button onClick={handleToggleSubscribe} disabled={isUpdatingSubscribe}>
+                        {isUpdatingSubscribe
+                            ? 'Updating...'
+                            : user?.subscribe
+                            ? 'Unsubscribe from Newsletter'
+                            : 'Subscribe to Newsletter'}
+                    </button>
+                        {user?.auth === true && (
+                            <Link
+                                to="/admin"
+                                onClick={async (e) => {
+                                    const valid = await ensureValidToken();
+                                    if (!valid) {
+                                        e.preventDefault();
+                                        window.location.href = '/login';
+                                    }
+                                }}
+                            >
+                                <button>Admin</button>
+                            </Link>
+                        )}
+                    {message && <p className="success-message">{message}</p>}
+                    {error && <p className="error-message">{error}</p>}
+                </div>
             </div>
         </div>
     );

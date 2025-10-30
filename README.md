@@ -26,7 +26,6 @@ A dynamic web platform created to showcase the comic book *GRIT*, offering fans 
 
 
 - **TODO**
-  add backspace to chapters -> pages in backend
   add backspace to wikidetail
   sort spinning wheels being off center
   hamburger menu

@@ -89,7 +89,7 @@ const SupportAdmin = () => {
 
     return (
         <div className='faqs-container'>
-			<h1>FAQs List</h1>
+			<h1>FAQs</h1>
 			<form className='faqs-form' onSubmit={(e) => {
 				e.preventDefault();
 				editingId ? handleUpdate() : handleCreate();

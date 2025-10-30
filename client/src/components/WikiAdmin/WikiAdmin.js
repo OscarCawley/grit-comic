@@ -149,7 +149,7 @@ const WikiAdmin = () => {
 	
     return (
         <div className='wiki-container'>
-			<h1>Wiki List</h1>
+			<h1>Wiki</h1>
 			<form className='wiki-form' onSubmit={(e) => {
 				e.preventDefault();
 				editingId ? handleUpdate() : handleCreate();

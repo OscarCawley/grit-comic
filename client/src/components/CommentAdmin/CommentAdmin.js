@@ -56,7 +56,7 @@ const CommentAdmin = () => {
 
     return (
         <div className="comment-container">
-            <h1>Comment List</h1>
+            <h1>Comments</h1>
             <div className='filters'>
                 <select value={chapterTerm} onChange={(e) => setChapterTerm(e.target.value)}>
                     <option value="">All Chapters</option>

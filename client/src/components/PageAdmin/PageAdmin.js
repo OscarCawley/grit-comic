@@ -6,7 +6,7 @@ const PageAdmin = ({ setView, setSelectedChapter, selectedChapter }) => {
     const [pages, setPages] = useState([]);
     const token = localStorage.getItem('token');
 
-        const fetchPages = useCallback(async () => {
+    const fetchPages = useCallback(async () => {
         if (!selectedChapter) return;
 
         try {
@@ -113,7 +113,7 @@ const PageAdmin = ({ setView, setSelectedChapter, selectedChapter }) => {
 
     return (
         <div className='page-container'>
-            <button className='back-button' onClick={() => { setView('chapters'); setSelectedChapter(null); }}>Back to Chapter Admin</button>
+            <button className='back-button' onClick={() => { setView('chapters'); setSelectedChapter(null); }}>{'< Back to Chapters'}</button>
             <h1>Manage Pages for Chapter {selectedChapter.chapter_num}</h1>
             <div className='image-upload'>
                 <label htmlFor='file-upload' className='custom-file-upload'>

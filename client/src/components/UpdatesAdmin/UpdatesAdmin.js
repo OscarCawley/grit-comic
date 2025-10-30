@@ -114,7 +114,7 @@ const UpdatesAdmin = () => {
 
     return (
         <div className='updates-container'>
-			<h1>Updates List</h1>
+			<h1>Updates</h1>
 			<form className='updates-form' onSubmit={(e) => {
 				e.preventDefault();
 				editingId ? handleUpdate() : handleCreate();

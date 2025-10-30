@@ -63,7 +63,7 @@ const UserAdmin = () => {
 
     return (
         <div className="user-container">
-            <h1>User List</h1>
+            <h1>Users</h1>
             <ul className="user-list">
                 {owners.map(ownerUser => (
                     <li key={ownerUser.id}>

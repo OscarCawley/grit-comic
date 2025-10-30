@@ -69,7 +69,7 @@ const AssetAdmin = () => {
 
     return (
         <div className="asset-container">
-            <h1>Asset Admin</h1>
+            <h1>Assets</h1>
             <div className="asset-list">
                 <h2>Image Assets</h2>
                 <ul className='image-list'>

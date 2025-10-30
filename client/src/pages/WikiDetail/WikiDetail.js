@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import DOMPurify from 'dompurify';
@@ -42,6 +42,9 @@ function WikiDetailPage() {
     return (
         <PageAnimation>
             <div className="wiki-detail">
+                <Link to="/wiki">
+                    <button className='back-button'>{'< BACK'}</button>
+                </Link>
                 {post ? (
                     <div className="wiki-detail-article">
                         <div className="wiki-detail-main-content">

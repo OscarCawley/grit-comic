@@ -7,16 +7,35 @@
     box-sizing: border-box; /* to include padding in width */
 }
 
+.wiki-detail .back-button {
+    background-color: #939393;
+    font-family: Arial, sans-serif;
+    font-size: 1em;
+    font-weight: 600;
+    color: #222222;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 0 auto;
+    min-width: 200px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.wiki-detail .back-button:hover {
+    background-color: #bbbbbb;
+}
+
 .wiki-detail-article {
     display: flex;
     flex-direction: column;
     border: 3px solid #939393;
     border-radius: 5px;
-    
     padding: 2rem;
     width: 100%;
     box-sizing: border-box;
     background-color: #222222;
+    margin: 2rem 0;
     overflow: auto; /* keep this to contain floated image */
 }
 

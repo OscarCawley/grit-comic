@@ -26,9 +26,8 @@ A dynamic web platform created to showcase the comic book *GRIT*, offering fans 
 
 
 - **TODO**
-  add backspace to wikidetail
   sort spinning wheels being off center
-  hamburger menu
+  hamburger menu and add socials
   change R and V in font file to be same height (possibly redo whole font file)
   create random assets to go onto the side columns
   figure out if password hashing needs to be hidden from github

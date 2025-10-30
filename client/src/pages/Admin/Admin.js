@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import ChapterAdmin from '../../components/ChapterAdmin/ChapterAdmin.js';
 import PageAdmin from '../../components/PageAdmin/PageAdmin.js';
 import WikiAdmin from '../../components/WikiAdmin/WikiAdmin.js';
@@ -15,6 +16,7 @@ const Admin = () => {
 
     return (
         <div className="admin-container">
+            <Link to="/"><button className='home-button'>{'HOME'}</button></Link>
             <div className="toggle-buttons">
                 <button onClick={() => setView('chapters')} className={view === 'chapters' ? 'active' : ''}>CHAPTERS</button>
                 <button onClick={() => setView('wiki')} className={view === 'wiki' ? 'active' : ''}>WIKI</button>

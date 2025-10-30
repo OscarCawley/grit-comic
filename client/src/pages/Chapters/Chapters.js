@@ -50,7 +50,7 @@ const Chapters = () => {
                 <h1>Chapters</h1>
                 <ul className='chapters-list'>
                     {chapters.map(chapter => (
-                        <li key={chapter.chapterNum} className='chapter-item' onClick={() => handleChapterClick(chapter.chapterNum - 1)}>
+                        <li key={chapter.chapter_num} className='chapter-item' onClick={() => handleChapterClick(chapter.chapter_num - 1)}>
                             <h2>{chapter.title}</h2>
                             <p>Pages: {chapter.pageCount}</p>
                         </li>

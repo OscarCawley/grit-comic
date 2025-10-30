@@ -56,7 +56,7 @@ const Home = () => {
 
             const chapterWithPages = await Promise.all(
                 chapterData.map(async chapter => {
-                    const pageRes = await axios.get(`${process.env.REACT_APP_API_URL}/api/chapters/${chapter.chapterNum}/pages`);
+                    const pageRes = await axios.get(`${process.env.REACT_APP_API_URL}/api/chapters/${chapter.chapter_num}/pages`);
                     return {
                         ...chapter,
                         pages: pageRes.data,

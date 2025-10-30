@@ -73,7 +73,7 @@ const ChapterAdmin = ({ setView, setSelectedChapter }) => {
                 await axios.delete(`${process.env.REACT_APP_API_URL}/api/chapters/delete/${chapterId}`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
-                setChapters(chapters.filter(ch => ch.chapterNum !== chapterId));
+                setChapters(chapters.filter(ch => ch.chapter_num !== chapterId));
             } catch (err) {
                 console.error('Error deleting chapter:', err);
             }
@@ -110,14 +110,14 @@ const ChapterAdmin = ({ setView, setSelectedChapter }) => {
             <div className="chapter-list">
                 <ul>
                     {chapters.map(chapter => (
-                        <li key={chapter.chapterNum}>
-                            Chapter {chapter.chapterNum}: {chapter.title} - {chapter.pageCount} pages
+                        <li key={chapter.chapter_num}>
+                            Chapter {chapter.chapter_num}: {chapter.title} - {chapter.pageCount} pages
                             <span>
                                 <button onClick={() => {
                                     setSelectedChapter(chapter);
                                     setView('pages');}}>Edit
                                 </button>
-                                <button onClick={() => handleDelete(chapter.chapterNum)}>Delete</button>
+                                <button onClick={() => handleDelete(chapter.chapter_num)}>Delete</button>
                             </span>
                         </li>
                     ))}

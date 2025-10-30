@@ -10,7 +10,7 @@ const PageAdmin = ({ selectedChapter }) => {
         if (!selectedChapter) return;
 
         try {
-            const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/chapters/${selectedChapter.chapterNum}/pages`);
+            const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/chapters/${selectedChapter.chapter_num}/pages`);
             setPages(res.data);
         } catch (err) {
             console.error('Error fetching pages:', err);
@@ -27,7 +27,7 @@ const PageAdmin = ({ selectedChapter }) => {
         files.forEach(file => formData.append('images', file));
 
         try {
-            await axios.post(`${process.env.REACT_APP_API_URL}/api/chapters/upload/${selectedChapter.chapterNum}`, formData, {
+            await axios.post(`${process.env.REACT_APP_API_URL}/api/chapters/upload/${selectedChapter.chapter_num}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     Authorization: `Bearer ${token}`
@@ -42,7 +42,7 @@ const PageAdmin = ({ selectedChapter }) => {
     }
 
     const handleReorder = async (direction, page) => {
-        const currentIndex = pages.findIndex(p => p.pageNum === page.pageNum);
+        const currentIndex = pages.findIndex(p => p.page_num === page.page_num);
         let newIndex = direction === 'left' ? currentIndex - 1 : currentIndex + 1;
 
         if (newIndex < 0 || newIndex >= pages.length) return; // Out of bounds
@@ -52,7 +52,7 @@ const PageAdmin = ({ selectedChapter }) => {
         setPages(updatedPages);
 
         try {
-            await axios.put(`${process.env.REACT_APP_API_URL}/api/chapters/reorder/${selectedChapter.chapterNum}`, { pages: updatedPages }, {
+            await axios.put(`${process.env.REACT_APP_API_URL}/api/chapters/reorder/${selectedChapter.chapter_num}`, { pages: updatedPages }, {
                 headers: { Authorization: `Bearer ${token}` }
             });
         } catch (err) {
@@ -63,10 +63,10 @@ const PageAdmin = ({ selectedChapter }) => {
 
     const handleDelete = async (page) => {
         try {
-            await axios.delete(`${process.env.REACT_APP_API_URL}/api/chapters/delete/${selectedChapter.chapterNum}/page/${page.pageNum}`, {
+            await axios.delete(`${process.env.REACT_APP_API_URL}/api/chapters/delete/${selectedChapter.chapter_num}/page/${page.page_num}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
-            setPages(pages.filter(p => p.pageNum !== page.pageNum));
+            setPages(pages.filter(p => p.page_num !== page.page_num));
         } catch (err) {
             console.error('Error deleting page:', err);
             alert('Failed to delete page.');
@@ -78,16 +78,16 @@ const PageAdmin = ({ selectedChapter }) => {
             // Optional: ensure correct page numbers before saving
             const reorderedPages = pages.map((page, index) => ({
                 ...page,
-                pageNum: index + 1,
+                page_num: index + 1,
             }));
 
-            await axios.put(`${process.env.REACT_APP_API_URL}/api/chapters/reorder/${selectedChapter.chapterNum}`, {
+            await axios.put(`${process.env.REACT_APP_API_URL}/api/chapters/reorder/${selectedChapter.chapter_num}`, {
                 pages: reorderedPages,
             }, {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
-            setPages(reorderedPages); // update state in case pageNums changed
+            setPages(reorderedPages); // update state in case page_nums changed
             alert('Page order saved successfully!');
         } catch (err) {
             console.error('Error saving page order:', err);
@@ -99,7 +99,7 @@ const PageAdmin = ({ selectedChapter }) => {
         if (!window.confirm('Are you sure you want to delete all pages? This action cannot be undone.')) return;
 
         try {
-            await axios.delete(`${process.env.REACT_APP_API_URL}/api/chapters/delete/${selectedChapter.chapterNum}/all`, {
+            await axios.delete(`${process.env.REACT_APP_API_URL}/api/chapters/delete/${selectedChapter.chapter_num}/all`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setPages([]);
@@ -113,7 +113,7 @@ const PageAdmin = ({ selectedChapter }) => {
 
     return (
         <div className='page-container'>
-            <h1>Manage Pages for Chapter {selectedChapter.chapterNum}</h1>
+            <h1>Manage Pages for Chapter {selectedChapter.chapter_num}</h1>
             <div className='image-upload'>
                 <label htmlFor='file-upload' className='custom-file-upload'>
                     Upload Images
@@ -130,14 +130,14 @@ const PageAdmin = ({ selectedChapter }) => {
             <button className='delete-all' onClick={deleteAll}>Delete All</button>
             <div className='page-list'>
                 {pages.map(page => (
-                <div key={page.pageNum} className="page-item">
+                <div key={page.page_num} className="page-item">
                     <div className='page-head'>
                         <button className='arrow-button-left' onClick={() => handleReorder('left', page)}>&lt;</button>
-                        <h3>Page {page.pageNum}</h3>
+                        <h3>Page {page.page_num}</h3>
                         <button className='arrow-button-right' onClick={() => handleReorder('right', page)}>&gt;</button>
                     </div>
                     <div className='page-content'>
-                        <img src={`${process.env.REACT_APP_API_URL}${page.image}`} alt={`Page ${page.pageNum} of Chapter ${page.chapterNum}`} />
+                        <img src={`${process.env.REACT_APP_API_URL}${page.image}`} alt={`Page ${page.page_num} of Chapter ${page.chapter_num}`} />
                         <button onClick={() => handleDelete(page)}>Delete</button>
                     </div>  
                 </div>

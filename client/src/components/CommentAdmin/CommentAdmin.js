@@ -44,7 +44,7 @@ const CommentAdmin = () => {
     };
 
     const selectedChapter = chapters.find(chap => chap.title === chapterTerm);
-    const selectedChapterId = selectedChapter ? selectedChapter.chapterNum : null;
+    const selectedChapterId = selectedChapter ? selectedChapter.chapter_num : null;
 
     const filteredComments = comments.filter((comment) => {
         const matchesUser =
@@ -61,8 +61,8 @@ const CommentAdmin = () => {
                 <select value={chapterTerm} onChange={(e) => setChapterTerm(e.target.value)}>
                     <option value="">All Chapters</option>
                     {chapters.map(chapter => (
-                        <option key={chapter.chapterNum} value={chapter.title}>
-                            {`Chapter ${chapter.chapterNum}: ${chapter.title}`}
+                        <option key={chapter.chapter_num} value={chapter.title}>
+                            {`Chapter ${chapter.chapter_num}: ${chapter.title}`}
                         </option>
                     ))}
                 </select>

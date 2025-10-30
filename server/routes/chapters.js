@@ -27,11 +27,11 @@ router.use('/uploads', express.static(uploadDir));
 router.get('/', async (req, res) => {
     try {
         const [results] = await db.query(`
-            SELECT c.chapterNum, c.title, COUNT(p.pageNum) AS pageCount
+            SELECT c.chapter_num, c.title, COUNT(p.page_num) AS pageCount
             FROM chapters c
-            LEFT JOIN pages p ON c.chapterNum = p.chapterNum
-            GROUP BY c.chapterNum, c.title
-            ORDER BY c.chapterNum ASC
+            LEFT JOIN pages p ON c.chapter_num = p.chapter_num
+            GROUP BY c.chapter_num, c.title
+            ORDER BY c.chapter_num ASC
         `);
         res.json(results);
     } catch (err) {
@@ -41,15 +41,15 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/create', AdminOnly, upload.none(), async (req, res) => {
-    const { chapterNum, title } = req.body;
+    const { chapter_num, title } = req.body;
 
-    if (!chapterNum || !title) {
+    if (!chapter_num || !title) {
         return res.status(400).json('Chapter number and title are required');
     }
 
     try {
-        console.log('Inserting chapter:', chapterNum, title);
-        await db.query('INSERT INTO chapters (chapterNum, title) VALUES (?, ?)', [chapterNum, title]);
+        console.log('Inserting chapter:', chapter_num, title);
+        await db.query('INSERT INTO chapters (chapter_num, title) VALUES (?, ?)', [chapter_num, title]);
 
         res.status(201).json({ message: 'Chapter created successfully!' });
     } catch (err) {
@@ -58,20 +58,20 @@ router.post('/create', AdminOnly, upload.none(), async (req, res) => {
     }
 });
 
-router.put('/update/:oldChapterNum', AdminOnly, upload.none(), async (req, res) => {
-    const { oldChapterNum } = req.params;
-    const { chapterNum, title } = req.body;
-    const newChapterNum = chapterNum;
+router.put('/update/:oldchapter_num', AdminOnly, upload.none(), async (req, res) => {
+    const { oldchapter_num } = req.params;
+    const { chapter_num, title } = req.body;
+    const newchapter_num = chapter_num;
     
     console.log(req.body)
-    console.log('Updating chapter:', oldChapterNum, 'to', newChapterNum, title);
+    console.log('Updating chapter:', oldchapter_num, 'to', newchapter_num, title);
 
-    if (!title || !newChapterNum) {
+    if (!title || !newchapter_num) {
         return res.status(400).send('Chapter number and title are required');
     }
 
     try {
-        const [result] = await db.query('UPDATE chapters SET chapterNum = ?, title = ? WHERE chapterNum = ?', [newChapterNum, title, oldChapterNum]);
+        const [result] = await db.query('UPDATE chapters SET chapter_num = ?, title = ? WHERE chapter_num = ?', [newchapter_num, title, oldchapter_num]);
 
         if (result.affectedRows === 0) {
             return res.status(404).send('Chapter not found');
@@ -84,12 +84,12 @@ router.put('/update/:oldChapterNum', AdminOnly, upload.none(), async (req, res) 
     }
 });
 
-router.delete('/delete/:chapterNum', AdminOnly, async (req, res) => {
-    const { chapterNum } = req.params;
+router.delete('/delete/:chapter_num', AdminOnly, async (req, res) => {
+    const { chapter_num } = req.params;
 
     try {
         // Delete images from the upload directory
-        const [images] = await db.query('SELECT image FROM pages WHERE chapterNum = ?', [chapterNum]);
+        const [images] = await db.query('SELECT image FROM pages WHERE chapter_num = ?', [chapter_num]);
         for (const img of images) {
             const filePath = path.join(__dirname, '..', img.image);
             try {
@@ -102,10 +102,10 @@ router.delete('/delete/:chapterNum', AdminOnly, async (req, res) => {
         }
 
         // Delete all pages associated with this chapter
-        await db.query('DELETE FROM pages WHERE chapterNum = ?', [chapterNum]);
+        await db.query('DELETE FROM pages WHERE chapter_num = ?', [chapter_num]);
 
         // Delete the chapter itself
-        const [result] = await db.query('DELETE FROM chapters WHERE chapterNum = ?', [chapterNum]);
+        const [result] = await db.query('DELETE FROM chapters WHERE chapter_num = ?', [chapter_num]);
 
         if (result.affectedRows === 0) {
             return res.status(404).send('Chapter not found');
@@ -119,11 +119,11 @@ router.delete('/delete/:chapterNum', AdminOnly, async (req, res) => {
     }
 });
 
-router.get('/:chapterNum/pages', async (req, res) => {
-    const { chapterNum } = req.params;
+router.get('/:chapter_num/pages', async (req, res) => {
+    const { chapter_num } = req.params;
 
     try {
-        const [pages] = await db.query('SELECT * FROM pages WHERE chapterNum = ? ORDER BY pageNum ASC', [chapterNum]);
+        const [pages] = await db.query('SELECT * FROM pages WHERE chapter_num = ? ORDER BY page_num ASC', [chapter_num]);
         res.json(pages);
     } catch (err) {
         console.error(err);
@@ -131,8 +131,8 @@ router.get('/:chapterNum/pages', async (req, res) => {
     }
 });
 
-router.post('/upload/:chapterNum', AdminOnly, upload.array('images'), async (req, res) => {
-    const { chapterNum } = req.params;
+router.post('/upload/:chapter_num', AdminOnly, upload.array('images'), async (req, res) => {
+    const { chapter_num } = req.params;
 
     if (!req.files || req.files.length === 0) {
         return res.status(400).send('No files uploaded');
@@ -140,16 +140,16 @@ router.post('/upload/:chapterNum', AdminOnly, upload.array('images'), async (req
 
     try {
         const [result] = await db.query(
-            'SELECT MAX(pageNum) AS maxPage FROM pages WHERE chapterNum = ?',
-            [chapterNum]
+            'SELECT MAX(page_num) AS maxPage FROM pages WHERE chapter_num = ?',
+            [chapter_num]
         );
 
-        let nextPageNum = result[0].maxPage ? result[0].maxPage + 1 : 1;
+        let nextpage_num = result[0].maxPage ? result[0].maxPage + 1 : 1;
 
         for (const file of req.files) {
             const imagePath = path.join('/uploads/', file.filename);
-            await db.query('INSERT INTO pages (pageNum, chapterNum, image) VALUES (?, ?, ?)', [nextPageNum, chapterNum, imagePath]);
-            nextPageNum++;
+            await db.query('INSERT INTO pages (page_num, chapter_num, image) VALUES (?, ?, ?)', [nextpage_num, chapter_num, imagePath]);
+            nextpage_num++;
         }
         res.status(201).json({ message: 'Images uploaded successfully' });
     } catch (err) {
@@ -158,8 +158,8 @@ router.post('/upload/:chapterNum', AdminOnly, upload.array('images'), async (req
     }
 });
 
-router.put('/reorder/:chapterNum', AdminOnly, async (req, res) => {
-    const { chapterNum } = req.params;
+router.put('/reorder/:chapter_num', AdminOnly, async (req, res) => {
+    const { chapter_num } = req.params;
     const { pages } = req.body;
 
     if (!Array.isArray(pages) || pages.length === 0) {
@@ -168,7 +168,7 @@ router.put('/reorder/:chapterNum', AdminOnly, async (req, res) => {
 
     try {
         const updatePromises = pages.map((page, index) => {
-            return db.query('UPDATE pages SET pageNum = ? WHERE id = ?', [index + 1, page.id]);
+            return db.query('UPDATE pages SET page_num = ? WHERE id = ?', [index + 1, page.id]);
         });
 
         await Promise.all(updatePromises);
@@ -179,12 +179,12 @@ router.put('/reorder/:chapterNum', AdminOnly, async (req, res) => {
     }
 });
 
-router.delete('/delete/:chapterNum/page/:pageNum', AdminOnly, async (req, res) => {
-    const { chapterNum, pageNum } = req.params;
+router.delete('/delete/:chapter_num/page/:page_num', AdminOnly, async (req, res) => {
+    const { chapter_num, page_num } = req.params;
 
     try {
         // Get the image path before deleting
-        const [imageResult] = await db.query('SELECT image FROM pages WHERE chapterNum = ? AND pageNum = ?', [chapterNum, pageNum]);
+        const [imageResult] = await db.query('SELECT image FROM pages WHERE chapter_num = ? AND page_num = ?', [chapter_num, page_num]);
         if (imageResult.length === 0) {
             return res.status(404).send('Page not found');
         }
@@ -192,7 +192,7 @@ router.delete('/delete/:chapterNum/page/:pageNum', AdminOnly, async (req, res) =
         const imagePath = path.join(__dirname, '..', imageResult[0].image);
         
         // Delete the page
-        const [result] = await db.query('DELETE FROM pages WHERE chapterNum = ? AND pageNum = ?', [chapterNum, pageNum]);
+        const [result] = await db.query('DELETE FROM pages WHERE chapter_num = ? AND page_num = ?', [chapter_num, page_num]);
 
         if (result.affectedRows === 0) {
             return res.status(404).send('Page not found');
@@ -210,15 +210,15 @@ router.delete('/delete/:chapterNum/page/:pageNum', AdminOnly, async (req, res) =
     }
 });
 
-router.delete('/delete/:chapterNum/all', AdminOnly, async (req, res) => {
-    const { chapterNum } = req.params;
+router.delete('/delete/:chapter_num/all', AdminOnly, async (req, res) => {
+    const { chapter_num } = req.params;
 
     try {
         // Get all images for the chapter
-        const [images] = await db.query('SELECT image FROM pages WHERE chapterNum = ?', [chapterNum]);
+        const [images] = await db.query('SELECT image FROM pages WHERE chapter_num = ?', [chapter_num]);
 
         // Delete all pages in the chapter
-        await db.query('DELETE FROM pages WHERE chapterNum = ?', [chapterNum]);
+        await db.query('DELETE FROM pages WHERE chapter_num = ?', [chapter_num]);
 
         // Delete image files from the server
         for (const img of images) {

@@ -1,4 +1,4 @@
-INSERT INTO pages (pageNum, chapterNum, image) VALUES
+INSERT INTO pages (page_num, chapter_num, image) VALUES
 (1, 1, '/uploads/test.png'), (2, 1, '/uploads/test.png'),
 (3, 1, '/uploads/test.png'), (4, 1, '/uploads/test.png'), 
 (5, 1, '/uploads/test.png'), (6, 1, '/uploads/test.png'),

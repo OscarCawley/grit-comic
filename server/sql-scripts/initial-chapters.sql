@@ -1,4 +1,4 @@
-INSERT INTO chapters (chapterNum, title) VALUES
+INSERT INTO chapters (chapter_num, title) VALUES
 (1, 'Chapter 1: The Beginning'), 
 (2, 'Chapter 2: The Journey'), 
 (3, 'Chapter 3: The Conflict'), 

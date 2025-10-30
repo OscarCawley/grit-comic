@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import './UnsubscribePage.css';
+import useMinLoading from '../../hooks/useMinLoading';
 
 const UnsubscribePage = () => {
 	const [status, setStatus] = useState('Checking…');
-	const [loading, setLoading] = useState(true);
+	const [loading, showLoading, hideLoading] = useMinLoading(true, 3000);
 
 	useEffect(() => {
 		const params = new URLSearchParams(window.location.search);
@@ -12,16 +13,17 @@ const UnsubscribePage = () => {
 
 		if (!token) {
 			setStatus('Missing unsubscribe token.');
-			setLoading(false);
+			hideLoading();
 			return;
 		}
 
+		showLoading();
 		axios.get(`${process.env.REACT_APP_API_URL}/api/users/unsubscribe?token=${token}`)
 			.then(() => setStatus('You are unsubscribed.'))
 			.catch((err) => {
 				setStatus(err.response?.data?.message || 'Unable to unsubscribe.');
 			})
-			.finally(() => setLoading(false));
+			.finally(() => hideLoading());
 	}, []);
 
 	return (

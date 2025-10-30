@@ -4,19 +4,21 @@ import axios from 'axios';
 import './Wiki.css';
 import DOMPurify from 'dompurify';
 import PageAnimation from '../../components/PageAnimation/PageAnimation.js';
+import useMinLoading from '../../hooks/useMinLoading';
 
 const Wiki = () => {
     const [posts, setPosts] = useState([]);
     const [activeCategory, setActiveCategory] = useState("All");
     const [searchTerm, setSearchTerm] = useState("");
-    const [loading, setLoading] = useState(true);
+    const [loading, showLoading, hideLoading] = useMinLoading(true);
 
     useEffect(() => {
         const initLoad = async () => {
             try {
+                showLoading();
                 await fetchWiki();
             } finally {
-                setLoading(false);
+                hideLoading();
             }
         };
         initLoad();
@@ -52,11 +54,9 @@ const Wiki = () => {
 
     if (loading) {
         return (
-            <PageAnimation>
-                <div className="page-loading" role="status" aria-live="polite" aria-label="Loading content">
-                    <div className="spinner" />
-                </div>
-            </PageAnimation>
+            <div className="page-loading" role="status" aria-live="polite" aria-label="Loading content">
+                <div className="spinner" />
+            </div>
         );
     }
 

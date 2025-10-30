@@ -3,18 +3,20 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import './Chapters.css';
 import PageAnimation from '../../components/PageAnimation/PageAnimation.js';
+import useMinLoading from '../../hooks/useMinLoading';
 
 const Chapters = () => {
     const navigate = useNavigate();
     const [chapters, setChapters] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, showLoading, hideLoading] = useMinLoading(true);
 
     useEffect (() => {
         const initLoad = async () => {
             try {
+                showLoading();
                 await fetchChapters();
             } finally {
-                setLoading(false);
+                hideLoading();
             }
         };
         initLoad();
@@ -36,11 +38,9 @@ const Chapters = () => {
 
     if (loading) {
         return (
-            <PageAnimation>
-                <div className="page-loading" role="status" aria-live="polite" aria-label="Loading content">
-                    <div className="spinner" />
-                </div>
-            </PageAnimation>
+            <div className="page-loading" role="status" aria-live="polite" aria-label="Loading content">
+                <div className="spinner" />
+            </div>
         );
     }
 

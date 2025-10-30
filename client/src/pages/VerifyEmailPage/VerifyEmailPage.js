@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import './VerifyEmailPage.css';
+import useMinLoading from '../../hooks/useMinLoading';
 
 const VerifyEmailPage = () => {
 	const [status, setStatus] = useState('Verifying…');
-	const [loading, setLoading] = useState(true);
+	const [loading, showLoading, hideLoading] = useMinLoading(true);
 
 	useEffect(() => {
 		const params = new URLSearchParams(window.location.search);
@@ -12,16 +13,17 @@ const VerifyEmailPage = () => {
 
 		if (!token) {
 			setStatus('Missing verification token.');
-			setLoading(false);
+			hideLoading();
 			return;
 		}
 
+		showLoading();
 		axios.get(`${process.env.REACT_APP_API_URL}/api/users/verify-email?token=${token}`)
 			.then(() => setStatus('Your email is verified! You can now log in.'))
 			.catch((err) => {
 				setStatus(err.response?.data?.message || 'Unable to verify email.');
 			})
-			.finally(() => setLoading(false));
+			.finally(() => hideLoading());
 	}, []);
 
 	return (

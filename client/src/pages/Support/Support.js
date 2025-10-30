@@ -4,20 +4,22 @@ import DOMPurify from 'dompurify';
 import PageAnimation from '../../components/PageAnimation/PageAnimation';
 import { UserContext } from '../../context/UserContext';
 import './Support.css';
+import useMinLoading from '../../hooks/useMinLoading';
 
 const Support = () => {
     const [faqs, setFaqs] = useState([]);
     const [message, setMessage] = useState('');
     const [submitStatus, setSubmitStatus] = useState(null);
     const { user } = useContext(UserContext);
-    const [loading, setLoading] = useState(true);
+    const [loading, showLoading, hideLoading] = useMinLoading(true);
 
     useEffect(() => {
         const initLoad = async () => {
             try {
+                showLoading();
                 await fetchFaqs();
             } finally {
-                setLoading(false);
+                hideLoading();
             }
         };
         initLoad();
@@ -56,11 +58,9 @@ const Support = () => {
 
     if (loading) {
         return (
-            <PageAnimation>
-                <div className="page-loading" role="status" aria-live="polite" aria-label="Loading content">
-                    <div className="spinner" />
-                </div>
-            </PageAnimation>
+            <div className="page-loading" role="status" aria-live="polite" aria-label="Loading content">
+                <div className="spinner" />
+            </div>
         );
     }
 

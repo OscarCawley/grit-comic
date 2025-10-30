@@ -4,19 +4,21 @@ import axios from 'axios';
 import DOMPurify from 'dompurify';
 import PageAnimation from '../../components/PageAnimation/PageAnimation.js';
 import './WikiDetail.css';
+import useMinLoading from '../../hooks/useMinLoading';
 
 function WikiDetailPage() {
     const { slug } = useParams();
     const [post, setPost] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [loading, showLoading, hideLoading] = useMinLoading(true);
 
     useEffect(() => {
         const initLoad = async () => {
             if (!slug) return;
             try {
+                showLoading();
                 await fetchPostBySlug(slug);
             } finally {
-                setLoading(false);
+                hideLoading();
             }
         };
         initLoad();

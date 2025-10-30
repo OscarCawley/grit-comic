@@ -8,6 +8,7 @@ import './Home.css';
 import PageAnimation from '../../components/PageAnimation/PageAnimation.js';
 import pageIcon from '../../assets/icons/page.png';
 import chapterIcon from '../../assets/icons/chapter.png';
+import useMinLoading from '../../hooks/useMinLoading';
 
 const Home = () => {
     const { user } = useContext(UserContext);
@@ -19,7 +20,7 @@ const Home = () => {
     const [comments, setComments] = useState([]); // State to hold comments data
     const [chapters, setChapters] = useState([]); // State to hold chapters data
     const [submitting, setSubmitting] = useState(false); // State to manage submission status
-    const [loading, setLoading] = useState(true); // Page-level loading gate
+    const [loading, showLoading, hideLoading] = useMinLoading(true); // Page-level loading gate (min 1s)
     const [newComment, setNewComment] = useState(''); // State for new comment input
 
     useEffect(() => {
@@ -82,9 +83,10 @@ const Home = () => {
     // Unified initial load: chapters (with pages) + comments
     const initLoad = async () => {
         try {
+            showLoading();
             await Promise.all([fetchChapters(), fetchComments()]);
         } finally {
-            setLoading(false);
+            hideLoading();
         }
     };
 
@@ -180,11 +182,9 @@ const Home = () => {
 
     if (loading) {
         return (
-            <PageAnimation>
-                <div className="page-loading" role="status" aria-live="polite" aria-label="Loading content">
-                    <div className="spinner" />
-                </div>
-            </PageAnimation>
+            <div className="page-loading" role="status" aria-live="polite" aria-label="Loading content">
+                <div className="spinner" />
+            </div>
         );
     }
 

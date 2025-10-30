@@ -4,17 +4,19 @@ import axios from 'axios';
 import DOMPurify from 'dompurify';
 import './Updates.css';
 import PageAnimation from '../../components/PageAnimation/PageAnimation.js';
+import useMinLoading from '../../hooks/useMinLoading';
 
 const Updates = () => {
     const [updates, setUpdates] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, showLoading, hideLoading] = useMinLoading(true);
 
     useEffect (() => {
         const initLoad = async () => {
             try {
+                showLoading();
                 await fetchUpdates();
             } finally {
-                setLoading(false);
+                hideLoading();
             }
         };
         initLoad();
@@ -31,11 +33,9 @@ const Updates = () => {
 
     if (loading) {
         return (
-            <PageAnimation>
-                <div className="page-loading" role="status" aria-live="polite" aria-label="Loading content">
-                    <div className="spinner" />
-                </div>
-            </PageAnimation>
+            <div className="page-loading" role="status" aria-live="polite" aria-label="Loading content">
+                <div className="spinner" />
+            </div>
         );
     }
 

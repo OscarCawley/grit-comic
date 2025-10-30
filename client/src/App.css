@@ -75,13 +75,15 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 70vh;
+    min-height: 50vh;
 }
 
 .spinner {
-    width: 56px;
-    height: 56px;
-    border: 6px solid rgba(255, 255, 255, 0.25);
+    /* Responsive spinner that scales with viewport but stays within sensible bounds.
+       Using clamp avoids percentage-sizing issues while remaining fluid. */
+    width: clamp(36px, 12vw, 90px);
+    height: clamp(36px, 12vw, 90px);
+    border: clamp(4px, 0.9vw, 12px) solid rgba(255, 255, 255, 0.25);
     border-top-color: #bbbbbb;
     border-radius: 50%;
     animation: spin 0.9s linear infinite;

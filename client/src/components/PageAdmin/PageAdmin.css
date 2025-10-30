@@ -6,6 +6,18 @@
   font-family: Arial, sans-serif;
 }
 
+.page-container .back-button {
+  background-color: #4a90e2;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  border: none;
+  margin-bottom: 1rem;
+}
+
 .page-container h1 {
   font-size: 1.8rem;
   margin-bottom: 1.5rem;

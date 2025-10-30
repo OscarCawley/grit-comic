@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import './PageAdmin.css';
 
-const PageAdmin = ({ selectedChapter }) => {
+const PageAdmin = ({ setView, setSelectedChapter, selectedChapter }) => {
     const [pages, setPages] = useState([]);
     const token = localStorage.getItem('token');
 
@@ -113,6 +113,7 @@ const PageAdmin = ({ selectedChapter }) => {
 
     return (
         <div className='page-container'>
+            <button className='back-button' onClick={() => { setView('chapters'); setSelectedChapter(null); }}>Back to Chapter Admin</button>
             <h1>Manage Pages for Chapter {selectedChapter.chapter_num}</h1>
             <div className='image-upload'>
                 <label htmlFor='file-upload' className='custom-file-upload'>

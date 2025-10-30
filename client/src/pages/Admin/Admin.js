@@ -28,7 +28,7 @@ const Admin = () => {
 
             <div className="section-content">
                 {view === 'chapters' && <ChapterAdmin setView={setView} setSelectedChapter={setSelectedChapter}/>}
-                {view === 'pages' && <PageAdmin selectedChapter={selectedChapter}/>}
+                {view === 'pages' && <PageAdmin setView={setView} setSelectedChapter={setSelectedChapter} selectedChapter={selectedChapter}/>}
                 {view === 'wiki' && <WikiAdmin />}
                 {view === 'updates' && <UpdatesAdmin />}
                 {view === 'users' && <UserAdmin />}

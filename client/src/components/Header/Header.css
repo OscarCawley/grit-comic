@@ -17,11 +17,12 @@
     margin: 1.5rem 0;
 }
 
-.account-container {
+.header-controls {
     position: absolute;
     right: 10px;
     display: flex;
     gap: 20px;
+    align-items: center;
 }
 
 .account-container button {
@@ -38,4 +39,13 @@
 .header-title-link {
     text-decoration: none; /* Remove underline */
     color: inherit; /* Inherit the color from the parent */
+}
+
+/* Hide account container on narrow screens (below 1300px).
+   Use 1299px here so 1300px falls into the desktop layout and
+   doesn't conflict with the hamburger breakpoint. */
+@media (max-width: 1299px) {
+    .account-container {
+        display: none;
+    }
 }

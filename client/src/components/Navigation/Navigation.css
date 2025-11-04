@@ -52,3 +52,9 @@
 .navigation a:hover {
     text-decoration: underline;
 }
+
+@media (max-width: 1300px) {
+    .navigation {
+        display: none;
+    }
+}

@@ -9,8 +9,8 @@
 }
 
 .comic-viewer img {
-    width: auto;
-    height: 80vh;
+    max-width: 100%;
+    max-height: 80vh;
     margin: auto;
     display: block;
 }

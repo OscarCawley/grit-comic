@@ -10,3 +10,15 @@ footer p {
     font-size: 16px;
     font-family: Arial, sans-serif;
 }
+
+@media (max-width: 700px) {
+    footer p {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 400px) {
+    footer p {
+        font-size: 12px;
+    }
+}

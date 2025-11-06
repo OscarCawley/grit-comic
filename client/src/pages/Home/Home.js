@@ -91,7 +91,7 @@ const Home = () => {
     };
 
     const filteredComments = comments.filter((comment) => {
-        const matchesChapter = comment.chapter_id === currentChapter + 1;
+        const matchesChapter = comment.chapter_num === currentChapter + 1;
         return matchesChapter;
     });
 
@@ -154,7 +154,7 @@ const Home = () => {
         try {
             const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/comments`, {
                 content: newComment,
-                chapter_id: currentChapter + 1,
+                chapter_num: currentChapter + 1,
                 user_id: user?.id,
             });
 
@@ -192,6 +192,9 @@ const Home = () => {
         <PageAnimation>
             <div className='comic-viewer-container'>
                 <h1 className="comic-chapter-title">{chapters[currentChapter]?.title}</h1>
+                {chapters.length > 0 && chapters[currentChapter]?.pages?.length > 0 ? (
+                    <p className='page-count'>Page {currentPage + 1} of {chapters[currentChapter].pages.length}</p>
+                ) : null}
                 <div className="comic-viewer" onClick={handleImageClick}>
                     {chapters.length > 0 && chapters[currentChapter]?.pages?.length > 0 ? (
                         <img
@@ -217,9 +220,6 @@ const Home = () => {
                             <img className="right-icon" src={chapterIcon} alt="" />
                         </button>
                     </div>
-                    {chapters.length > 0 && chapters[currentChapter]?.pages?.length > 0 ? (
-                        <p>Page {currentPage + 1} of {chapters[currentChapter].pages.length}</p>
-                    ) : null}
                 </div>
             </div>
             <div className="comment-section">

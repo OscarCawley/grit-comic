@@ -5,7 +5,15 @@
 .comic-chapter-title {
     color: white;
     font-size: 5em;
-    margin: 2.5rem 0;
+    margin: 2.5rem 0 0 0;
+}
+
+.page-count {
+    font-family: Arial, sans-serif;
+    color: white;
+    font-size: 1.25em;
+    font-weight: bold;
+    margin: 15px 0 15px 0;
 }
 
 .comic-viewer img {
@@ -15,33 +23,24 @@
     display: block;
 }
 
-.comic-page-indicator {
-    font-family: Arial, sans-serif;
-    color: white;
-    font-size: 1.25em;
-    font-weight: bold;
-    margin: 15px 0 15px 0;
-}
-
 .navigation-buttons {
     display: flex;
-    gap: 12px;
+    gap: 20px;
     justify-content: center;
     align-items: center;
     margin: 15px 0;
 }
 
 .page-button {
-    border: 3px solid #32FFB0;
-    border-radius: 8px;
-    background: #222222;
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
     cursor: pointer;
     transition: color 0.2s;
-    padding: 6px 10px;
 }
 
 .page-button:disabled {
-    border-color: #555555;
     color: #555555;
     cursor: not-allowed;
 }
@@ -51,23 +50,16 @@
 }
 
 .page-button:not(:disabled):hover {
-    border-color: #32FFB0;
     color: #32FFB0;
 }
 
 .page-button:not(:disabled):active {
-    transform: scale(0.95);
-}
-
-.page-button:focus {
-    outline: 3px solid #939393;
-    outline-offset: 2px;
+    transform: scale(0.9);
 }
 
 .page-button img {
-    height: 28px;
+    height: 36px;
     width: auto;
-    
 }
 
 .page-button .left-icon {
@@ -78,11 +70,11 @@
     font-family: Arial, sans-serif;
     display: flex;
     flex-direction: column;
-    align-items: stretch;
-    margin: 0 auto;
-    margin-bottom: 3rem;
+    align-items: center;
+    margin: 0 auto 3rem;
     gap: 30px;
-    max-width: 70%;
+    width: 90%;
+    max-width: 800px;
     color: white;
 }
 
@@ -92,12 +84,10 @@
     flex-direction: column;
     align-items: stretch;
     gap: 20px;
-    width: 90%;
+    width: 100%;
 }
 
 .comment-textarea {
-    resize: none; /* only allow vertical resizing */
-    max-width: 100%;  /* stays responsive */
     width: 100%;      /* fills the container */
     box-sizing: border-box; /* include padding/border in width */
     padding: 10px;
@@ -106,7 +96,6 @@
     border: 3px solid #939393;
     background-color: #222222;
     border-radius: 5px;
-    
     color: white;
 }
 
@@ -131,7 +120,7 @@
     border-radius: 5px;
     padding: 10px;
     margin: 0 auto;
-    min-width: 300px;
+    min-width: 250px;
     cursor: pointer;
     text-align: center;
 }
@@ -156,7 +145,6 @@
     border: 3px solid #939393;
     background-color: #222222;
     border-radius: 5px;
-    
     padding: 10px;
     width: 100%;
     box-sizing: border-box;
@@ -194,4 +182,95 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+@media (max-width: 700px) {
+    .page-button img {
+        height: 30px;
+    }
+
+    .comic-chapter-title {
+        font-size: 4.5em;
+    }
+
+    .page-count {
+        font-size: 1em;
+    }
+
+    .comment-textarea {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .comment-submit-button {
+        font-size: 1em;
+        padding: 8px;
+        min-width: 200px;
+    }
+
+    .comment-title {
+        font-size: 1.75em;
+    }
+
+    .comment {
+        padding: 8px;
+    }
+
+    .comment-header h3 {
+        font-size: 1.25em;
+    }
+
+    .comment-date {
+        font-size: 0.7em;
+    }
+
+    .comment-content {
+        font-size: 14px;
+    }
+
+}
+
+@media (max-width: 400px) {
+    .page-button img {
+        height: 24px;
+    }
+
+    .comic-chapter-title {
+        font-size: 3.5em;
+    }
+
+    .page-count {
+        font-size: 0.9em;
+    }
+
+    .comment-textarea {
+        font-size: 13px;
+        padding: 6px;
+    }
+
+    .comment-submit-button {
+        font-size: 0.9em;
+        padding: 6px;
+        min-width: 150px;
+    }
+
+    .comment-title {
+        font-size: 1.5em;
+    }
+
+    .comment {
+        padding: 6px;
+    }
+
+    .comment-header h3 {
+        font-size: 1.1em;
+    }
+
+    .comment-date {
+        font-size: 0.6em;
+    }
+
+    .comment-content {
+        font-size: 13px;
+    }
 }

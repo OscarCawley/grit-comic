@@ -31,10 +31,10 @@
     width: 100%;
     border: 3px solid #939393; /* Light blue border */
     border-radius: 5px;
-    
     background-color: #222222;
     padding: 10px;
     cursor: pointer;
+    gap: 1rem;
 }
 
 .chapters-list h1 {
@@ -55,4 +55,32 @@
     white-space: nowrap;
     margin: 0;
     color: #bbbbbb;
+}
+
+@media (max-width: 700px) {
+    .chapters-page h1 {
+        font-size: 4.5em;
+    }
+
+    .chapter-item h2 {
+        font-size: 1.5em;
+    }
+
+    .chapter-item p {
+        font-size: 0.9em;
+    }
+}
+
+@media (max-width: 400px) {
+    .chapters-page h1 {
+        font-size: 3.5em;
+    }
+
+    .chapter-item h2 {
+        font-size: 1.25em;
+    }
+
+    .chapter-item p {
+        font-size: 0.8em;
+    }
 }

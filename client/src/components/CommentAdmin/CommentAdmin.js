@@ -50,7 +50,7 @@ const CommentAdmin = () => {
         const matchesUser =
             userSearchTerm === "" || comment.username.toLowerCase().includes(userSearchTerm.toLowerCase());
         const matchesChapter =
-            chapterTerm === "" || comment.chapter_id === selectedChapterId;
+            chapterTerm === "" || comment.chapter_num === selectedChapterId;
         return matchesUser && matchesChapter;
     });
 

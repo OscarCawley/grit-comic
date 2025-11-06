@@ -14,12 +14,12 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-    const { user_id, chapter_id, content } = req.body;
-    if (!user_id || !chapter_id || !content) {
+    const { user_id, chapter_num, content } = req.body;
+    if (!user_id || !chapter_num || !content) {
         return res.status(400).send('Missing required fields');
     }
     try {
-        const [result] = await db.query('INSERT INTO comments (user_id, chapter_id, content) VALUES (?, ?, ?)', [user_id, chapter_id, content]);
+        const [result] = await db.query('INSERT INTO comments (user_id, chapter_num, content) VALUES (?, ?, ?)', [user_id, chapter_num, content]);
         const [newCommentRows] = await db.query(`SELECT comments.*, users.username AS username, DATE_FORMAT(comments.created_at, '%d/%m/%Y %H:%i') AS created_at_formatted FROM comments JOIN users ON comments.user_id = users.id WHERE comments.id = ?`, [result.insertId]);
         res.status(201).json(newCommentRows[0]);
     } catch (err) {

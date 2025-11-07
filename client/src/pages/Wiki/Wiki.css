@@ -20,7 +20,6 @@
 .wiki-content h2 {
     font-size: 2.5em;
     margin: 0;
-    text-align: center;
 }
 
 .category-list {
@@ -109,7 +108,6 @@
     border: 3px solid #939393;
     background-color: #222222;
     border-radius: 5px;
-    
     padding: 10px;
     width: 100%;
     box-sizing: border-box;
@@ -121,6 +119,7 @@
 .wiki-item-header {
     display: flex;
     justify-content: space-between;
+    gap: 10px;
 }
 
 .wiki-item-header h2 {
@@ -159,4 +158,62 @@
     text-overflow: ellipsis;
     box-sizing: border-box;
     margin-bottom: 0.5rem;
+}
+
+@media (max-width: 1000px) {
+    .wiki-content {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .category-list {
+        flex-direction: row;
+        overflow-x: auto;
+        justify-content: center;
+        width: 100%;
+        gap: 15px;
+    }
+
+    .category-list h2 {
+        display: none;
+    }
+
+    .category-button {
+        min-width: auto;
+        white-space: nowrap;
+        margin: 0;
+    }
+
+    .wiki-list {
+        grid-column: 1;
+    }
+}
+
+@media (max-width: 700px) {
+    .wiki h1 {
+        font-size: 4.5em;
+    }
+
+    .wiki-item-header h2 {
+        font-size: 1.5em;
+    }
+
+    .wiki-item-content {
+        -webkit-line-clamp: 3;
+        line-clamp: 3;
+    }
+
+    .wiki-item-content p {
+        font-size: 14px;
+        margin: 12px 0;
+    }
+
+    .category-list {
+        gap: 10px;
+    }
+
+    .category-button {
+        font-size: 1em;
+        padding: 8px;
+    }
 }

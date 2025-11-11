@@ -2,7 +2,7 @@
     color: white;
     font-family: Arial, sans-serif;
     padding: 2rem;
-    width: 80%;         /* allows shrinking on small screens */
+    width: 90%;         /* allows shrinking on small screens */
     margin: 0 auto;      /* centers horizontally */
     box-sizing: border-box; /* to include padding in width */
 }
@@ -42,8 +42,7 @@
 .wiki-detail-image {
     float: right;
     margin: 0 0 1rem 1rem;
-    max-width: 300px;
-    width: 100%;
+    width: 35%;
     height: auto;
     border-radius: 8px;
     border: 2px solid #939393;
@@ -87,4 +86,73 @@
     overflow: auto; /* contains float */
     flex-grow: 1;
     text-align: left; /* ensure text aligns left */
+}
+
+@media (max-width: 800px) {
+    .wiki-detail .back-button {
+        min-width: 150px;
+        padding: 8px;
+        font-size: 0.9em;
+    }
+    
+    .wiki-detail-image {
+        float: none;
+        display: block;
+        margin: 0 auto 1.5rem auto;
+        width: 80%;
+    }
+
+    .wiki-detail-title {
+        font-size: 2.5em;
+    }
+
+    .wiki-detail-content h2 {
+        font-size: 1.5rem;
+    }
+
+    .wiki-detail-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .wiki-detail {
+        padding: 1rem;
+    }
+
+    .wiki-detail-article {
+        padding: 1rem;
+    }
+
+    .wiki-detail-article div {
+        font-size: 0.9em;
+    }
+}
+
+@media (max-width: 500px) {
+    .wiki-detail .back-button {
+        min-width: 120px;
+        padding: 6px;
+        font-size: 0.8em;
+    }
+
+    .wiki-detail-image {
+        width: 95%;
+    }
+
+    .wiki-detail-title {
+        font-size: 2em;
+    }
+
+    .wiki-detail-content h2 {
+        font-size: 1.2rem;
+    }
+
+    .wiki-detail-article {
+        padding: 0.5rem;
+    }
+
+    .wiki-detail-article div {
+        font-size: 0.85em;
+    }
 }

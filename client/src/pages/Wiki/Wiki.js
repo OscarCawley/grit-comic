@@ -72,6 +72,16 @@ const Wiki = () => {
                         <button className={`category-button ${activeCategory === "World" ? "active" : ""}`} onClick={() => handleCategoryClick("World")}>World</button>
                         <button className={`category-button ${activeCategory === "Characters" ? "active" : ""}`} onClick={() => handleCategoryClick("Characters")}>Characters</button>
                     </div>
+
+                    {/*dropdown menu for categories on mobile*/}
+                    <div className="mobile-category-dropdown">
+                        <select value={activeCategory} onChange={(e) => handleCategoryClick(e.target.value)}>
+                            <option value="All">All</option>
+                            <option value="General">General</option>
+                            <option value="World">World</option>
+                            <option value="Characters">Characters</option>
+                        </select>
+                    </div>
                     
                     <div className="wiki-list">
                         <div className='wiki-search'>

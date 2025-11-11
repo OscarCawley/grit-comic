@@ -230,7 +230,7 @@
 
 }
 
-@media (max-width: 400px) {
+@media (max-width: 500px) {
     .page-button img {
         height: 24px;
     }

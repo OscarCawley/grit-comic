@@ -26,7 +26,7 @@ A dynamic web platform created to showcase the comic book *GRIT*, offering fans 
 
 
 - **TODO**
-  filter dropdown menu for wiki at 500px
   make wiki posts only show first paragraph or 5 lines
   change R and V in font file to be same height (possibly redo whole font file)
   figure out if password hashing needs to be hidden from github
+  make socials white

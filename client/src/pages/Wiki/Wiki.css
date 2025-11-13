@@ -229,7 +229,7 @@
     }
 
     .wiki-item-content p {
-        font-size: 14px;
+        font-size: 15px;
         margin: 12px 0;
     }
 
@@ -271,5 +271,10 @@
 
     .wiki-item-updated {
         font-size: 0.7em;
+    }
+
+    .wiki-item-content p {
+        font-size: 14px;
+        margin: 8px 0;
     }
 }

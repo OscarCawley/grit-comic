@@ -6,7 +6,7 @@
 }
 
 .updates h1 {
-    font-size: 4.5em;
+    font-size: 5em;
     margin: 2.5rem 0;
     text-align: center;
 }
@@ -28,14 +28,12 @@
     border: 3px solid #939393; /* Light blue border */
     background-color: #222222;
     border-radius: 5px;
-    
     padding: 10px;
-    width: 100%;
+    width: 80%;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
     text-overflow: ellipsis;
-    max-width: 80%;
     margin: 0 auto;
 }
 
@@ -56,4 +54,50 @@
     color: #bbbbbb; /* Light blue text */
     text-align: right;
     margin: 0;
+}
+
+@media (max-width: 700px) {
+    .updates h1 {
+        font-size: 4.5em;
+    }
+
+    .updates-item {
+        width: 85%;
+    }
+
+    .updates-item-header {
+        font-size: 1.5em;
+    }
+
+    .updates-item-updated {
+        font-size: 0.75em;
+    }
+
+    .updates-item-content p {
+        font-size: 15px;
+        margin: 12px 0;
+    }
+}
+
+@media (max-width: 500px) {
+    .updates h1 {
+        font-size: 3.5em;
+    }
+
+    .updates-item {
+        width: 90%;
+    }
+
+    .updates-item-header {
+        font-size: 1.2em;
+    }
+
+    .updates-item-updated {
+        font-size: 0.7em;
+    }
+
+    .updates-item-content p {
+        font-size: 14px;
+        margin: 8px 0;
+    }
 }

@@ -173,7 +173,7 @@
 .comment-content {
     width: 100%;
     box-sizing: border-box;
-    margin: 0.5rem 0;
+    margin: 8px 0;
 }
 
 .image-placeholder {
@@ -226,6 +226,7 @@
 
     .comment-content {
         font-size: 14px;
+        margin: 6px 0;
     }
 
 }
@@ -272,5 +273,6 @@
 
     .comment-content {
         font-size: 13px;
+        margin: 4px 0;
     }
 }

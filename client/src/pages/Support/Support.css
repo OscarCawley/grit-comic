@@ -126,6 +126,10 @@
     width: 100%;
 }
 
+.faq-item-answer p {
+    margin: 8px 0 0 0;
+}
+
 @media (max-width: 900px) {
     .support {
         max-width: 80%;
@@ -169,7 +173,7 @@
 
     .faq-item-answer p {
         font-size: 15px;
-        margin: 12px 0;
+        margin: 6px 0 0 0;
     }
 }
 
@@ -206,6 +210,6 @@
 
     .faq-item-answer p {
         font-size: 13px;
-        margin: 8px 0;
+        margin: 4px 0 0 0;
     }
 }

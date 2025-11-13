@@ -174,7 +174,11 @@
     overflow: hidden;
     text-overflow: ellipsis;
     box-sizing: border-box;
-    margin-bottom: 0.5rem;
+    margin: 8px 0;
+}
+
+.wiki-item-content p {
+    margin:0;
 }
 
 @media (max-width: 1000px) {

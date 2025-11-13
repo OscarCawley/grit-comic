@@ -56,6 +56,10 @@
     margin: 0;
 }
 
+.updates-item-content p {
+    margin: 8px 0;
+}
+
 @media (max-width: 700px) {
     .updates h1 {
         font-size: 4.5em;
@@ -75,7 +79,7 @@
 
     .updates-item-content p {
         font-size: 15px;
-        margin: 12px 0;
+        margin: 6px 0;
     }
 }
 
@@ -98,6 +102,6 @@
 
     .updates-item-content p {
         font-size: 14px;
-        margin: 8px 0;
+        margin: 4px 0;
     }
 }

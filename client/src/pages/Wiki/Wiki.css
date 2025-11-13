@@ -12,14 +12,9 @@
 .wiki-content {
     display: grid;
     grid-template-columns: 20% auto;
-    width: 80%;
+    width: 85%;
     margin: 2.5rem auto;
     gap: 3rem;
-}
-
-.wiki-content h2 {
-    font-size: 2.5em;
-    margin: 0;
 }
 
 .category-list {
@@ -40,7 +35,7 @@
     color: #222222;
     border: none;
     border-radius: 8px; /* Slightly rounder corners */
-    padding: 12px 20px; /* Comfortable padding */
+    padding: 10px 16px; /* Comfortable padding */
     margin: 0 auto;
     min-width: 100%;
     cursor: pointer;
@@ -81,15 +76,38 @@
 }
 
 .mobile-category-dropdown select {
-    width: 110px;
-    padding: 8px 8px;
-    font-size: 0.9em;
-    border: 2px solid #939393;
-    border-radius: 5px;
-    background-color: #222222;
-    color: white;
+    width: auto;
+    padding: 8px 8px; /* match button padding */
+    font-size: 0.9em; /* match button font size */
+    font-weight: 600;
+    font-family: 'Arial', sans-serif;
+    color: #222222; /* dark text like buttons */
+    background: linear-gradient(145deg, #32FFB0, #2ACFAF); /* same gradient as buttons */
+    border: none;
+    border-radius: 6px; /* rounded corners like buttons */
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.15); /* subtle shadow */
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    text-align: center;
+}
+
+/* Hover effect */
+.mobile-category-dropdown select:hover {
+    box-shadow: 0 6px 10px rgba(0,0,0,0.2);
+}
+
+/* Active / focus effect */
+.mobile-category-dropdown select:focus {
     outline: none;
-    transition: all 0.2s ease-in-out;
+    box-shadow: 0 6px 10px rgba(0,0,0,0.25);
+}
+
+.mobile-category-dropdown select option {
+    background-color: #222222; /* dark background */
+    color: white; /* text color */
+    font-family: 'Arial', sans-serif;
+    font-size: 1em;
+    padding: 8px; /* may work on some browsers */
 }
 
 .wiki-search {
@@ -181,6 +199,12 @@
 
 .wiki-item-content p {
     margin:0;
+}
+
+@media (max-width: 1100px) {
+    .wiki-content {
+        grid-template-columns: 22% auto;
+    }
 }
 
 @media (max-width: 1000px) {

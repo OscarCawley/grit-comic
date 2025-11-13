@@ -66,7 +66,6 @@ const Wiki = () => {
                 <h1>Wiki</h1>
                 <div className="wiki-content">
                     <div className="category-list">
-                        <h2>Category</h2>
                         <button className={`category-button ${activeCategory === "All" ? "active" : ""}`} onClick={() => handleCategoryClick("All")}>All</button>
                         <button className={`category-button ${activeCategory === "General" ? "active" : ""}`} onClick={() => handleCategoryClick("General")}>General</button>
                         <button className={`category-button ${activeCategory === "World" ? "active" : ""}`} onClick={() => handleCategoryClick("World")}>World</button>

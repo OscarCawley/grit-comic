@@ -36,6 +36,28 @@
     color: #bbbbbb;
 }
 
+.account-info button {
+    background: linear-gradient(145deg, #FF6B6B, #FF3B3B);; /* Modern gradient */
+    font-family: 'Arial', sans-serif;
+    font-size: 0.7em;
+    font-weight: 600;
+    color: #222222; /* White text looks cleaner */
+    border: none;
+    border-radius: 6px; /* Slightly rounder corners */
+    padding: 8px 16px; /* More comfortable padding */
+    margin: 0 auto;
+    width: 150px;
+    cursor: pointer;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.15); /* Subtle shadow */
+    transition: all 0.3s ease; /* Smooth hover transition */
+}
+
+.account-info button:hover {
+    box-shadow: 0 6px 10px rgba(0,0,0,0.2); /* Lift effect on hover */
+    transform: translateY(-3px); /* Slight lift */
+}
+
 .account-actions {
     text-align: center;
 

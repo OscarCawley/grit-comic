@@ -9,7 +9,8 @@
 }
 
 .sign-up-page p button {
-    background-color: #939393; /* Light blue button */
+    box-sizing: border-box;
+    background: linear-gradient(145deg, #32FFB0, #2ACFAF); /* Modern gradient */
     color: #222222; /* Dark text for contrast */
     border: none;
     border-radius: 5px;
@@ -17,12 +18,13 @@
     font-size: 14px;
     font-weight: bold;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
     margin-left: 8px;
 }
 
 .sign-up-page p button:hover {
-    background-color: #bbbbbb; /* Slightly darker blue on hover */
+    box-shadow: 0 6px 10px rgba(0,0,0,0.2); /* Lift effect on hover */
+    transform: translateY(-3px); /* Slight lift */
 }
 
 .sign-up-page p button:focus {
@@ -67,20 +69,23 @@
 
 .sign-up-form button {
     box-sizing: border-box;
-    width: 100%;
-    padding: 10px;
-    background-color: #939393; /* Light blue button */
+    width: 100%; /* login-form buttons */
+    padding: 12px 20px; /* more comfortable padding */
+    background: linear-gradient(145deg, #32FFB0, #2ACFAF); /* Modern gradient */
     color: #222222; /* Dark text for contrast */
     border: none;
-    border-radius: 5px;
+    border-radius: 8px; /* Rounded corners */
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.15); /* Subtle shadow */
+    transition: all 0.3s ease; /* Smooth hover transition */
 }
 
 .sign-up-form button:hover {
-    background-color: #bbbbbb; /* Slightly darker blue on hover */
+    box-shadow: 0 6px 10px rgba(0,0,0,0.2); /* Lift effect on hover */
+    transform: translateY(-3px); /* Slight lift */
 }
 
 .message {

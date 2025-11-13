@@ -8,22 +8,25 @@
 }
 
 .wiki-detail .back-button {
-    background-color: #939393;
-    font-family: Arial, sans-serif;
-    font-size: 1em;
+    background: linear-gradient(145deg, #32FFB0, #2ACFAF); /* Modern gradient */
+    font-family: 'Arial', sans-serif;
+    font-size: 1.1em;
     font-weight: 600;
-    color: #222222;
+    color: #222222; /* White text looks cleaner */
     border: none;
-    border-radius: 5px;
-    padding: 10px;
+    border-radius: 8px; /* Slightly rounder corners */
+    padding: 12px 20px; /* More comfortable padding */
     margin: 0 auto;
-    min-width: 200px;
+    width: 250px;
     cursor: pointer;
     text-align: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.15); /* Subtle shadow */
+    transition: all 0.3s ease; /* Smooth hover transition */
 }
 
 .wiki-detail .back-button:hover {
-    background-color: #bbbbbb;
+    box-shadow: 0 6px 10px rgba(0,0,0,0.2); /* Lift effect on hover */
+    transform: translateY(-3px); /* Slight lift */
 }
 
 .wiki-detail-article {

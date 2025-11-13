@@ -33,31 +33,33 @@
 }
 
 .category-button {
-    background-color: #939393; /* Light blue background */
-    font-family: Arial, sans-serif;
+    background: linear-gradient(145deg, #32FFB0, #2ACFAF); /* Modern gradient */
+    font-family: 'Arial', sans-serif;
     font-size: 1.2em;
     font-weight: 600;
     color: #222222;
     border: none;
-    border-radius: 5px;
-    padding: 10px;
+    border-radius: 8px; /* Slightly rounder corners */
+    padding: 12px 20px; /* Comfortable padding */
     margin: 0 auto;
     min-width: 100%;
     cursor: pointer;
     text-align: center;
     box-sizing: border-box;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.15); /* Subtle shadow */
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .category-button:hover {
-    background-color: #bbbbbb;
+    box-shadow: 0 6px 10px rgba(0,0,0,0.2); /* Lift effect on hover */
+    transform: translateY(-3px); /* Slight lift */
 }
 
 .category-button.active {
     /* Visible border around the active category with a small gap */
-    outline: 3px solid #bbbbbb; /* border color */
-    outline-offset: 3px; /* gap between button and outline */
-    border-radius: 6px; /* match button rounding */
-    background-color: #bbbbbb;
+    outline: 2px solid #32FFB0; /* border color */
+    outline-offset: 4px; /* gap between button and outline */
+    border-radius: 8px; /* match button rounding */
 }
 
 .wiki-list {

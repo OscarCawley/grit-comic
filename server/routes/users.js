@@ -6,6 +6,7 @@ const nodemailer = require('nodemailer');
 const db = require('../db');
 const { sendPasswordResetEmail, sendVerificationEmail } = require('../emailUtils');
 const AdminOnly = require('../middleware/AdminOnly.js');
+const AuthenticateToken = require('../middleware/AuthenticateToken.js');
 
 const router = express.Router();
 
@@ -88,7 +89,7 @@ router.post('/login', async (req, res) => {
         }
 
         const token = jwt.sign(
-            { userId: user.id, username: user.username, email: user.email, subscribe: Boolean(user.subscribe), auth: Boolean(user.auth), owner: Boolean(user.owner) },
+            { id: user.id, username: user.username, email: user.email, subscribe: Boolean(user.subscribe), auth: Boolean(user.auth), owner: Boolean(user.owner) },
             process.env.JWT_SECRET,
             { expiresIn: '1h' }
         );
@@ -165,19 +166,30 @@ router.patch('/:id/subscribe', async (req, res) => {
     }
 
     try {
+        const subscribeValue = subscribe ? 1 : 0;
+
+        // Update in DB
+        await db.query('UPDATE users SET subscribe = ? WHERE id = ?', [subscribeValue, id]);
+
+        // Fetch the updated user from DB
         const [rows] = await db.query('SELECT * FROM users WHERE id = ?', [id]);
 
         if (rows.length === 0) {
             return res.status(404).json({ message: 'User not found.' });
         }
 
-        const subscribeValue = subscribe ? 1 : 0;
-        await db.query('UPDATE users SET subscribe = ? WHERE id = ?', [subscribeValue, id]);
-
         const user = rows[0];
 
+        // Use the value from the database (user.subscribe) in the token
         const token = jwt.sign(
-            { userId: user.id, username: user.username, email: user.email, subscribe },
+            {
+                id: user.id,
+                username: user.username,
+                email: user.email,
+                subscribe: Boolean(user.subscribe), // ensure it's boolean
+                auth: Boolean(user.auth),
+                owner: Boolean(user.owner)
+            },
             process.env.JWT_SECRET,
             { expiresIn: '1h' }
         );
@@ -275,7 +287,7 @@ router.put('/:id/admin', AdminOnly, async (req, res) => {
 });
 
 // DELETE user
-router.delete('/:id', AdminOnly, async (req, res) => {
+router.delete('delete-user/:id', AdminOnly, async (req, res) => {
     const userId = req.params.id;
 
     try {
@@ -289,6 +301,25 @@ router.delete('/:id', AdminOnly, async (req, res) => {
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Database error', error: err });
+    }
+});
+
+// USER SELF DELETE ACCOUNT
+router.delete("/delete-account", AuthenticateToken, async (req, res) => {
+    const userId = req.user.id; // this comes from decoded JWT
+    console.log('Deleting user with ID:', userId);
+
+    try {
+        const [result] = await db.query("DELETE FROM users WHERE id = ?", [userId]);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        res.json({ message: "Account deleted successfully" });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Database error", error: err });
     }
 });
 

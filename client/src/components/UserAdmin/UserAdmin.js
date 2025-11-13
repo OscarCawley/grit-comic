@@ -37,7 +37,7 @@ const UserAdmin = () => {
 
     const handleDelete = (userId) => {
         if (window.confirm('Are you sure you want to delete this user?')) {
-            axios.delete(`${process.env.REACT_APP_API_URL}/api/users/${userId}`, {
+            axios.delete(`${process.env.REACT_APP_API_URL}/api/users/delete-user/${userId}`, {
                 headers: { Authorization: `Bearer ${token}` }
             }).then(() => {
                 setUsers(users.filter(user => user.id !== userId));

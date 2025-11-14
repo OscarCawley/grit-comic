@@ -62,6 +62,9 @@ router.post('/signup', async (req, res) => {
         res.status(201).json({ message: 'User registered successfully!' });
     } catch (err) {
         console.error(err);
+        if (err.errno == 1406) {
+            res.status(500).json({ message: 'Username too long (min 15 characters)', error: err });
+        }
         res.status(500).json({ message: 'Error inserting user', error: err });
     }
 });

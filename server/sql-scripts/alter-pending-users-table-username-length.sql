@@ -1,0 +1,1 @@
+ALTER TABLE pending_users MODIFY COLUMN username VARCHAR(15);

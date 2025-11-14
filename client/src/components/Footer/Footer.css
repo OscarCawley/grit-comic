@@ -9,16 +9,32 @@ footer p {
     color: #bbbbbb;
     font-size: 16px;
     font-family: Arial, sans-serif;
+    margin: 0 0 12px 0;
+}
+
+.help {
+    display: none;
+    font-size: 0.8em;
+    font-family: Arial, sans-serif;
+    margin-bottom: 0;
 }
 
 @media (max-width: 700px) {
     footer p {
         font-size: 14px;
     }
+
+    .help {
+        display: block;
+    }
 }
 
 @media (max-width: 400px) {
     footer p {
         font-size: 12px;
+    }
+
+    .help {
+        font-size: 0.7em;
     }
 }

@@ -26,7 +26,11 @@ A dynamic web platform created to showcase the comic book *GRIT*, offering fans 
 
 
 - **TODO**
-  make wiki posts only show first paragraph or 5 lines
-  change R and V in font file to be same height (possibly redo whole font file)
-  figure out if password hashing needs to be hidden from github
+  
+  redo colours for titles
+  verify, subscribe pages need responsive css
+  account page needs responsive css
+  fix long one word comments from not wrapping
   make socials white
+  make wiki posts only show first paragraph or 5 lines
+  figure out if password hashing needs to be hidden from github

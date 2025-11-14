@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import "./Header.css";
 import { UserContext } from "../../context/UserContext";
 import logo from "../../assets/icons/grit-logo.png";
+import accountIcon from "../../assets/icons/account.png";
 import HamburgerMenu from "../HamburgerMenu/HamburgerMenu";
 
 const Header = () => {
@@ -18,10 +19,12 @@ const Header = () => {
                     {user ? (
                         <Link to="/account">
                             <button className="user">{user.username}</button>
+                            <img className="account-icon" src={accountIcon} alt="" />
                         </Link>
                     ) : (
                         <Link to="/login">
                             <button>LOGIN</button>
+                            <img className="account-icon" src={accountIcon} alt="" />
                         </Link>
                     )}
                 </div>

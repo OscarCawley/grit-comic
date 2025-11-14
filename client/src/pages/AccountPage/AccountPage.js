@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import './AccountPage.css';
 import { UserContext, normalizeUser } from '../../context/UserContext';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 
 const AccountPage = () => {
@@ -11,6 +11,7 @@ const AccountPage = () => {
     const [error, setError] = useState('');
     const [isUpdatingSubscribe, setIsUpdatingSubscribe] = useState(false);
     const token = localStorage.getItem('token');
+    const navigate = useNavigate();
     
     const handleForgotPassword = async () => {
         if (!user?.email) {
@@ -93,7 +94,7 @@ const AccountPage = () => {
 
             alert('Your account has been deleted.');
             signOut();
-            window.location.href = '/';
+            navigate("/");
         } catch (err) {
             alert(`Error: ${err.response?.data?.message || "Something went wrong"}`);
         }
@@ -124,11 +125,12 @@ const AccountPage = () => {
                     {user?.auth === true && (
                         <Link
                             to="/admin"
+                            state={{ from: "admin" }}
                             onClick={async (e) => {
                                 const valid = await ensureValidToken();
                                 if (!valid) {
                                     e.preventDefault();
-                                    window.location.href = '/login';
+                                    navigate("/login", { state: { from: "admin" } }); // <-- pass state correctly
                                 }
                             }}
                         >

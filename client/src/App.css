@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'Grit Font';
-    src: url('./assets/grit-font-lowerK.otf') format('opentype');
+    src: url('./assets/grit-font.otf') format('opentype');
 }
 
 .App {

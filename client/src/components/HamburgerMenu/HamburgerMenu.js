@@ -35,7 +35,7 @@ return (
 				{user ? (
 					<li>
 						<Link className="hamburger-link" to="/account" onClick={() => setMenuOpen(false)}>
-							{user.username}
+							Account
 						</Link>
 					</li>
 				) : (

@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'Grit Font';
-    src: url('../../assets/grit-font-lowerK.otf') format('opentype');
+    src: url('../../assets/grit-font.otf') format('opentype');
 }
 
 .header {
@@ -24,15 +24,36 @@
     align-items: center;
 }
 
+.account-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px;
+}
+
+.account-container a {
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    gap: 10px;
+}
+
 .account-container button {
     background: none;
     border: none;
-    color: #bbbbbb;
-    padding: 10px 20px;
+    color: #32FFB0;
     cursor: pointer;
     font-family: 'Grit Font';
     text-transform: uppercase; /* Capitalizes the first letter of each word */
-    font-size: 2em;
+    font-size: 3em;
+    padding: 0;
+}
+
+.account-icon {
+    height: 39px;
+    aspect-ratio: 1;
 }
 
 .header-title-link {
@@ -43,7 +64,7 @@
 /* Hide account container on narrow screens (below 1300px).
    Use 1299px here so 1300px falls into the desktop layout and
    doesn't conflict with the hamburger breakpoint. */
-@media (max-width: 1299px) {
+@media (max-width: 1399px) {
     .account-container {
         display: none;
     }

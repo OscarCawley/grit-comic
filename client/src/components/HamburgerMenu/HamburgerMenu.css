@@ -99,7 +99,7 @@
   height: 40px;
 }
 
-@media (min-width: 1300px) {
+@media (min-width: 1400px) {
   .hamburger-wrapper { display: none !important; }
   .hamburger-backdrop { display: none !important; }
   .hamburger-menu { display: none !important; }

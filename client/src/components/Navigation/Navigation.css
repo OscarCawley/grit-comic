@@ -53,7 +53,7 @@
     text-decoration: underline;
 }
 
-@media (max-width: 1399px) {
+@media (max-width: 1349px) {
     .navigation {
         display: none;
     }

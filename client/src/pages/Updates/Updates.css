@@ -40,18 +40,12 @@
 .updates-item-header {
     font-size: 2em;
     margin: 0;
-    color: #bbbbbb;
+    color: #32FFB0;
 }
-
-.updates-item-link {
-    text-decoration: none;
-    color: #bbbbbb; /* Light blue text */
-}
-    
 
 .updates-item-updated {
     font-size: 0.8em;
-    color: #bbbbbb; /* Light blue text */
+    color: #bbbbbb;
     text-align: right;
     margin: 0;
 }

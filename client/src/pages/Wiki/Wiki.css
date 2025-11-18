@@ -171,12 +171,12 @@
 
 .wiki-item-link {
     text-decoration: none;
-    color: #bbbbbb; /* Light blue text */
+    color: #32FFB0; 
 }
 
 .wiki-item-updated {
     font-size: 0.8em;
-    color: #bbbbbb; /* Light blue text */
+    color: #bbbbbb; 
     text-align: right;
     margin: 0;
 }

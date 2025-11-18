@@ -77,8 +77,10 @@ const LogInPage = () => {
                 <button type="submit">Log In</button>
                 <p className={`message ${message ? 'visible' : 'hidden'}`}>{message || ' '}</p>
             </form>
-            <p>Don't have an account? <Link to="/signup"><button>Sign Up</button></Link></p>
-            <p>Forgot your password? <Link to="/forgot-password"><button>Reset Password</button></Link></p>
+            <div className='form-footer'>
+                <p>Don't have an account? <Link to="/signup"><button>Sign Up</button></Link></p>
+                <p>Forgot your password? <Link to="/forgot-password"><button>Reset Password</button></Link></p>
+            </div>
         </div>
     );
 };

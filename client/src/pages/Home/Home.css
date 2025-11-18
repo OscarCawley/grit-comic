@@ -13,7 +13,7 @@
     color: white;
     font-size: 1.25em;
     font-weight: bold;
-    margin: 15px 0 15px 0;
+    margin: 15px 0;
 }
 
 .comic-viewer img {
@@ -173,7 +173,7 @@
 .comment-header h3 {
     font-size: 1.5em;
     margin: 0;
-    color: #bbbbbb;
+    color: #21c787;
 }
 
 .comment-date {
@@ -198,6 +198,7 @@
 }
 
 @media (max-width: 700px) {
+
     .page-button img {
         height: 30px;
     }
@@ -245,6 +246,7 @@
 }
 
 @media (max-width: 500px) {
+
     .page-button img {
         height: 24px;
     }

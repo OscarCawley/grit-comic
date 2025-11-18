@@ -8,37 +8,11 @@
     margin: 1.5rem 0;
 }
 
-.sign-up-page p button {
-    box-sizing: border-box;
-    background: linear-gradient(145deg, #32FFB0, #2ACFAF); /* Modern gradient */
-    color: #222222; /* Dark text for contrast */
-    border: none;
-    border-radius: 5px;
-    padding: 5px 10px;
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-left: 8px;
-}
-
-.sign-up-page p button:hover {
-    box-shadow: 0 6px 10px rgba(0,0,0,0.2); /* Lift effect on hover */
-    transform: translateY(-3px); /* Slight lift */
-}
-
-.sign-up-page p button:focus {
-    outline: none;
-    box-shadow: 0 0 5px white; /* Highlight button on focus */
-}
-
-
 .sign-up-form {
     background-color: #222222; /* Slightly lighter background for the form */
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
-    width: 100%;
     max-width: 400px; /* Limit the form width */
     text-align: center;
     margin: 0 auto; /* Center the form horizontally */
@@ -69,8 +43,8 @@
 
 .sign-up-form button {
     box-sizing: border-box;
-    width: 100%; /* login-form buttons */
-    padding: 12px 20px; /* more comfortable padding */
+    width: 100%; /* sign-up-form buttons */
+    padding: 12px 0; /* more comfortable padding */
     background: linear-gradient(145deg, #32FFB0, #2ACFAF); /* Modern gradient */
     color: #222222; /* Dark text for contrast */
     border: none;
@@ -88,9 +62,29 @@
     transform: translateY(-3px); /* Slight lift */
 }
 
+.form-footer button {
+    box-sizing: border-box;
+    background: linear-gradient(145deg, #32FFB0, #2ACFAF); /* Modern gradient */
+    color: #222222; /* Dark text for contrast */
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-left: 8px;
+}
+
+.form-footer button:hover {
+    box-shadow: 0 6px 10px rgba(0,0,0,0.2); /* Lift effect on hover */
+    transform: translateY(-3px); /* Slight lift */
+}
+
+
 .message {
     min-height: 24px; /* Reserve vertical space for one line of text */
-    margin: 15px 0 0 0;
+    margin: 14px 0 0 0;
     font-size: 16px;
     color: white;
     transition: opacity 0.3s ease;
@@ -104,4 +98,83 @@
 .message.visible {
     opacity: 1;
     visibility: visible;
+}
+
+@media (max-width: 600px) {
+    .sign-up-page {
+        margin: 0 0.9rem;
+    }
+
+    .sign-up-form {
+        padding: 25px;
+    }
+
+    .sign-up-form input {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .sign-up-checkbox {
+        font-size: 13px;
+    }
+
+    .sign-up-form button {
+        font-size: 14px;
+        padding: 10px 0;
+    }
+
+    .form-footer p {
+        font-size: 14px;
+    }
+
+    .form-footer button {
+        font-size: 12px;
+        padding: 4px 8px;
+        margin-left: 6px;
+    }
+
+    .message {
+        min-height: 20px;
+        margin: 12px 0 0 0;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 400px) {
+    .sign-up-page {
+        margin: 0 0.7rem;
+    }
+
+    .sign-up-form {
+        padding: 20px;
+    }
+
+    .sign-up-form input {
+        font-size: 13px;
+        padding: 8px;
+    }
+    .sign-up-checkbox {
+        font-size: 12px;
+    }
+
+    .sign-up-form button {
+        font-size: 13px;
+        padding: 8px 0;
+    }
+
+    .form-footer p {
+        font-size: 13px;
+    }
+
+    .form-footer button {
+        font-size: 11px;
+        padding: 3px 6px;
+        margin-left: 2px;
+    }
+
+    .message {
+        min-height: 18px;
+        margin: 10px 0 0 0;
+        font-size: 12px;
+    }
 }

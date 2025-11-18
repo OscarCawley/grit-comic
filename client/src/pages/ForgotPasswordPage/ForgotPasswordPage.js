@@ -53,8 +53,10 @@ const ForgotPasswordPage = () => {
                 {/* Always rendered message element to reserve space */}
                 <p className={`message ${message ? 'visible' : 'hidden'}`}>{message || ' '}</p>
             </form>
-
-            <p>If you remember your password, <Link to="/login"><button>Login</button></Link></p>
+            <div className='form-footer'>
+                <p>If you remember your password, <Link to="/login"><button>Login</button></Link></p>
+            </div>
+            
         </div>
     );
 };

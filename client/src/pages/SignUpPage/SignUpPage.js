@@ -79,7 +79,10 @@ const SignUpPage = () => {
                 <button type="submit">Sign Up</button>
                 <p className={`message ${message ? 'visible' : 'hidden'}`}>{message || ' '}</p>
             </form>
-            <p>Already have an account? <Link to="/login"><button>Login</button></Link></p>
+            <div className='form-footer'>
+                <p>Already have an account? <Link to="/login"><button>Login</button></Link></p>
+            </div>
+            
         </div>
     );
 };

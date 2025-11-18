@@ -49,6 +49,19 @@ const sendPasswordResetEmail = async (email, resetLink) => {
                         ">
                         Reset Password
                     </a>
+                    <p style="
+                        font-size: 14px; 
+                        color: #555555; 
+                        text-align: center; 
+                        margin-top: 15px; 
+                        line-height: 1.4;
+                    ">
+                        If the button doesn’t work, copy and paste this link into your browser:<br>
+                        <a href="${resetLink}" 
+                            style="color: #2ACFAF; text-decoration: underline; word-break: break-all;">
+                            ${resetLink}
+                        </a>
+                    </p>
                 </div>
                 <p style="font-size: 14px; color: #555; text-align: center;">
                     If you did not request this, please ignore this email. This link will expire in 1 hour.
@@ -111,8 +124,12 @@ const sendNewsletterEmails = async (title, content, users) => {
                             display: inline-block; 
                             font-size: 12px;
                             font-weight: bold; 
-                            color: #222222;  
-                        ">Unsubscribe</a>.
+                            color: #2ACFAF;  
+                        ">Unsubscribe</a><br>.
+                        <a href="${process.env.FRONTEND_URL}/unsubscribe?token=${user.unsubscribe_token}" 
+                            style="color: #2ACFAF; text-decoration: underline; word-break: break-all;">
+                            ${process.env.FRONTEND_URL}/unsubscribe?token=${user.unsubscribe_token}
+                        </a>
                     </div>
                 </div>
             `
@@ -160,6 +177,19 @@ const sendVerificationEmail = async (email, token) => {
                             box-shadow: 0 4px 6px rgba(0,0,0,0.15);
                             border: none;
                     ">Verify Email</a>
+                    <p style="
+                        font-size: 14px; 
+                        color: #555555; 
+                        text-align: center; 
+                        margin-top: 15px; 
+                        line-height: 1.4;
+                    ">
+                        If the button doesn’t work, copy and paste this link into your browser:<br>
+                        <a href="${verificationLink}" 
+                            style="color: #2ACFAF; text-decoration: underline; word-break: break-all;">
+                            ${verificationLink}
+                        </a>
+                    </p>
                 </div>
                 <p style="font-size: 14px; color: #555; text-align: center;">
                     If you did not create an account, please ignore this email.

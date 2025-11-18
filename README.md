@@ -26,8 +26,9 @@ A dynamic web platform created to showcase the comic book *GRIT*, offering fans 
 
 
 - **TODO**
-  
-  redo colours for titles
+  buttons at bottom of sign up pages
+  whitelist characters for usernames
+  signup double password check
   verify, subscribe pages need responsive css
   account page needs responsive css
   fix long one word comments from not wrapping

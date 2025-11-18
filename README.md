@@ -26,12 +26,12 @@ A dynamic web platform created to showcase the comic book *GRIT*, offering fans 
 
 
 - **TODO**
-  buttons at bottom of sign up pages
+  verify, subscribe pages need responsive css
   whitelist characters for usernames
   signup double password check
-  verify, subscribe pages need responsive css
   account page needs responsive css
   fix long one word comments from not wrapping
   make socials white
   make wiki posts only show first paragraph or 5 lines
+  check if secure from SQL injection
   figure out if password hashing needs to be hidden from github

@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom'
 import axios from 'axios';
 import './UnsubscribePage.css';
 import useMinLoading from '../../hooks/useMinLoading';
 
 const UnsubscribePage = () => {
-	const [status, setStatus] = useState('Checking…');
+	const [status, setStatus] = useState('CHECKING…');
 	const [loading, showLoading, hideLoading] = useMinLoading(true, 3000);
 
 	useEffect(() => {
@@ -12,16 +13,16 @@ const UnsubscribePage = () => {
 		const token = params.get('token');
 
 		if (!token) {
-			setStatus('Missing unsubscribe token.');
+			setStatus('MISSING UNSUBSCRIBE TOKEN.');
 			hideLoading();
 			return;
 		}
 
 		showLoading();
 		axios.get(`${process.env.REACT_APP_API_URL}/api/users/unsubscribe?token=${token}`)
-			.then(() => setStatus('You are unsubscribed.'))
+			.then(() => setStatus('YOU ARE UNSUBSCRIBED.'))
 			.catch((err) => {
-				setStatus(err.response?.data?.message || 'Unable to unsubscribe.');
+				setStatus(err.response?.data?.message || 'UNABLE TO SUBSCRIBE.');
 			})
 			.finally(() => hideLoading());
 	}, []);
@@ -35,7 +36,7 @@ const UnsubscribePage = () => {
 			) : (
 				<>
 					<h1>{status}</h1>
-					<a href="/">Return to Grit Comic</a>
+					<Link to="/"><button className="unsubscribe-button">Return to Home</button></Link>
 				</>
 			)}
 		</div>

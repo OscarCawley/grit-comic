@@ -93,7 +93,6 @@ const sendNewsletterEmails = async (title, content, users) => {
 
     if (!users || users.length === 0) return;
     if (!title || !content) return;
-    console.log('Sending newsletter to users:', users);
     for (const user of users) {
         const mailOptions = {
             from: `"Grit Comic" <${process.env.EMAIL_USER}>`,

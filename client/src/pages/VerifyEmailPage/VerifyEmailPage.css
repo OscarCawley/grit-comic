@@ -9,15 +9,31 @@
 
 .verify-email-page h1 {
     font-size: 2em;
-    margin-bottom: 1rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
     text-align: center;
     color: white;
     font-family: Arial, sans-serif;
 }
 
-.verify-email-page a {
-    font-size: 1.25em;
-    color: #AAC7D8;
-    text-decoration: none;
-    font-weight: bold;
+.verify-email-button {
+    background: linear-gradient(145deg, #32FFB0, #2ACFAF);
+    font-family: 'Arial', sans-serif;
+    font-size: 1.1em;
+    font-weight: 600;
+    color: #222222;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    width: 250px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+    transition: all 0.3s ease;
+}
+.verify-email-button:hover {
+    box-shadow: 0 6px 10px rgba(0,0,0,0.2);
+    transform: translateY(-3px);
+}
+.verify-email-button:active {
+    transform: translateY(0);
 }

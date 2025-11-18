@@ -32,16 +32,23 @@ const sendPasswordResetEmail = async (email, resetLink) => {
                     You requested a password reset. Click the button below to reset it:
                 </p>
                 <div style="text-align: center; margin: 20px 0;">
-                    <a href="${resetLink}" style="
-                        display: inline-block; 
-                        padding: 10px 20px; 
-                        font-size: 16px;
-                        font-weight: bold; 
-                        color: #222222; 
-                        background-color: #bbbbbb; 
-                        text-decoration: none; 
-                        border-radius: 5px;
-                    ">Reset Password</a>
+                    <a href="${resetLink}" 
+                        style="
+                            display: inline-block;
+                            padding: 12px 20px;
+                            font-size: 1.1em;
+                            font-weight: 600;
+                            font-family: Arial, sans-serif;
+                            color: #222222;
+                            background: #32FFB0;
+                            text-decoration: none;
+                            border-radius: 8px;
+                            width: 250px;
+                            box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+                            border: none;
+                        ">
+                        Reset Password
+                    </a>
                 </div>
                 <p style="font-size: 14px; color: #555; text-align: center;">
                     If you did not request this, please ignore this email. This link will expire in 1 hour.
@@ -140,14 +147,18 @@ const sendVerificationEmail = async (email, token) => {
                 </div>
                 <div style="text-align: center; margin: 20px 0;">
                     <a href="${verificationLink}" style="
-                        display: inline-block; 
-                        padding: 10px 20px; 
-                        font-size: 16px;
-                        font-weight: bold; 
-                        color: #222222; 
-                        background-color: #bbbbbb; 
-                        text-decoration: none; 
-                        border-radius: 5px;
+                        display: inline-block;
+                            padding: 12px 20px;
+                            font-size: 1.1em;
+                            font-weight: 600;
+                            font-family: Arial, sans-serif;
+                            color: #222222;
+                            background: #32FFB0;
+                            text-decoration: none;
+                            border-radius: 8px;
+                            width: 250px;
+                            box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+                            border: none;
                     ">Verify Email</a>
                 </div>
                 <p style="font-size: 14px; color: #555; text-align: center;">

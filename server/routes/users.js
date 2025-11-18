@@ -310,7 +310,6 @@ router.delete('delete-user/:id', AdminOnly, async (req, res) => {
 // USER SELF DELETE ACCOUNT
 router.delete("/delete-account", AuthenticateToken, async (req, res) => {
     const userId = req.user.id; // this comes from decoded JWT
-    console.log('Deleting user with ID:', userId);
 
     try {
         const [result] = await db.query("DELETE FROM users WHERE id = ?", [userId]);

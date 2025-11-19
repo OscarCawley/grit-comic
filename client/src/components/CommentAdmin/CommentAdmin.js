@@ -33,7 +33,7 @@ const CommentAdmin = () => {
     
     const handleDelete = (commentId) => {
         if (window.confirm('Are you sure you want to delete this comment?')) {
-            axios.delete(`${process.env.REACT_APP_API_URL}/api/comments/${commentId}`)
+            axios.delete(`${process.env.REACT_APP_API_URL}/api/comments/admin/${commentId}`)
                 .then(() => {
                     setComments(comments.filter(comment => comment.id !== commentId));
                 })

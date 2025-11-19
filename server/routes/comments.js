@@ -1,5 +1,7 @@
 const express = require('express');
 const db = require('../db');
+const AdminOnly = require('../middleware/AdminOnly');
+const AuthenticateToken = require('../middleware/AuthenticateToken');
 
 const router = express.Router();
 
@@ -28,7 +30,7 @@ router.post('/', async (req, res) => {
     }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('admin/:id', AdminOnly, async (req, res) => {
     const commentId = req.params.id;
     try {
         const [result] = await db.query('DELETE FROM comments WHERE id = ?', [commentId]);
@@ -39,6 +41,30 @@ router.delete('/:id', async (req, res) => {
     } catch (err) {
         console.error(err);
         res.status(500).send('Database error');
+    }
+});
+
+router.delete('/user/:id', AuthenticateToken, async (req, res) => {
+    const commentId = req.params.id;
+    const userId = req.user.id;
+
+    try {
+        // Ensure the comment belongs to this user
+        const [rows] = await db.query(
+            'SELECT * FROM comments WHERE id = ? AND user_id = ?',
+            [commentId, userId]
+        );
+
+        if (rows.length === 0) {
+            return res.status(403).json({ message: "You can only delete your own comments." });
+        }
+
+        // Delete the comment
+        await db.query('DELETE FROM comments WHERE id = ?', [commentId]);
+        res.json({ message: "Comment deleted successfully." });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Database error." });
     }
 });
 

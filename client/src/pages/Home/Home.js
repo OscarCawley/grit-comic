@@ -22,6 +22,7 @@ const Home = () => {
     const [submitting, setSubmitting] = useState(false); // State to manage submission status
     const [loading, showLoading, hideLoading] = useMinLoading(true); // Page-level loading gate (min 1s)
     const [newComment, setNewComment] = useState(''); // State for new comment input
+    const token = localStorage.getItem('token');
 
     useEffect(() => {
         if (chapters.length === 0) {
@@ -168,6 +169,17 @@ const Home = () => {
         }
     };
 
+    const handleDeleteComment = async (commentId) => {
+        try {
+            await axios.delete(`${process.env.REACT_APP_API_URL}/api/comments/user/${commentId}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setComments(comments.filter(c => c.id !== commentId));
+        } catch (err) {
+            console.error("Failed to delete comment:", err);
+        }
+    };
+
     // Navigation availability flags
     const canGoPrevChapter = currentChapter > 0;
     const canGoNextChapter = currentChapter < chapters.length - 1;
@@ -245,6 +257,12 @@ const Home = () => {
                     <div key={comment.id} className="comment">
                         <div className="comment-header">
                             <h3>{comment.username}</h3>
+                            {user?.id === comment.user_id && (
+                                <button 
+                                    className="delete-comment-button"
+                                    onClick={() => handleDeleteComment(comment.id)}
+                                >Delete</button>
+                            )}
                         </div>
                         <div className="comment-content">
                             {comment.content}

@@ -189,6 +189,21 @@
     margin: 8px 0;
 }
 
+.delete-comment-button {
+    background: linear-gradient(145deg, #FF6B6B, #FF3B3B);; /* Modern gradient */
+    font-family: 'Arial', sans-serif;
+    font-size: 0.7em;
+    font-weight: 600;
+    color: #222222;
+    border: none;
+    border-radius: 6px; /* Slightly rounder corners */
+    padding: 6px 12px; /* More comfortable padding */
+    cursor: pointer;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.15); /* Subtle shadow */
+    transition: all 0.3s ease; /* Smooth hover transition */
+}
+
 .image-placeholder {
     width: 100%;
     height: 300px;
@@ -243,6 +258,11 @@
         margin: 6px 0;
     }
 
+    .delete-comment-button {
+        font-size: 0.65em;
+        padding: 4px 8px;
+    }
+
 }
 
 @media (max-width: 500px) {
@@ -289,5 +309,10 @@
     .comment-content {
         font-size: 13px;
         margin: 4px 0;
+    }
+
+    .delete-comment-button {
+        font-size: 0.6em;
+        padding: 3px 6px;
     }
 }

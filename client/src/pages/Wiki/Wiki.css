@@ -187,14 +187,25 @@
     overflow-wrap: break-word;
     word-break: break-word;
     width: 100%;
+    box-sizing: border-box;
+    margin: 8px 0;
+}
+
+.wiki-item-content > * {
+    display: none;
+}
+
+.wiki-item-content > *:first-child {
+    display: block;
+    margin-top: 0;
+}
+
+.wiki-item-content > h2:first-child + * {
     display: -webkit-box;
     -webkit-line-clamp: 5;
-    line-clamp: 5;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
-    box-sizing: border-box;
-    margin: 8px 0;
 }
 
 .wiki-item-content p {

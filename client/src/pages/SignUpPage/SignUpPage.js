@@ -10,10 +10,21 @@ const SignUpPage = () => {
     const [message, setMessage] = useState('');
     const [subscribe, setSubscribe] = useState(false);
     const navigate = useNavigate();
+    const usernameRegex = /^[a-zA-Z0-9._-]{3,15}$/;
 
     const handleSignUp = async (e) => {
         e.preventDefault();
         setMessage('');
+
+        if (!usernameRegex.test(username)) {
+            setMessage(
+                "Username must be 3–15 characters and contain only letters, numbers, '.', '-', or '_'"
+            );
+            setTimeout(() => {
+                setMessage('');
+            }, 3000);
+            return;
+        }
 
         try {
             await axios.post(`${process.env.REACT_APP_API_URL}/api/users/signup`, {

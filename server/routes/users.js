@@ -41,6 +41,16 @@ router.post('/signup', async (req, res) => {
         return res.status(400).json({ message: 'Please provide all fields (username, email, password)' });
     }
 
+    username = username.trim();
+
+    const usernameRegex = /^[a-zA-Z0-9._-]{3,15}$/;
+    if (!usernameRegex.test(username)) {
+        return res.status(400).json({ 
+            message: "Username must be 3–15 characters and contain only letters, numbers, '.', '-', or '_'" 
+        });
+    }
+
+
     try {
         const [existing] = await db.query(
             'SELECT id FROM users WHERE email = ? UNION SELECT id FROM pending_users WHERE email = ?',
@@ -62,9 +72,6 @@ router.post('/signup', async (req, res) => {
         res.status(201).json({ message: 'User registered successfully!' });
     } catch (err) {
         console.error(err);
-        if (err.errno == 1406) {
-            res.status(500).json({ message: 'Username too long (min 15 characters)', error: err });
-        }
         res.status(500).json({ message: 'Error inserting user', error: err });
     }
 });

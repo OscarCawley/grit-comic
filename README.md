@@ -26,8 +26,6 @@ A dynamic web platform created to showcase the comic book *GRIT*, offering fans 
 
 
 - **TODO**
-  account page needs responsive css
-  fix long one word comments from not wrapping
   make wiki posts only show first paragraph or 5 lines (make whole block clickable, and add "read more..." somewhere)
   potentially make comments, updates, wiki etc load after every 10 inserts
   check if secure from SQL injection

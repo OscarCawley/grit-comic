@@ -26,8 +26,6 @@ A dynamic web platform created to showcase the comic book *GRIT*, offering fans 
 
 
 - **TODO**
-  signup double password check
-  remove unverified users after 1 week (or after token expires)
   account page needs responsive css
   fix long one word comments from not wrapping
   make socials white

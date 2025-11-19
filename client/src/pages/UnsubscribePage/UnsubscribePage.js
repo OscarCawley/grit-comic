@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import './UnsubscribePage.css';
 import useMinLoading from '../../hooks/useMinLoading';

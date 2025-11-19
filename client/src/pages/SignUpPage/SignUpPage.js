@@ -40,9 +40,10 @@ const SignUpPage = () => {
             });
 
             setMessage('Check your email to verify your account!');
+            setUsername('');
             setEmail('');
             setPassword('');
-            setUsername('');
+            setConfirmPassword('');
             setSubscribe(false);
 
             // Clear message & redirect after 3 seconds

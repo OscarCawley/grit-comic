@@ -35,7 +35,7 @@ router.get('/subscribers', AdminOnly, async (req, res) => {
 
 // SIGN UP
 router.post('/signup', async (req, res) => {
-    const { username, email, password, subscribe } = req.body;
+    let { username, email, password, subscribe } = req.body;
 
     if (!username || !email || !password) {
         return res.status(400).json({ message: 'Please provide all fields (username, email, password)' });

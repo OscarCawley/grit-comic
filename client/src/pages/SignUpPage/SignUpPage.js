@@ -4,9 +4,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const SignUpPage = () => {
+    const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [username, setUsername] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [message, setMessage] = useState('');
     const [subscribe, setSubscribe] = useState(false);
     const navigate = useNavigate();
@@ -16,13 +17,17 @@ const SignUpPage = () => {
         e.preventDefault();
         setMessage('');
 
+        if (password !== confirmPassword) {
+            setMessage('Passwords do not match');
+            setTimeout(() => setMessage(''), 3000);
+            return;
+        }
+
         if (!usernameRegex.test(username)) {
             setMessage(
                 "Username must be 3–15 characters and contain only letters, numbers, '.', '-', or '_'"
             );
-            setTimeout(() => {
-                setMessage('');
-            }, 3000);
+            setTimeout(() => setMessage(''), 3000);
             return;
         }
 
@@ -76,6 +81,13 @@ const SignUpPage = () => {
                     placeholder="Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    className='sign-up-input'
+                />
+                <input
+                    type="password"
+                    placeholder="Confirm password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
                     className='sign-up-input'
                 />
                 <label className='sign-up-checkbox'>

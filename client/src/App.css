@@ -55,13 +55,15 @@
 .App-content {
     position: relative;
     z-index: 2;
-    max-width: 70%;
-    width: 100%;
+    width: 70%;
     min-height: 100%; /* ensures it fills .page-background vertically */
     background-color: #0F0F0F;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    white-space: normal;      /* allows text to wrap onto multiple lines */
+    word-wrap: break-word;    /* break long words if needed */
+    overflow-wrap: break-word;/* modern standard for breaking long words */
 }
 
 body {
@@ -100,18 +102,18 @@ body {
 
 @media (max-width: 1000px) {
   .App-content {
-    max-width: 75%;
+    width: 75%;
   }
 }
 
 @media (max-width: 700px) {
   .App-content {
-    max-width: 80%;
+    width: 80%;
   }
 }
 
 @media (max-width: 400px) {
   .App-content {
-    max-width: 85%;
+    width: 85%;
   }
 }

@@ -124,11 +124,7 @@ const sendNewsletterEmails = async (title, content, users) => {
                             font-size: 12px;
                             font-weight: bold; 
                             color: #2ACFAF;  
-                        ">Unsubscribe</a><br>.
-                        <a href="${process.env.FRONTEND_URL}/unsubscribe?token=${user.unsubscribe_token}" 
-                            style="color: #2ACFAF; text-decoration: underline; word-break: break-all;">
-                            ${process.env.FRONTEND_URL}/unsubscribe?token=${user.unsubscribe_token}
-                        </a>
+                        ">Unsubscribe.</a>
                     </div>
                 </div>
             `

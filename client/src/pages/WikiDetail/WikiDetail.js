@@ -50,11 +50,13 @@ function WikiDetailPage() {
                 {post ? (
                     <div className="wiki-detail-article">
                         <div className="wiki-detail-main-content">
-                            <img
+                            {post.image && (
+                                <img
                                 src={`${process.env.REACT_APP_API_URL}${post.image}`}
                                 alt={post.title} 
                                 className="wiki-detail-image"
-                            />
+                                />
+                            )}
                             <h2 className="wiki-detail-title">{post.title}</h2>
                             <div
                                 className="wiki-detail-content"

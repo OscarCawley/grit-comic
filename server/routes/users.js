@@ -21,6 +21,17 @@ router.get('/', AdminOnly, async (req, res) => {
     }
 });
 
+// GET pending users
+router.get('/pending', AdminOnly, async (req, res) => {
+    try {
+        const [results] = await db.query('SELECT * FROM pending_users');
+        res.json(results);
+    } catch (err) {
+        console.log(err);
+        res.status(500).send('Database error');
+    }
+});
+
 // GET subscribers
 router.get('/subscribers', AdminOnly, async (req, res) => {
     try {
@@ -297,11 +308,29 @@ router.put('/:id/admin', AdminOnly, async (req, res) => {
 });
 
 // DELETE user
-router.delete('delete-user/:id', AdminOnly, async (req, res) => {
+router.delete('/delete-user/:id', AdminOnly, async (req, res) => {
     const userId = req.params.id;
 
     try {
         const [result] = await db.query('DELETE FROM users WHERE id = ?', [userId]);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.json({ message: 'User deleted successfully' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Database error', error: err });
+    }
+});
+
+// DELETE pending user
+router.delete('/delete-pending-user/:id', AdminOnly, async (req, res) => {
+    const userId = req.params.id;
+
+    try {
+        const [result] = await db.query('DELETE FROM pending_users WHERE id = ?', [userId]);
 
         if (result.affectedRows === 0) {
             return res.status(404).json({ message: 'User not found' });

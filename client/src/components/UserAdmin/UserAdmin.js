@@ -10,6 +10,7 @@ const UserAdmin = () => {
     const [users, setUsers] = useState([]);
     const [admins, setAdmins] = useState([]);
     const [owners, setOwners] = useState([]);
+    const [pendingUsers, setPendingUsers] = useState([]);
     const token = localStorage.getItem('token');
 
     useEffect (() => {
@@ -18,7 +19,7 @@ const UserAdmin = () => {
 
     const fetchUsers = async () => {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/users`, {
+            let response = await axios.get(`${process.env.REACT_APP_API_URL}/api/users`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setUsers(response.data.filter(user => {
@@ -30,6 +31,10 @@ const UserAdmin = () => {
             setOwners(response.data.filter(user => {
                 return user.owner === 1;
             }));
+            response = await axios.get(`${process.env.REACT_APP_API_URL}/api/users/pending`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setPendingUsers(response.data);
         } catch (err) {
             console.error('Failed to fetch users:', err);
         }
@@ -41,6 +46,18 @@ const UserAdmin = () => {
                 headers: { Authorization: `Bearer ${token}` }
             }).then(() => {
                 setUsers(users.filter(user => user.id !== userId));
+            }).catch(err => {
+                console.error(err);
+            });
+        }
+    };
+
+        const handlePendingDelete = (userId) => {
+        if (window.confirm('Are you sure you want to delete this pending user?')) {
+            axios.delete(`${process.env.REACT_APP_API_URL}/api/users/delete-pending-user/${userId}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            }).then(() => {
+                setPendingUsers(pendingUsers.filter(user => user.id !== userId));
             }).catch(err => {
                 console.error(err);
             });
@@ -60,6 +77,30 @@ const UserAdmin = () => {
             });
         }
     };
+
+    function timeSince(dateString) {
+        const now = new Date();
+        const created = new Date(dateString);
+        const seconds = Math.floor((now - created) / 1000);
+
+        const intervals = [
+            { label: 'year', seconds: 31536000 },
+            { label: 'month', seconds: 2592000 },
+            { label: 'day', seconds: 86400 },
+            { label: 'hour', seconds: 3600 },
+            { label: 'minute', seconds: 60 },
+            { label: 'second', seconds: 1 }
+        ];
+
+        for (const interval of intervals) {
+            const count = Math.floor(seconds / interval.seconds);
+            if (count >= 1) {
+                return `${count} ${interval.label}${count > 1 ? 's' : ''} ago`;
+            }
+        }
+
+        return 'just now';
+    }
 
     return (
         <div className="user-container">
@@ -112,6 +153,20 @@ const UserAdmin = () => {
                             {/* Owners and admins can delete normal users */}
                             {(user?.owner === true || user?.auth === true) && (
                                 <button className='delete-button' onClick={() => handleDelete(normalUser.id)}>Delete</button>
+                            )}
+                        </div>
+                    </li>
+                ))}
+            </ul>
+            <h1>Pending Users</h1>
+            <ul className='user-list'>
+                {pendingUsers.map(pendingUser => (
+                    <li key={pendingUser.id}>
+                        <span>{pendingUser.username} ({pendingUser.email}) - ({timeSince(pendingUser.created_at)})</span>
+                        <div className='admin-actions'>
+                            {/* Owners and admins can delete pending users */}
+                            {(user?.owner === true || user?.auth === true) && (
+                                <button className='delete-button' onClick={() => handlePendingDelete(pendingUser.id)}>Delete</button>
                             )}
                         </div>
                     </li>

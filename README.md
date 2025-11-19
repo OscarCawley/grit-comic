@@ -26,12 +26,12 @@ A dynamic web platform created to showcase the comic book *GRIT*, offering fans 
 
 
 - **TODO**
-  allow users to delete their own comments
   signup double password check
   remove unverified users after 1 week (or after token expires)
   account page needs responsive css
   fix long one word comments from not wrapping
   make socials white
   make wiki posts only show first paragraph or 5 lines
+  potentially make comments, updates, wiki etc load after every 10 inserts
   check if secure from SQL injection
   figure out if password hashing needs to be hidden from github

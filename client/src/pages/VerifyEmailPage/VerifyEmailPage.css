@@ -37,3 +37,15 @@
 .verify-email-button:active {
     transform: translateY(0);
 }
+
+@media (max-width: 500px) {
+    .verify-email-page h1 {
+        font-size: 1.7em;
+    }
+
+    .verify-email-button {
+        font-size: 1em;
+        padding: 10px 16px;
+        width: 200px;
+    }
+}

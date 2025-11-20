@@ -94,14 +94,18 @@ const Wiki = () => {
 
                         {filteredPosts.map((post) => (
                             <div key={post.id} className="wiki-item">
+                                <Link to={`/wiki/${post.slug}`} className='wiki-item-link'>
                                 <div className='wiki-item-header'>
-                                    <Link to={`/wiki/${post.slug}`} className='wiki-item-link'>
                                         <h2>{post.title}</h2>
-                                    </Link>
+                                    
                                     <span>{post.category_name}</span>
                                 </div>
                                 <div className='wiki-item-content' dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}></div>
-                                <p className='wiki-item-updated'>{post.updated_at_formatted}</p>
+                                <div className='wiki-footer'>
+                                    <p className='read-more'>Read More...</p>
+                                    <p className='wiki-item-updated'>{post.updated_at_formatted}</p>
+                                </div>
+                                </Link>
                             </div>
                         ))}
                     </div>

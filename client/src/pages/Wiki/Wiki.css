@@ -153,6 +153,10 @@
     text-overflow: ellipsis;
 }
 
+.wiki-item-link {
+    text-decoration: none;
+}
+
 .wiki-item-header {
     display: flex;
     justify-content: space-between;
@@ -162,24 +166,13 @@
 .wiki-item-header h2 {
     font-size: 2em;
     margin: 0;
+    color: #21c787;
 }
 
 .wiki-item-header span {
     font-size: 1em;
     color: #bbbbbb;
 }    
-
-.wiki-item-link {
-    text-decoration: none;
-    color: #21c787; 
-}
-
-.wiki-item-updated {
-    font-size: 0.8em;
-    color: #bbbbbb; 
-    text-align: right;
-    margin: 0;
-}
 
 .wiki-item-content {
     white-space: normal !important;
@@ -189,6 +182,7 @@
     width: 100%;
     box-sizing: border-box;
     margin: 8px 0;
+    color: white;
 }
 
 .wiki-item-content > * {
@@ -209,7 +203,30 @@
 }
 
 .wiki-item-content p {
-    margin:0;
+    margin: 0;
+}
+
+.wiki-item-content h2 {
+    font-size: 1.5em;
+}
+
+.wiki-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.read-more {
+    color: #bbbbbb;
+    font-size: 0.9em;
+    margin: 0;
+}
+
+.wiki-item-updated {
+    color: #bbbbbb;
+    font-size: 0.8em;
+    margin: 0;
 }
 
 @media (max-width: 1100px) {
@@ -253,15 +270,11 @@
     }
 
     .wiki-item-header h2 {
-        font-size: 1.5em;
+        font-size: 1.75em;
     }
 
     .wiki-item-header span {
         font-size: 0.9em;
-    }
-
-    .wiki-item-updated {
-        font-size: 0.75em;
     }
 
     .wiki-item-content {
@@ -269,9 +282,22 @@
         line-clamp: 3;
     }
 
+    .wiki-item-content h2 {
+        font-size: 1.3em;
+    }
+
+
     .wiki-item-content p {
         font-size: 15px;
         margin: 12px 0;
+    }
+
+    .wiki-item-updated {
+        font-size: 0.75em;
+    }
+
+    .read-more {
+        font-size: 0.85em;
     }
 
     .category-list {
@@ -303,19 +329,27 @@
     }
 
     .wiki-item-header h2 {
-        font-size: 1.2em;
+        font-size: 1.5em;
     }
 
     .wiki-item-header span {
         font-size: 0.8em;
     }
 
-    .wiki-item-updated {
-        font-size: 0.7em;
+    .wiki-item-content h2 {
+        font-size: 1.15em;
     }
 
     .wiki-item-content p {
         font-size: 14px;
         margin: 8px 0;
+    }
+
+    .wiki-item-updated {
+        font-size: 0.7em;
+    }
+
+    .read-more {
+        font-size: 0.8em;
     }
 }

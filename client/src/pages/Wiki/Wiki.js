@@ -96,8 +96,7 @@ const Wiki = () => {
                             <div key={post.id} className="wiki-item">
                                 <Link to={`/wiki/${post.slug}`} className='wiki-item-link'>
                                 <div className='wiki-item-header'>
-                                        <h2>{post.title}</h2>
-                                    
+                                    <h2>{post.title}</h2>
                                     <span>{post.category_name}</span>
                                 </div>
                                 <div className='wiki-item-content' dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}></div>

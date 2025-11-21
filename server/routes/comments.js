@@ -7,8 +7,70 @@ const router = express.Router();
 
 router.get('/', async (req, res) => {
     try {
-        const [comments] = await db.query(`SELECT comments.*, users.username AS username, DATE_FORMAT(comments.created_at, '%d/%m/%Y %H:%i') AS created_at_formatted FROM comments JOIN users ON comments.user_id = users.id ORDER BY created_at DESC`);
-        res.json(comments);
+        await new Promise(resolve => setTimeout(resolve, 3000)); // artificial delay
+
+        const chapter = req.query.chapter ? parseInt(req.query.chapter) : null;
+        const limit = req.query.limit ? parseInt(req.query.limit) : null;
+        const offset = req.query.offset ? parseInt(req.query.offset) : null;
+
+        const isPaginated = limit !== null || offset !== null || chapter !== null;
+
+        if (!isPaginated) {
+            const [allComments] = await db.query(`
+                SELECT 
+                    comments.*, 
+                    users.username,
+                    DATE_FORMAT(comments.created_at, '%d/%m/%Y %H:%i') AS created_at_formatted
+                FROM comments
+                JOIN users ON comments.user_id = users.id
+                ORDER BY comments.created_at DESC
+            `);
+
+            return res.json(allComments); // exact old behavior
+        }
+
+        let where = "";
+        let params = [];
+
+        if (chapter !== null) {
+            where = "WHERE comments.chapter_num = ?";
+            params.push(chapter);
+        }
+
+        const safeLimit = limit ?? 10;    // default limit
+        const safeOffset = offset ?? 0;   // default offset
+
+        const [countRows] = await db.query(
+            `SELECT COUNT(*) AS total FROM comments ${where}`,
+            params
+        );
+        const total = countRows[0].total;
+
+        const [comments] = await db.query(
+            `
+            SELECT 
+                comments.*, 
+                users.username,
+                DATE_FORMAT(comments.created_at, '%d/%m/%Y %H:%i') AS created_at_formatted
+            FROM comments
+            JOIN users ON comments.user_id = users.id
+            ${where}
+            ORDER BY comments.created_at DESC
+            LIMIT ? OFFSET ?
+            `,
+            [...params, safeLimit, safeOffset]
+        );
+
+        const hasMore = safeOffset + comments.length < total;
+
+        return res.json({
+            comments,
+            total,
+            offset: safeOffset,
+            limit: safeLimit,
+            hasMore
+        });
+
     } catch (err) {
         console.error(err);
         res.status(500).send('Database error');

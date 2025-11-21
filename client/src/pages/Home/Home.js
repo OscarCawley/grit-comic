@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { throttle } from 'lodash';
 import { useSearchParams } from 'react-router-dom';
 import { useContext } from "react";
 import { UserContext } from "../../context/UserContext";
@@ -12,89 +11,100 @@ import useMinLoading from '../../hooks/useMinLoading';
 
 const Home = () => {
     const { user } = useContext(UserContext);
+    const [searchParams] = useSearchParams();
+    const initialChapter = parseInt(searchParams.get('chapter')) || 0;
 
-    const [searchParams] = useSearchParams(); // Initialize useSearchParams
-    const initialChapter = parseInt(searchParams.get('chapter')) || 0; // Get chapter index from query params
     const [currentPage, setCurrentPage] = useState(0);
     const [currentChapter, setCurrentChapter] = useState(0);
-    const [comments, setComments] = useState([]); // State to hold comments data
-    const [chapters, setChapters] = useState([]); // State to hold chapters data
-    const [submitting, setSubmitting] = useState(false); // State to manage submission status
-    const [loading, showLoading, hideLoading] = useMinLoading(true); // Page-level loading gate (min 1s)
-    const [newComment, setNewComment] = useState(''); // State for new comment input
+    const [comments, setComments] = useState([]);
+    const [chapters, setChapters] = useState([]);
+    const [submitting, setSubmitting] = useState(false);
+    const [loading, showLoading, hideLoading] = useMinLoading(true);
+    const [newComment, setNewComment] = useState('');
     const token = localStorage.getItem('token');
 
-    useEffect(() => {
-        if (chapters.length === 0) {
-            initLoad();
-        }
-    }, [chapters.length]);
+    const [offset, setOffset] = useState(0);
+    const [hasMore, setHasMore] = useState(true);
+    const [commentsLoading, setCommentsLoading] = useState(false);
+    const limit = 10;
 
-    useEffect(() => {
-        if (chapters.length > 0) {
-            setCurrentChapter(initialChapter || 0);
-            setCurrentPage(0);
-        }
-    }, [chapters, initialChapter]);
-
-    useEffect(() => {
-        const handleKeyDown = throttle((event) => {
-            if (event.key === 'ArrowRight') {
-                handlePageChange('next');
-            } else if (event.key === 'ArrowLeft') {
-                handlePageChange('prev');
-            }
-        }, 200);
-        window.addEventListener('keydown', handleKeyDown);
-        return () => {
-            window.removeEventListener('keydown', handleKeyDown);
-        };
-    }, [currentPage, currentChapter, chapters]);
-
+    // -------------------
+    // Separate fetch functions
+    // -------------------
     const fetchChapters = async () => {
-        try {
-            const chapterRes = await axios.get(`${process.env.REACT_APP_API_URL}/api/chapters`);
-            const chapterData = chapterRes.data;
+        const chapterRes = await axios.get(`${process.env.REACT_APP_API_URL}/api/chapters`);
+        const chapterData = chapterRes.data;
 
-            const chapterWithPages = await Promise.all(
-                chapterData.map(async chapter => {
-                    const pageRes = await axios.get(`${process.env.REACT_APP_API_URL}/api/chapters/${chapter.chapter_num}/pages`);
-                    return {
-                        ...chapter,
-                        pages: pageRes.data,
-                    };
-                })
-            );
-            setChapters(chapterWithPages);
+        const chapterWithPages = await Promise.all(
+            chapterData.map(async chapter => {
+                const pageRes = await axios.get(`${process.env.REACT_APP_API_URL}/api/chapters/${chapter.chapter_num}/pages`);
+                return { ...chapter, pages: pageRes.data };
+            })
+        );
+
+        setChapters(chapterWithPages);
+        return chapterWithPages; // return for immediate use
+    };
+
+    const fetchComments = async (reset = false, chapterArg = null) => {
+        if (commentsLoading) return;
+        setCommentsLoading(true);
+
+        try {
+            const chapterToFetch = chapterArg !== null ? chapterArg : currentChapter;
+            if (reset) setComments([]); // clear old comments immediately
+
+            const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/comments`, {
+                params: {
+                    chapter: chapterToFetch + 1,
+                    offset: reset ? 0 : offset,
+                    limit
+                }
+            });
+
+            const newComments = res.data.comments;
+
+            if (reset) {
+                setComments(newComments);
+                setOffset(newComments.length);
+            } else {
+                setComments(prev => [...prev, ...newComments]);
+                setOffset(prev => prev + newComments.length);
+            }
+
+            setHasMore(res.data.hasMore);
 
         } catch (err) {
-            console.error('Failed to load chapters or pages:', err);
-        }
-    }
-    
-    const fetchComments = async () => {
-        try {
-            const commentsRes = await axios.get(`${process.env.REACT_APP_API_URL}/api/comments`);
-            setComments(commentsRes.data);
-        } catch (err) {
-            console.error('Failed to load comments:', err);
-        }
-    }
-
-    // Unified initial load: chapters (with pages) + comments
-    const initLoad = async () => {
-        try {
-            showLoading();
-            await Promise.all([fetchChapters(), fetchComments()]);
+            console.error("Failed to load comments:", err);
         } finally {
-            hideLoading();
+            setCommentsLoading(false);
         }
     };
 
-    const filteredComments = comments.filter((comment) => {
-        const matchesChapter = comment.chapter_num === currentChapter + 1;
-        return matchesChapter;
-    });
+    // -------------------
+    // Initial page load
+    // -------------------
+    useEffect(() => {
+        const loadPageData = async () => {
+            try {
+                showLoading();
+
+                await fetchChapters();
+                const initial = initialChapter || 0;
+                setCurrentChapter(initial);
+                setCurrentPage(0);
+
+                await fetchComments(true, initial);
+
+            } catch (err) {
+                console.error('Failed to load page data:', err);
+            } finally {
+                hideLoading();
+            }
+        };
+
+        loadPageData();
+    }, []);
 
     const handleImageClick = (e) => {
         const { left, width } = e.target.getBoundingClientRect();
@@ -122,31 +132,41 @@ const Home = () => {
         }
     };
 
+    const handleChapterChange = async (direction) => {
+        let newChapter = currentChapter;
+        if (direction === 'next' && currentChapter < chapters.length - 1) {
+            newChapter = currentChapter + 1;
+        } else if (direction === 'prev' && currentChapter > 0) {
+            newChapter = currentChapter - 1;
+        }
+
+        setCurrentChapter(newChapter);
+        setCurrentPage(0); // reset page
+        setOffset(0);
+        setHasMore(true);
+
+        await fetchComments(true, newChapter); // fetch comments for the new chapter
+    };
+
     const handlePageChange = useCallback((direction) => {
         if (!chapters.length) return;
 
-        if (direction === 'next' && currentPage < chapters[currentChapter].pages.length - 1) {
-            setCurrentPage(currentPage + 1);
-        } else if (direction === 'prev' && currentPage > 0) {
-            setCurrentPage(currentPage - 1);
-        } else if (direction === 'next' && currentPage === chapters[currentChapter].pages.length - 1 && currentChapter < chapters.length - 1) {
-            setCurrentChapter(currentChapter + 1);
-            setCurrentPage(0); // Reset to first page of the new chapter
-        } else if (direction === 'prev' && currentPage === 0 && currentChapter > 0) {
-            setCurrentChapter(currentChapter - 1);
-            setCurrentPage(chapters[currentChapter - 1].pages.length - 1); // Go to last page of the previous chapter
-        }
-    }, [currentPage, currentChapter, chapters]);
+        const currentChapterPages = chapters[currentChapter].pages.length;
 
-    const handleChapterChange = (direction) => {
-        if (direction === 'next' && currentChapter < chapters.length - 1) {
-            setCurrentChapter(currentChapter + 1);
-            setCurrentPage(0); // Reset to first page of the new chapter
-        } else if (direction === 'prev' && currentChapter > 0) {
-            setCurrentChapter(currentChapter - 1);
-            setCurrentPage(0); // Reset to first page of the new chapter
+        if (direction === 'next') {
+            if (currentPage < currentChapterPages - 1) {
+                setCurrentPage(currentPage + 1);
+            } else if (currentChapter < chapters.length - 1) {
+                handleChapterChange('next'); // move to next chapter
+            }
+        } else if (direction === 'prev') {
+            if (currentPage > 0) {
+                setCurrentPage(currentPage - 1);
+            } else if (currentChapter > 0) {
+                handleChapterChange('prev'); // move to previous chapter
+            }
         }
-    };
+    }, [currentPage, currentChapter, chapters, handleChapterChange]);
 
     const handleCommentSubmit = async (e) => {
         e.preventDefault();
@@ -252,24 +272,37 @@ const Home = () => {
                     />
                     <button type="submit" className='comment-submit-button' disabled={!user || submitting}>{submitting ? "Posting..." : "Post Comment"}</button>
                 </form>
-
-                {filteredComments.map(comment => (
-                    <div key={comment.id} className="comment">
-                        <div className="comment-header">
-                            <h3>{comment.username}</h3>
-                            {user?.id === comment.user_id && (
-                                <button 
-                                    className="delete-comment-button"
-                                    onClick={() => handleDeleteComment(comment.id)}
-                                >Delete</button>
-                            )}
-                        </div>
-                        <div className="comment-content">
-                            {comment.content}
-                        </div>
-                        <p className='comment-date'>{comment.created_at_formatted}</p>
-                    </div>
-                ))}
+                {commentsLoading && comments.length === 0 ? (
+                    <div className="small-spinner" />
+                ) : (
+                    <>
+                        {comments.map(comment => (
+                            <div key={comment.id} className="comment">
+                                <div className="comment-header">
+                                    <h3>{comment.username}</h3>
+                                    {user?.id === comment.user_id && (
+                                        <button 
+                                            className="delete-comment-button"
+                                            onClick={() => handleDeleteComment(comment.id)}
+                                        >Delete</button>
+                                    )}
+                                </div>
+                                <div className="comment-content">
+                                    {comment.content}
+                                </div>
+                                <p className='comment-date'>{comment.created_at_formatted}</p>
+                            </div>
+                        ))}
+                        {hasMore && (
+                            <button
+                                className="load-more-button"
+                                onClick={() => fetchComments(false)}
+                            >
+                                Load More...
+                            </button>
+                        )}
+                    </>
+                )};
             </div>
         </PageAnimation>
     );

@@ -7,8 +7,6 @@ const router = express.Router();
 
 router.get('/', async (req, res) => {
     try {
-        await new Promise(resolve => setTimeout(resolve, 3000)); // artificial delay
-
         const chapter = req.query.chapter ? parseInt(req.query.chapter) : null;
         const limit = req.query.limit ? parseInt(req.query.limit) : null;
         const offset = req.query.offset ? parseInt(req.query.offset) : null;

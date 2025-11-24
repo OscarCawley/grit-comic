@@ -163,7 +163,14 @@ const Home = () => {
             if (currentPage > 0) {
                 setCurrentPage(currentPage - 1);
             } else if (currentChapter > 0) {
-                handleChapterChange('prev'); // move to previous chapter
+                const newChapter = currentChapter - 1;
+                const lastPageIndex = chapters[newChapter].pages.length - 1;
+
+                setCurrentChapter(newChapter);
+                setCurrentPage(lastPageIndex);
+                setOffset(0);
+                setHasMore(true);
+                fetchComments(true, newChapter);
             }
         }
     }, [currentPage, currentChapter, chapters, handleChapterChange]);

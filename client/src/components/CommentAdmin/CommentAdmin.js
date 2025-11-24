@@ -16,7 +16,11 @@ const CommentAdmin = () => {
     const fetchComments = async () => {
         try {
             const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/comments`);
-            setComments(response.data);
+            // Sort by created_at descending (newest first)
+            const sortedComments = [...response.data].sort(
+                (a, b) => new Date(b.created_at) - new Date(a.created_at)
+            );
+            setComments(sortedComments);
         } catch (err) {
             console.error('Failed to fetch comments:', err);
         }

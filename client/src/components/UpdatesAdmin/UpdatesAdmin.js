@@ -21,7 +21,12 @@ const UpdatesAdmin = () => {
 	const fetchUpdates = async () => {
 		try {
             const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/updates`);
-            setUpdates(response.data);
+
+            const sorted = [...response.data].sort(
+                (a, b) => new Date(b.created_at) - new Date(a.created_at)
+            );
+
+            setUpdates(sorted);
         } catch (error) {
             console.error('Error fetching Updates:', error);
         }

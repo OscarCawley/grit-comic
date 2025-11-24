@@ -22,19 +22,20 @@ const UserAdmin = () => {
             let response = await axios.get(`${process.env.REACT_APP_API_URL}/api/users`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
-            setUsers(response.data.filter(user => {
-                return user.auth === 0;
-            }));
-            setAdmins(response.data.filter(user => {
-                return user.auth === 1 && user.owner === 0;
-            }));
-            setOwners(response.data.filter(user => {
-                return user.owner === 1;
-            }));
+
+            const allUsers = [...response.data].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+            setUsers(allUsers.filter(user => user.auth === 0));
+            setAdmins(allUsers.filter(user => user.auth === 1 && user.owner === 0));
+            setOwners(allUsers.filter(user => user.owner === 1));
+
             response = await axios.get(`${process.env.REACT_APP_API_URL}/api/users/pending`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
-            setPendingUsers(response.data);
+
+            const sortedPending = [...response.data].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+            setPendingUsers(sortedPending);
+
         } catch (err) {
             console.error('Failed to fetch users:', err);
         }

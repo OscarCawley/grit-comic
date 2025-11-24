@@ -23,8 +23,17 @@ const WikiAdmin = () => {
 	}, [formData.title, isSlugEdited]);
 
 	const fetchPosts = async () => {
-		const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/wiki/posts`);
-		setPosts(res.data);
+		try {
+			const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/wiki/posts`);
+
+			const sorted = [...response.data].sort(
+				(a, b) => new Date(b.created_at) - new Date(a.created_at)
+			);
+
+			setPosts(sorted);
+		} catch (error) {
+			console.error('Error fetching Posts:', error);
+		}
 	};
 
 	const handleCreate = async () => {

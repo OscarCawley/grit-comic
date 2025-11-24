@@ -302,7 +302,7 @@ const Home = () => {
                             </button>
                         )}
                     </>
-                )};
+                )}
             </div>
         </PageAnimation>
     );

@@ -128,12 +128,14 @@
     transition: all 0.3s ease; /* Smooth hover transition */
 }
 
-.comment-submit-button:hover {
+.comment-submit-button:hover,
+.load-more-button:hover {
     box-shadow: 0 6px 10px rgba(0,0,0,0.2); /* Lift effect on hover */
     transform: translateY(-3px); /* Slight lift */
 }
 
-.comment-submit-button:active {
+.comment-submit-button:active,
+.load-more-button:active {
     transform: translateY(0);
     box-shadow: 0 4px 6px rgba(0,0,0,0.15); /* Pressed effect */
 }

@@ -64,7 +64,6 @@ function WikiDetailPage() {
                             />
                         </div>
                         <div className="wiki-detail-meta">
-                            <span>Category: {post.category_name}</span>
                             <span>Last Updated: {new Date(post.updated_at).toLocaleDateString()}</span>
                         </div>
                         </div>

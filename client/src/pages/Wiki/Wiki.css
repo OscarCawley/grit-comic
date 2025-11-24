@@ -1,6 +1,8 @@
 .wiki {
     color: white;
     font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
 }
 
 .wiki h1 {
@@ -9,105 +11,15 @@
     text-align: center;
 }
 
-.wiki-content {
-    display: grid;
-    grid-template-columns: 20% auto;
-    width: 85%;
-    margin: 2.5rem auto;
-    gap: 3rem;
-}
-
-.category-list {
-    grid-column: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    box-sizing: border-box;
-    width: 100%;
-    gap: 30px;
-}
-
-.category-button {
-    background: linear-gradient(145deg, #32FFB0, #2ACFAF); /* Modern gradient */
-    font-family: 'Arial', sans-serif;
-    font-size: 1.2em;
-    font-weight: 600;
-    color: #222222;
-    border: none;
-    border-radius: 8px; /* Slightly rounder corners */
-    padding: 10px 16px; /* Comfortable padding */
-    margin: 0 auto;
-    min-width: 100%;
-    cursor: pointer;
-    text-align: center;
-    box-sizing: border-box;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.15); /* Subtle shadow */
-    transition: box-shadow 0.3s ease, transform 0.3s ease;
-}
-
-.category-button:hover {
-    box-shadow: 0 6px 10px rgba(0,0,0,0.2); /* Lift effect on hover */
-    transform: translateY(-3px); /* Slight lift */
-}
-
-.category-button.active {
-    /* Visible border around the active category with a small gap */
-    outline: 2px solid #32FFB0; /* border color */
-    outline-offset: 4px; /* gap between button and outline */
-    border-radius: 8px; /* match button rounding */
-}
-
 .wiki-list {
-    grid-column: 2;
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 0 auto;
-    margin-bottom: 3rem;
+    margin: 0 auto 3rem auto;
     color: white;
     box-sizing: border-box;
     gap: 30px;
     width: 100%;
-}
-
-.mobile-category-dropdown {
-    display: none;
-    justify-content: center;
-}
-
-.mobile-category-dropdown select {
-    width: auto;
-    padding: 8px 8px; /* match button padding */
-    font-size: 0.9em; /* match button font size */
-    font-weight: 600;
-    font-family: 'Arial', sans-serif;
-    color: #222222; /* dark text like buttons */
-    background: linear-gradient(145deg, #32FFB0, #2ACFAF); /* same gradient as buttons */
-    border: none;
-    border-radius: 6px; /* rounded corners like buttons */
-    cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.15); /* subtle shadow */
-    transition: box-shadow 0.3s ease, transform 0.3s ease;
-    text-align: center;
-}
-
-/* Hover effect */
-.mobile-category-dropdown select:hover {
-    box-shadow: 0 6px 10px rgba(0,0,0,0.2);
-}
-
-/* Active / focus effect */
-.mobile-category-dropdown select:focus {
-    outline: none;
-    box-shadow: 0 6px 10px rgba(0,0,0,0.25);
-}
-
-.mobile-category-dropdown select option {
-    background-color: #222222; /* dark background */
-    color: white; /* text color */
-    font-family: 'Arial', sans-serif;
-    font-size: 1em;
-    padding: 8px; /* may work on some browsers */
 }
 
 .wiki-search {
@@ -117,7 +29,7 @@
 }
 
 .wiki-search input {
-    width: 80%;
+    width: 70%;
     max-width: 600px;
     padding: 10px 15px;
     font-size: 1.1em;
@@ -137,7 +49,6 @@
 .wiki-search input:focus {
     border-color: #bbbbbb;
     background-color: #303030;
-    outline: none;
 }
 
 .wiki-item {
@@ -146,11 +57,10 @@
     background-color: #222222;
     border-radius: 5px;
     padding: 10px;
-    width: 100%;
+    width: 80%;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    text-overflow: ellipsis;
 }
 
 .wiki-item-link {
@@ -169,11 +79,6 @@
     color: #21c787;
 }
 
-.wiki-item-header span {
-    font-size: 1em;
-    color: #bbbbbb;
-}    
-
 .wiki-item-content {
     white-space: normal !important;
     word-wrap: break-word;
@@ -185,6 +90,7 @@
     color: white;
 }
 
+/* Only show the first element preview */
 .wiki-item-content > * {
     display: none;
 }
@@ -194,6 +100,7 @@
     margin-top: 0;
 }
 
+/* Clamp long text inside the first element */
 .wiki-item-content > h2:first-child + * {
     display: -webkit-box;
     -webkit-line-clamp: 5;
@@ -229,52 +136,19 @@
     margin: 0;
 }
 
-@media (max-width: 1100px) {
-    .wiki-content {
-        grid-template-columns: 22% auto;
-    }
-}
-
-@media (max-width: 1000px) {
-    .wiki-content {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-    }
-
-    .category-list {
-        flex-direction: row;
-        overflow-x: auto;
-        justify-content: center;
-        width: 100%;
-        gap: 15px;
-    }
-
-    .category-list h2 {
-        display: none;
-    }
-
-    .category-button {
-        min-width: auto;
-        white-space: nowrap;
-        margin: 0;
-    }
-
-    .wiki-list {
-        grid-column: 1;
-    }
-}
+/* --- Responsive --- */
 
 @media (max-width: 700px) {
     .wiki h1 {
         font-size: 4.5em;
     }
 
-    .wiki-item-header h2 {
-        font-size: 1.75em;
+    .wiki-item {
+        width: 85%;
     }
 
-    .wiki-item-header span {
-        font-size: 0.9em;
+    .wiki-item-header h2 {
+        font-size: 1.75em;
     }
 
     .wiki-item-content {
@@ -285,7 +159,6 @@
     .wiki-item-content h2 {
         font-size: 1.3em;
     }
-
 
     .wiki-item-content p {
         font-size: 15px;
@@ -299,29 +172,16 @@
     .read-more {
         font-size: 0.85em;
     }
-
-    .category-list {
-        gap: 10px;
-    }
-
-    .category-button {
-        font-size: 1em;
-        padding: 8px;
-    }
 }
 
 @media (max-width: 500px) {
-    .mobile-category-dropdown {
-        display: flex;
-    }
-
-    .category-list {
-        display: none;
-    }
-
     .wiki-search input {
         width: 90%;
         font-size: 0.9em;
+    }
+
+    .wiki-item {
+        width: 90%;
     }
 
     .wiki h1 {
@@ -330,10 +190,6 @@
 
     .wiki-item-header h2 {
         font-size: 1.5em;
-    }
-
-    .wiki-item-header span {
-        font-size: 0.8em;
     }
 
     .wiki-item-content h2 {

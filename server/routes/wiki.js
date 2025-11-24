@@ -28,10 +28,10 @@ router.use('/uploads', express.static(uploadDir));
 router.get('/posts', async (req, res) => {
     try {
         const [results] = await db.query(`
-            SELECT wiki.*, wiki.image, categories.name AS category_name, 
+            SELECT wiki.*, wiki.image, 
             DATE_FORMAT(wiki.created_at, '%d/%m/%Y %H:%i') AS created_at_formatted, 
             DATE_FORMAT(wiki.updated_at, '%d/%m/%Y %H:%i') AS updated_at_formatted 
-            FROM wiki JOIN categories ON wiki.category_id = categories.id
+            FROM wiki
         `);
         res.json(results);
     } catch (err) {
@@ -44,11 +44,10 @@ router.get('/posts/:slug', async (req, res) => {
     const { slug } = req.params;
     try {
         const [post] = await db.query(`
-            SELECT wiki.*, wiki.image, categories.name AS category_name, 
+            SELECT wiki.*, wiki.image, 
             DATE_FORMAT(wiki.created_at, '%d/%m/%Y %H:%i') AS created_at_formatted, 
             DATE_FORMAT(wiki.updated_at, '%d/%m/%Y %H:%i') AS updated_at_formatted 
-            FROM wiki JOIN categories ON wiki.category_id = categories.id 
-            WHERE wiki.slug = ?
+            FROM wiki WHERE wiki.slug = ?
         `, [slug]);
 
         if (post.length === 0) {
@@ -62,28 +61,18 @@ router.get('/posts/:slug', async (req, res) => {
     }
 });
 
-router.get('/categories', AdminOnly, async (req, res) => {
-    try {
-        const [results] = await db.query('SELECT * FROM categories');
-        res.json(results);
-    } catch (err) {
-        console.error(err);
-        res.status(500).send('Database error');
-    }
-});
-
 router.post('/create', AdminOnly, upload.single('image'), async (req, res) => {
-    const { title, slug, content, category_id } = req.body;
+    const { title, slug, content } = req.body;
     const image = req.file ? `/uploads/${req.file.filename}` : null;
 
-    if (!title || !slug || !content || !category_id) {
+    if (!title || !slug || !content) {
         return res.status(400).json({ message: 'Please provide all fields' });
     }
 
     try {
         await db.query(
-            'INSERT INTO wiki (title, slug, content, category_id, image) VALUES (?, ?, ?, ?, ?)',
-            [title, slug, content, category_id, image]
+            'INSERT INTO wiki (title, slug, content, image) VALUES (?, ?, ?, ?)',
+            [title, slug, content, image]
         );
 
         res.status(201).json({ message: 'Post created successfully!' });
@@ -95,10 +84,10 @@ router.post('/create', AdminOnly, upload.single('image'), async (req, res) => {
 
 router.put('/:id', AdminOnly, upload.single('image'), async (req, res) => {
     const { id } = req.params;
-    const { title, slug, content, category_id } = req.body;
+    const { title, slug, content } = req.body;
     const image = req.file ? `/uploads/${req.file.filename}` : null;
 
-    if (!title || !slug || !content || !category_id) {
+    if (!title || !slug || !content) {
         return res.status(400).json({ message: 'Please provide all fields' });
     }
 
@@ -118,8 +107,8 @@ router.put('/:id', AdminOnly, upload.single('image'), async (req, res) => {
             }
         }
 
-        let query = 'UPDATE wiki SET title = ?, slug = ?, content = ?, category_id = ?';
-        const params = [title, slug, content, category_id];
+        let query = 'UPDATE wiki SET title = ?, slug = ?, content = ?';
+        const params = [title, slug, content];
 
         if (image) {
             query += ', image = ?';

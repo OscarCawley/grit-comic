@@ -6,15 +6,13 @@ import TipTapEditor from '../TipTapEditor/TipTapEditor';
 const WikiAdmin = () => {
 
 	const [posts, setPosts] = useState([]);
-	const [categories, setCategories] = useState([]);
-	const [formData, setFormData] = useState({ title: '', slug: '', content: '', category_id: '', image: null });
+	const [formData, setFormData] = useState({ title: '', slug: '', content: '', image: null });
 	const [editingId, setEditingId] = useState(null);
 	const [isSlugEdited, setIsSlugEdited] = useState(false);
 	const formRef = useRef(null);
 	const token = localStorage.getItem('token');
 
 	useEffect(() => {
-		fetchCategories();
 		fetchPosts();
 	}, []);
 
@@ -24,13 +22,6 @@ const WikiAdmin = () => {
   		}
 	}, [formData.title, isSlugEdited]);
 
-	const fetchCategories = async () => {
-		const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/wiki/categories`, {
-			headers: { Authorization: `Bearer ${token}` }
-		});
-		setCategories(res.data);
-	};
-
 	const fetchPosts = async () => {
 		const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/wiki/posts`);
 		setPosts(res.data);
@@ -38,9 +29,9 @@ const WikiAdmin = () => {
 
 	const handleCreate = async () => {
 
-		const { title, slug, content, category_id, image } = formData;
+		const { title, slug, content, image } = formData;
 
-		if (!title.trim() || !slug.trim() || !content.trim() || !category_id || isNaN(category_id)) {
+		if (!title.trim() || !slug.trim() || !content.trim()) {
 			alert('Please fill out all fields before creating the post.');
 			return;}
 
@@ -49,7 +40,6 @@ const WikiAdmin = () => {
 			data.append('title', title);
 			data.append('slug', slug);
 			data.append('content', content);
-			data.append('category_id', category_id);
 
 			if (image) {
 				data.append('image', image);
@@ -63,7 +53,7 @@ const WikiAdmin = () => {
 			});
 
 			alert('Wiki post created!');
-			setFormData({ title: '', slug: '', content: '', category_id: '', image: null });
+			setFormData({ title: '', slug: '', content: '', image: null });
 			if (formRef.current) {
 				formRef.current.value = '';
 			}
@@ -80,7 +70,6 @@ const WikiAdmin = () => {
 			title: post.title,
 			slug: post.slug,
 			content: post.content,
-			category_id: post.category_id,
 			image: null,
 			existingImage: post.image
 		});
@@ -91,13 +80,12 @@ const WikiAdmin = () => {
 	}
 
 	const handleUpdate = async () => {
-		const { title, slug, content, category_id, image } = formData;
+		const { title, slug, content, image } = formData;
 
 		const data = new FormData();
 		data.append('title', title);
 		data.append('slug', slug);
 		data.append('content', content);
-		data.append('category_id', category_id);
 
 		if (image) {
 			data.append('image', image); // New uploaded image
@@ -111,7 +99,7 @@ const WikiAdmin = () => {
 				}
 			});
 			alert('Wiki post updated!');
-			setFormData({ title: '', slug: '', content: '', category_id: '', image: null });
+			setFormData({ title: '', slug: '', content: '', image: null });
 			setEditingId(null);
 			if (formRef.current) {
 				formRef.current.value = '';
@@ -178,16 +166,6 @@ const WikiAdmin = () => {
 					content={formData.content}
 					onChange={(html) => setFormData({ ...formData, content: html })}
 				/>
-				<select
-					value={formData.category_id}
-					onChange={(e) => setFormData({ ...formData, category_id: parseInt(e.target.value) })}
-				>
-					
-					<option value="">Select Category</option>
-					{categories.map(category => (
-						<option key={category.id} value={category.id}>{category.name}</option>
-					))}
-				</select>
 				<input type="file" accept='image/*' ref={formRef} onChange={(e) => setFormData({ ...formData, image: e.target.files[0]})}/>
 				{formData.existingImage && !formData.image && (
 					<div>

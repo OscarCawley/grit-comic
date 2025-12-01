@@ -26,6 +26,4 @@ A dynamic web platform created to showcase the comic book *GRIT*, offering fans 
 
 
 - **TODO**
-  check if secure from SQL injection
-  figure out if password hashing needs to be hidden from github
   whether wiki searching lags on server (due to requests every letter insert)

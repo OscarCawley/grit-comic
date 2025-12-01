@@ -8,14 +8,55 @@ const router = express.Router();
 // Get all updates
 router.get('/', async (req, res) => {
     try {
+        await new Promise(resolve => setTimeout(resolve, 2000)); // 0.5s delay
+
+        const limit = req.query.limit ? parseInt(req.query.limit) : null;
+        const offset = req.query.offset ? parseInt(req.query.offset) : null;
+        const isPaginated = limit !== null || offset !== null;
+
+        // OLD BEHAVIOR (no pagination)
+        if (!isPaginated) {
+            const [rows] = await db.query(`
+                SELECT 
+                    updates.*, 
+                    DATE_FORMAT(updates.created_at, '%d/%m/%Y %H:%i') AS created_at_formatted,
+                    DATE_FORMAT(updates.updated_at, '%d/%m/%Y %H:%i') AS updated_at_formatted
+                FROM updates
+                ORDER BY created_at DESC
+            `);
+
+            return res.json(rows);
+        }
+
+        // PAGINATION LOGIC
+        const safeLimit = limit ?? 10;
+        const safeOffset = offset ?? 0;
+
+        const [[{ total }]] = await db.query(`SELECT COUNT(*) AS total FROM updates`);
+
         const [updates] = await db.query(`
-            SELECT *, DATE_FORMAT(updates.created_at, '%d/%m/%Y %H:%i') AS created_at_formatted, 
-            DATE_FORMAT(updates.updated_at, '%d/%m/%Y %H:%i') AS updated_at_formatted
-            FROM updates ORDER BY created_at DESC`);
-        res.json(updates);
+            SELECT 
+                updates.*,
+                DATE_FORMAT(updates.created_at, '%d/%m/%Y %H:%i') AS created_at_formatted,
+                DATE_FORMAT(updates.updated_at, '%d/%m/%Y %H:%i') AS updated_at_formatted
+            FROM updates
+            ORDER BY created_at DESC
+            LIMIT ? OFFSET ?
+        `, [safeLimit, safeOffset]);
+
+        const hasMore = safeOffset + updates.length < total;
+
+        res.json({
+            updates,
+            total,
+            offset: safeOffset,
+            limit: safeLimit,
+            hasMore
+        });
+
     } catch (err) {
         console.error(err);
-        res.status(500).send('Database error');
+        res.status(500).send("Database error");
     }
 });
 

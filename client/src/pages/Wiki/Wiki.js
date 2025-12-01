@@ -11,11 +11,18 @@ const Wiki = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [loading, showLoading, hideLoading] = useMinLoading(true);
 
+    // Pagination state
+    const [offset, setOffset] = useState(0);
+    const [hasMore, setHasMore] = useState(true);
+    const [fetching, setFetching] = useState(false);
+
+    const limit = 10;
+
     useEffect(() => {
         const initLoad = async () => {
             try {
                 showLoading();
-                await fetchWiki();
+                await fetchWiki(true); // initial load with reset
             } finally {
                 hideLoading();
             }
@@ -23,26 +30,57 @@ const Wiki = () => {
         initLoad();
     }, []);
 
-    const fetchWiki = async () => {
+    /**
+     * Fetch wiki posts
+     * @param {boolean} reset — true = reset list for new search
+     * @param {string|null} customSearch — use this search instead of current state
+     */
+    const fetchWiki = async (reset = false, customSearch = null) => {
+        if (fetching) return;
+        setFetching(true);
+
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/wiki/posts`);
-            const sortedData = [...response.data].sort(
-                (a, b) => new Date(b.updated_at) - new Date(a.updated_at)
-            );
-            setPosts(sortedData);
+            const search = customSearch !== null ? customSearch : searchTerm;
+
+            if (reset) {
+                setPosts([]);
+                setOffset(0);
+            }
+
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/wiki/posts`, {
+                params: {
+                    search,
+                    offset: reset ? 0 : offset,
+                    limit
+                }
+            });
+
+            const data = response.data.results || response.data;
+
+            if (reset) {
+                setPosts(data);
+                setOffset(data.length);
+            } else {
+                setPosts((prev) => [...prev, ...data]);
+                setOffset((prev) => prev + data.length);
+            }
+
+            setHasMore(response.data.hasMore ?? false);
+
         } catch (error) {
             console.error('Error fetching wiki data:', error);
+        } finally {
+            setFetching(false);
         }
     };
 
-    const filteredPosts = posts.filter((post) => {
+    const handleSearchChange = async (e) => {
+        const value = e.target.value;
+        setSearchTerm(value);
 
-        const matchesSearch =
-            post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            post.content.toLowerCase().includes(searchTerm.toLowerCase());
-
-        return matchesSearch;
-    });
+        // Reset + search
+        await fetchWiki(true, value);
+    };
 
     if (loading) {
         return (
@@ -57,29 +95,52 @@ const Wiki = () => {
             <div className='wiki'>
                 <h1>Wiki</h1>
                 <div className="wiki-list">
+                    
+                    {/* Search Bar */}
                     <div className='wiki-search'>
                         <input 
                             type="text" 
                             placeholder="Search..."
                             value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
+                            onChange={handleSearchChange}
                         />
                     </div>
 
-                    {filteredPosts.map((post) => (
+                    {/* Posts */}
+                    {posts.map((post) => (
                         <div key={post.id} className="wiki-item">
                             <Link to={`/wiki/${post.slug}`} className='wiki-item-link'>
-                            <div className='wiki-item-header'>
-                                <h2>{post.title}</h2>
-                            </div>
-                            <div className='wiki-item-content' dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}></div>
-                            <div className='wiki-footer'>
-                                <p className='read-more'>Read More...</p>
-                                <p className='wiki-item-updated'>{post.updated_at_formatted}</p>
-                            </div>
+                                <div className='wiki-item-header'>
+                                    <h2>{post.title}</h2>
+                                </div>
+                                <div 
+                                    className='wiki-item-content' 
+                                    dangerouslySetInnerHTML={{
+                                        __html: DOMPurify.sanitize(post.content)
+                                    }}
+                                ></div>
+                                <div className='wiki-footer'>
+                                    <p className='read-more'>Read More...</p>
+                                    <p className='wiki-item-updated'>{post.updated_at_formatted}</p>
+                                </div>
                             </Link>
                         </div>
                     ))}
+
+                    {/* Load More Button */}
+                    {!fetching && hasMore && (
+                        <button 
+                            className="load-more-button" 
+                            onClick={() => fetchWiki(false)}
+                            disabled={fetching}
+                        >
+                            {fetching ? "Loading..." : "Load More..."}
+                        </button>
+                    )}
+                    {fetching && hasMore && (
+                        <div className="small-spinner" />
+                    )}
+
                 </div>
             </div>
         </PageAnimation>

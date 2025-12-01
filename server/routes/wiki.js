@@ -27,13 +27,75 @@ router.use('/uploads', express.static(uploadDir));
 
 router.get('/posts', async (req, res) => {
     try {
-        const [results] = await db.query(`
-            SELECT wiki.*, wiki.image, 
-            DATE_FORMAT(wiki.created_at, '%d/%m/%Y %H:%i') AS created_at_formatted, 
-            DATE_FORMAT(wiki.updated_at, '%d/%m/%Y %H:%i') AS updated_at_formatted 
+        const search = req.query.search ? req.query.search.toLowerCase() : null;
+        const limit = req.query.limit ? parseInt(req.query.limit) : null;
+        const offset = req.query.offset ? parseInt(req.query.offset) : null;
+
+        const isPaginated = search !== null || limit !== null || offset !== null;
+
+        // -------------------------
+        // CASE 1: NO PAGINATION → Return all posts (old behavior)
+        // -------------------------
+        if (!isPaginated) {
+            const [results] = await db.query(`
+                SELECT 
+                    wiki.*,
+                    DATE_FORMAT(wiki.created_at, '%d/%m/%Y %H:%i') AS created_at_formatted,
+                    DATE_FORMAT(wiki.updated_at, '%d/%m/%Y %H:%i') AS updated_at_formatted
+                FROM wiki
+                ORDER BY wiki.updated_at DESC
+            `);
+            return res.json(results);
+        }
+
+        // -------------------------
+        // CASE 2: PAGINATED + SEARCH
+        // -------------------------
+
+        let where = "";
+        let params = [];
+
+        if (search !== null) {
+            where = `WHERE LOWER(wiki.title) LIKE ? OR LOWER(wiki.content) LIKE ?`;
+            params.push(`%${search}%`, `%${search}%`);
+        }
+
+        const safeLimit = limit ?? 10;
+        const safeOffset = offset ?? 0;
+
+        // Count total
+        const [countRows] = await db.query(
+            `SELECT COUNT(*) AS total FROM wiki ${where}`,
+            params
+        );
+
+        const total = countRows[0].total;
+
+        // Fetch paginated results
+        const [results] = await db.query(
+            `
+            SELECT 
+                wiki.*,
+                DATE_FORMAT(wiki.created_at, '%d/%m/%Y %H:%i') AS created_at_formatted,
+                DATE_FORMAT(wiki.updated_at, '%d/%m/%Y %H:%i') AS updated_at_formatted
             FROM wiki
-        `);
-        res.json(results);
+            ${where}
+            ORDER BY wiki.updated_at DESC
+            LIMIT ? OFFSET ?
+            `,
+            [...params, safeLimit, safeOffset]
+        );
+
+        const hasMore = safeOffset + results.length < total;
+
+        return res.json({
+            results,
+            total,
+            offset: safeOffset,
+            limit: safeLimit,
+            hasMore
+        });
+
     } catch (err) {
         console.error(err);
         res.status(500).send('Database error');

@@ -28,9 +28,6 @@ const Home = () => {
     const [commentsLoading, setCommentsLoading] = useState(false);
     const limit = 10;
 
-    // -------------------
-    // Separate fetch functions
-    // -------------------
     const fetchChapters = async () => {
         const chapterRes = await axios.get(`${process.env.REACT_APP_API_URL}/api/chapters`);
         const chapterData = chapterRes.data;
@@ -81,9 +78,6 @@ const Home = () => {
         }
     };
 
-    // -------------------
-    // Initial page load
-    // -------------------
     useEffect(() => {
         const loadPageData = async () => {
             try {
@@ -279,9 +273,7 @@ const Home = () => {
                     />
                     <button type="submit" className='comment-submit-button' disabled={!user || submitting}>{submitting ? "Posting..." : "Post Comment"}</button>
                 </form>
-                {commentsLoading && comments.length === 0 ? (
-                    <div className="small-spinner" />
-                ) : (
+                {comments.length > 0 && (
                     <>
                         {comments.map(comment => (
                             <div key={comment.id} className="comment">
@@ -300,13 +292,16 @@ const Home = () => {
                                 <p className='comment-date'>{comment.created_at_formatted}</p>
                             </div>
                         ))}
-                        {hasMore && (
+                        {!commentsLoading && hasMore && (
                             <button
                                 className="load-more-button"
                                 onClick={() => fetchComments(false)}
                             >
                                 Load More...
                             </button>
+                        )}
+                        {commentsLoading && hasMore && (
+                            <div className="small-spinner" />
                         )}
                     </>
                 )}

@@ -23,14 +23,17 @@ const upload = multer({ storage: multer.memoryStorage() });
 // Helper: Upload blob
 // -----------------------------------------------------------------------------
 async function uploadToAzureBlob(fileBuffer, originalName) {
-    const filename = `${Date.now()}-${originalName}`;
-    const blobClient = containerClient.getBlockBlobClient(filename);
+    const timestamp = Date.now();
+    const safeName = originalName.replace(/\s+/g, "-");
+    const blobName = `${timestamp}-${safeName}`;
 
-    await blobClient.uploadData(fileBuffer, {
+    const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+
+    await blockBlobClient.uploadData(fileBuffer, {
         blobHTTPHeaders: { blobContentType: "image/jpeg" }
     });
 
-    return blobClient.url;
+    return blockBlobClient.url;
 }
 
 // -----------------------------------------------------------------------------

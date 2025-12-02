@@ -25,14 +25,16 @@ const upload = multer({ storage: multer.memoryStorage() });
 // -----------------------------------------------------------------------------
 async function uploadToAzureBlob(fileBuffer, originalName) {
     const timestamp = Date.now();
-    const blobName = `${timestamp}-${originalName}`;
+    const safeName = originalName.replace(/\s+/g, "-");
+    const blobName = `${timestamp}-${safeName}`;
+
     const blockBlobClient = containerClient.getBlockBlobClient(blobName);
 
     await blockBlobClient.uploadData(fileBuffer, {
         blobHTTPHeaders: { blobContentType: "image/jpeg" }
     });
 
-    return blockBlobClient.url; // return public blob URL
+    return blockBlobClient.url;
 }
 
 // -----------------------------------------------------------------------------
@@ -227,7 +229,9 @@ router.delete('/:id', AdminOnly, async (req, res) => {
         const url = rows[0]?.image;
 
         if (url) {
-            await deleteBlobFromUrl(url);
+            console.log(url);
+            result = await deleteBlobFromUrl(url);
+            console.log(result);
         }
 
         await db.query('DELETE FROM wiki WHERE id = ?', [id]);

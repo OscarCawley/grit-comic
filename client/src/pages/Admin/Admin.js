@@ -5,7 +5,6 @@ import PageAdmin from '../../components/PageAdmin/PageAdmin.js';
 import WikiAdmin from '../../components/WikiAdmin/WikiAdmin.js';
 import UpdatesAdmin from '../../components/UpdatesAdmin/UpdatesAdmin.js';
 import UserAdmin from '../../components/UserAdmin/UserAdmin.js';
-import AssetAdmin from '../../components/AssetAdmin/AssetAdmin.js';
 import SupportAdmin from '../../components/SupportAdmin/SupportAdmin.js';
 import CommentAdmin from '../../components/CommentAdmin/CommentAdmin.js';
 import './Admin.css';
@@ -22,7 +21,6 @@ const Admin = () => {
                 <button onClick={() => setView('wiki')} className={view === 'wiki' ? 'active' : ''}>WIKI</button>
                 <button onClick={() => setView('updates')} className={view === 'updates' ? 'active' : ''}>UPDATES</button>
                 <button onClick={() => setView('users')} className={view === 'users' ? 'active' : ''}>USERS</button>
-                <button onClick={() => setView('assets')} className={view === 'assets' ? 'active' : ''}>ASSETS</button>
                 <button onClick={() => setView('support')} className={view === 'support' ? 'active' : ''}>SUPPORT</button>
                 <button onClick={() => setView('comments')} className={view === 'comments' ? 'active' : ''}>COMMENTS</button>
                 
@@ -34,7 +32,6 @@ const Admin = () => {
                 {view === 'wiki' && <WikiAdmin />}
                 {view === 'updates' && <UpdatesAdmin />}
                 {view === 'users' && <UserAdmin />}
-                {view === 'assets' && <AssetAdmin />}
                 {view === 'support' && <SupportAdmin />}
                 {view === 'comments' && <CommentAdmin />}
                 

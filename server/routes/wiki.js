@@ -10,14 +10,11 @@ const router = express.Router();
 // -----------------------------
 // Azure Blob Storage
 // -----------------------------
-const blobService = BlobServiceClient.fromConnectionString(
-    process.env.AZURE_STORAGE_CONNECTION_STRING
-);
+const blobService = BlobServiceClient.fromConnectionString(process.env.AZURE_STORAGE_CONNECTION_STRING);
 const containerName = "uploads";
 const containerClient = blobService.getContainerClient(containerName);
 
 // Multer (memory buffer)
-
 const upload = multer({ storage: multer.memoryStorage() });
 
 // -----------------------------------------------------------------------------
@@ -58,51 +55,48 @@ router.get('/posts', async (req, res) => {
         const search = req.query.search ? req.query.search.toLowerCase() : null;
         const limit = req.query.limit ? parseInt(req.query.limit) : null;
         const offset = req.query.offset ? parseInt(req.query.offset) : null;
-
         const isPaginated = search !== null || limit !== null || offset !== null;
 
         if (!isPaginated) {
-            const [results] = await db.query(`
+            const results = await db.query(`
                 SELECT 
                     wiki.*,
-                    DATE_FORMAT(wiki.created_at, '%d/%m/%Y %H:%i') AS created_at_formatted,
-                    DATE_FORMAT(wiki.updated_at, '%d/%m/%Y %H:%i') AS updated_at_formatted
+                    FORMAT(wiki.created_at, 'dd/MM/yyyy HH:mm') AS created_at_formatted,
+                    FORMAT(wiki.updated_at, 'dd/MM/yyyy HH:mm') AS updated_at_formatted
                 FROM wiki
                 ORDER BY wiki.updated_at DESC
             `);
             return res.json(results);
         }
 
-        let where = "";
-        let params = [];
+        let whereClause = "";
+        const params = {};
 
         if (search !== null) {
-            where = `WHERE LOWER(wiki.title) LIKE ? OR LOWER(wiki.content) LIKE ?`;
-            params.push(`%${search}%`, `%${search}%`);
+            whereClause = "WHERE LOWER(wiki.title) LIKE @search OR LOWER(wiki.content) LIKE @search";
+            params.search = `%${search}%`;
         }
 
         const safeLimit = limit ?? 10;
         const safeOffset = offset ?? 0;
 
-        const [countRows] = await db.query(
-            `SELECT COUNT(*) AS total FROM wiki ${where}`,
+        const [[{ total }]] = await db.query(
+            `SELECT COUNT(*) AS total FROM wiki ${whereClause}`,
             params
         );
 
-        const total = countRows[0].total;
-
-        const [results] = await db.query(
+        const results = await db.query(
             `
             SELECT 
                 wiki.*,
-                DATE_FORMAT(wiki.created_at, '%d/%m/%Y %H:%i') AS created_at_formatted,
-                DATE_FORMAT(wiki.updated_at, '%d/%m/%Y %H:%i') AS updated_at_formatted
+                FORMAT(wiki.created_at, 'dd/MM/yyyy HH:mm') AS created_at_formatted,
+                FORMAT(wiki.updated_at, 'dd/MM/yyyy HH:mm') AS updated_at_formatted
             FROM wiki
-            ${where}
+            ${whereClause}
             ORDER BY wiki.updated_at DESC
-            LIMIT ? OFFSET ?
+            OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY
             `,
-            [...params, safeLimit, safeOffset]
+            { ...params, offset: safeOffset, limit: safeLimit }
         );
 
         const hasMore = safeOffset + results.length < total;
@@ -127,18 +121,17 @@ router.get('/posts', async (req, res) => {
 router.get('/posts/:slug', async (req, res) => {
     const { slug } = req.params;
     try {
-        const [post] = await db.query(`
+        const post = await db.query(`
             SELECT wiki.*, wiki.image,
-            DATE_FORMAT(wiki.created_at, '%d/%m/%Y %H:%i') AS created_at_formatted, 
-            DATE_FORMAT(wiki.updated_at, '%d/%m/%Y %H:%i') AS updated_at_formatted 
-            FROM wiki WHERE wiki.slug = ?
-        `, [slug]);
+                FORMAT(wiki.created_at, 'dd/MM/yyyy HH:mm') AS created_at_formatted,
+                FORMAT(wiki.updated_at, 'dd/MM/yyyy HH:mm') AS updated_at_formatted
+            FROM wiki
+            WHERE wiki.slug = @slug
+        `, { slug });
 
-        if (post.length === 0) {
-            return res.status(404).send('Post not found');
-        }
-
+        if (post.length === 0) return res.status(404).send('Post not found');
         res.json(post[0]);
+
     } catch (err) {
         console.error(err);
         res.status(500).send('Database error');
@@ -150,24 +143,21 @@ router.get('/posts/:slug', async (req, res) => {
 // -----------------------------------------------------------------------------
 router.post('/create', AdminOnly, upload.single('image'), async (req, res) => {
     const { title, slug, content } = req.body;
-
-    if (!title || !slug || !content) {
-        return res.status(400).json({ message: 'Please provide all fields' });
-    }
-
-    let imageUrl = null;
+    if (!title || !slug || !content) return res.status(400).json({ message: 'Please provide all fields' });
 
     try {
+        let imageUrl = null;
         if (req.file) {
             imageUrl = await uploadToAzureBlob(req.file.buffer, req.file.originalname);
         }
 
-        await db.query(
-            'INSERT INTO wiki (title, slug, content, image) VALUES (?, ?, ?, ?)',
-            [title, slug, content, imageUrl]
-        );
+        await db.query(`
+            INSERT INTO wiki (title, slug, content, image) 
+            VALUES (@title, @slug, @content, @image)
+        `, { title, slug, content, image: imageUrl });
 
         res.status(201).json({ message: 'Post created successfully!' });
+
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Error inserting post', error: err });
@@ -180,38 +170,31 @@ router.post('/create', AdminOnly, upload.single('image'), async (req, res) => {
 router.put('/:id', AdminOnly, upload.single('image'), async (req, res) => {
     const { id } = req.params;
     const { title, slug, content } = req.body;
-
-    if (!title || !slug || !content) {
-        return res.status(400).json({ message: 'Please provide all fields' });
-    }
+    if (!title || !slug || !content) return res.status(400).json({ message: 'Please provide all fields' });
 
     try {
         let newImageUrl = null;
-
         if (req.file) {
-            // Delete old blob
-            const [rows] = await db.query('SELECT image FROM wiki WHERE id = ?', [id]);
+            const [rows] = await db.query('SELECT image FROM wiki WHERE id = @id', { id });
             const oldUrl = rows[0]?.image;
             if (oldUrl) await deleteBlobFromUrl(oldUrl);
 
-            // Upload new blob
             newImageUrl = await uploadToAzureBlob(req.file.buffer, req.file.originalname);
         }
 
-        let query = 'UPDATE wiki SET title = ?, slug = ?, content = ?';
-        const params = [title, slug, content];
+        let query = 'UPDATE wiki SET title = @title, slug = @slug, content = @content';
+        const params = { title, slug, content, id };
 
         if (newImageUrl) {
-            query += ', image = ?';
-            params.push(newImageUrl);
+            query += ', image = @image';
+            params.image = newImageUrl;
         }
 
-        query += ' WHERE id = ?';
-        params.push(id);
-
+        query += ' WHERE id = @id';
         await db.query(query, params);
 
         res.status(200).json({ message: 'Post updated successfully!' });
+
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Error updating post', error: err });
@@ -225,18 +208,13 @@ router.delete('/:id', AdminOnly, async (req, res) => {
     const { id } = req.params;
 
     try {
-        const [rows] = await db.query('SELECT image FROM wiki WHERE id = ?', [id]);
+        const [rows] = await db.query('SELECT image FROM wiki WHERE id = @id', { id });
         const url = rows[0]?.image;
+        if (url) await deleteBlobFromUrl(url);
 
-        if (url) {
-            console.log(url);
-            result = await deleteBlobFromUrl(url);
-            console.log(result);
-        }
-
-        await db.query('DELETE FROM wiki WHERE id = ?', [id]);
-
+        await db.query('DELETE FROM wiki WHERE id = @id', { id });
         res.status(200).json({ message: 'Post deleted successfully!' });
+
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Error deleting post', error: err });

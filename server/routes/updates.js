@@ -5,54 +5,46 @@ const AdminOnly = require('../middleware/AdminOnly.js');
 
 const router = express.Router();
 
-// Get all updates
+// -----------------------------------------------------------------------------
+// GET — All updates (with optional pagination)
+// -----------------------------------------------------------------------------
 router.get('/', async (req, res) => {
     try {
-        await new Promise(resolve => setTimeout(resolve, 2000)); // 0.5s delay
-
         const limit = req.query.limit ? parseInt(req.query.limit) : null;
         const offset = req.query.offset ? parseInt(req.query.offset) : null;
         const isPaginated = limit !== null || offset !== null;
 
-        // OLD BEHAVIOR (no pagination)
         if (!isPaginated) {
-            const [rows] = await db.query(`
+            const updates = await db.query(`
                 SELECT 
-                    updates.*, 
-                    DATE_FORMAT(updates.created_at, '%d/%m/%Y %H:%i') AS created_at_formatted,
-                    DATE_FORMAT(updates.updated_at, '%d/%m/%Y %H:%i') AS updated_at_formatted
+                    *,
+                    FORMAT(created_at, 'dd/MM/yyyy HH:mm') AS created_at_formatted,
+                    FORMAT(updated_at, 'dd/MM/yyyy HH:mm') AS updated_at_formatted
                 FROM updates
                 ORDER BY created_at DESC
             `);
-
-            return res.json(rows);
+            return res.json(updates);
         }
 
-        // PAGINATION LOGIC
         const safeLimit = limit ?? 10;
         const safeOffset = offset ?? 0;
 
-        const [[{ total }]] = await db.query(`SELECT COUNT(*) AS total FROM updates`);
+        const totalRows = await db.query(`SELECT COUNT(*) AS total FROM updates`);
+        const total = totalRows[0].total;
 
-        const [updates] = await db.query(`
+        const updates = await db.query(`
             SELECT 
-                updates.*,
-                DATE_FORMAT(updates.created_at, '%d/%m/%Y %H:%i') AS created_at_formatted,
-                DATE_FORMAT(updates.updated_at, '%d/%m/%Y %H:%i') AS updated_at_formatted
+                *,
+                FORMAT(created_at, 'dd/MM/yyyy HH:mm') AS created_at_formatted,
+                FORMAT(updated_at, 'dd/MM/yyyy HH:mm') AS updated_at_formatted
             FROM updates
             ORDER BY created_at DESC
-            LIMIT ? OFFSET ?
-        `, [safeLimit, safeOffset]);
+            OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY
+        `, { offset: safeOffset, limit: safeLimit });
 
         const hasMore = safeOffset + updates.length < total;
 
-        res.json({
-            updates,
-            total,
-            offset: safeOffset,
-            limit: safeLimit,
-            hasMore
-        });
+        res.json({ updates, total, offset: safeOffset, limit: safeLimit, hasMore });
 
     } catch (err) {
         console.error(err);
@@ -60,27 +52,39 @@ router.get('/', async (req, res) => {
     }
 });
 
-// Create a new update
+// -----------------------------------------------------------------------------
+// POST — Create a new update
+// -----------------------------------------------------------------------------
 router.post('/create', AdminOnly, async (req, res) => {
     const { title, content, users } = req.body;
 
     if (!title || !content) {
         return res.status(400).json({ message: 'Please provide all fields' });
-    }        
+    }
+
     try {
-        const [result] = await db.query('INSERT INTO updates (title, content) VALUES (?, ?)', [title, content]);
-        res.status(201).json({ id: result.insertId, title, content });
+        await db.query(
+            'INSERT INTO updates (title, content) VALUES (@title, @content)',
+            { title, content }
+        );
 
-        if (!users || users.length === 0) return;
-        sendNewsletterEmails(title, content, users);
+        const inserted = await db.query('SELECT SCOPE_IDENTITY() AS id');
+        const newId = inserted[0].id;
 
+        res.status(201).json({ id: newId, title, content });
+
+        if (users && users.length > 0) {
+            sendNewsletterEmails(title, content, users);
+        }
     } catch (err) {
         console.error(err);
         res.status(500).send('Database error');
     }
 });
 
-// Update an existing update
+// -----------------------------------------------------------------------------
+// PUT — Update an existing update
+// -----------------------------------------------------------------------------
 router.put('/:id', AdminOnly, async (req, res) => {
     const { id } = req.params;
     const { title, content } = req.body;
@@ -90,7 +94,10 @@ router.put('/:id', AdminOnly, async (req, res) => {
     }
 
     try {
-        await db.query('UPDATE updates SET title = ?, content = ? WHERE id = ?', [title, content, id]);
+        await db.query(
+            'UPDATE updates SET title = @title, content = @content WHERE id = @id',
+            { title, content, id }
+        );
         res.json({ message: 'Update successful' });
     } catch (err) {
         console.error(err);
@@ -98,18 +105,19 @@ router.put('/:id', AdminOnly, async (req, res) => {
     }
 });
 
-// Delete an update
+// -----------------------------------------------------------------------------
+// DELETE — Remove an update
+// -----------------------------------------------------------------------------
 router.delete('/:id', AdminOnly, async (req, res) => {
     const { id } = req.params;
 
     try {
-        await db.query('DELETE FROM updates WHERE id = ?', [id]);
+        await db.query('DELETE FROM updates WHERE id = @id', { id });
         res.json({ message: 'Update deleted successfully' });
     } catch (err) {
         console.error(err);
         res.status(500).send('Database error');
     }
 });
-
 
 module.exports = router;

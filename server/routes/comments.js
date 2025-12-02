@@ -5,6 +5,9 @@ const AuthenticateToken = require('../middleware/AuthenticateToken');
 
 const router = express.Router();
 
+// -----------------------------------------------------------------------------
+// GET — All comments (with optional pagination/filter by chapter)
+// -----------------------------------------------------------------------------
 router.get('/', async (req, res) => {
     try {
         const chapter = req.query.chapter ? parseInt(req.query.chapter) : null;
@@ -14,11 +17,11 @@ router.get('/', async (req, res) => {
         const isPaginated = limit !== null || offset !== null || chapter !== null;
 
         if (!isPaginated) {
-            const [allComments] = await db.query(`
+            const allComments = await db.query(`
                 SELECT 
                     comments.*, 
                     users.username,
-                    DATE_FORMAT(comments.created_at, '%d/%m/%Y %H:%i') AS created_at_formatted
+                    FORMAT(comments.created_at, 'dd/MM/yyyy HH:mm') AS created_at_formatted
                 FROM comments
                 JOIN users ON comments.user_id = users.id
                 ORDER BY comments.created_at DESC
@@ -28,35 +31,36 @@ router.get('/', async (req, res) => {
         }
 
         let where = "";
-        let params = [];
+        let params = {};
 
         if (chapter !== null) {
-            where = "WHERE comments.chapter_num = ?";
-            params.push(chapter);
+            where = "WHERE comments.chapter_num = @chapter_num";
+            params.chapter_num = chapter;
         }
 
-        const safeLimit = limit ?? 10;    // default limit
-        const safeOffset = offset ?? 0;   // default offset
+        const safeLimit = limit ?? 10;
+        const safeOffset = offset ?? 0;
 
-        const [countRows] = await db.query(
+        const countRows = await db.query(
             `SELECT COUNT(*) AS total FROM comments ${where}`,
             params
         );
         const total = countRows[0].total;
 
-        const [comments] = await db.query(
+        // MSSQL pagination using OFFSET/FETCH
+        const comments = await db.query(
             `
             SELECT 
                 comments.*, 
                 users.username,
-                DATE_FORMAT(comments.created_at, '%d/%m/%Y %H:%i') AS created_at_formatted
+                FORMAT(comments.created_at, 'dd/MM/yyyy HH:mm') AS created_at_formatted
             FROM comments
             JOIN users ON comments.user_id = users.id
             ${where}
             ORDER BY comments.created_at DESC
-            LIMIT ? OFFSET ?
+            OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY
             `,
-            [...params, safeLimit, safeOffset]
+            { ...params, offset: safeOffset, limit: safeLimit }
         );
 
         const hasMore = safeOffset + comments.length < total;
@@ -75,14 +79,29 @@ router.get('/', async (req, res) => {
     }
 });
 
+// -----------------------------------------------------------------------------
+// POST — Create comment
+// -----------------------------------------------------------------------------
 router.post('/', async (req, res) => {
     const { user_id, chapter_num, content } = req.body;
     if (!user_id || !chapter_num || !content) {
         return res.status(400).send('Missing required fields');
     }
     try {
-        const [result] = await db.query('INSERT INTO comments (user_id, chapter_num, content) VALUES (?, ?, ?)', [user_id, chapter_num, content]);
-        const [newCommentRows] = await db.query(`SELECT comments.*, users.username AS username, DATE_FORMAT(comments.created_at, '%d/%m/%Y %H:%i') AS created_at_formatted FROM comments JOIN users ON comments.user_id = users.id WHERE comments.id = ?`, [result.insertId]);
+        const result = await db.query(
+            'INSERT INTO comments (user_id, chapter_num, content) VALUES (@user_id, @chapter_num, @content)',
+            { user_id, chapter_num, content }
+        );
+
+        // MSSQL: retrieve newly inserted comment by SCOPE_IDENTITY()
+        const newCommentRows = await db.query(
+            `SELECT comments.*, users.username AS username, FORMAT(comments.created_at, 'dd/MM/yyyy HH:mm') AS created_at_formatted
+             FROM comments
+             JOIN users ON comments.user_id = users.id
+             WHERE comments.id = @id`,
+            { id: result.recordset[0]?.id || await db.query('SELECT SCOPE_IDENTITY() AS id').then(r => r[0].id) }
+        );
+
         res.status(201).json(newCommentRows[0]);
     } catch (err) {
         console.error(err);
@@ -90,11 +109,18 @@ router.post('/', async (req, res) => {
     }
 });
 
-router.delete('admin/:id', AdminOnly, async (req, res) => {
+// -----------------------------------------------------------------------------
+// DELETE — Admin delete comment
+// -----------------------------------------------------------------------------
+router.delete('/admin/:id', AdminOnly, async (req, res) => {
     const commentId = req.params.id;
     try {
-        const [result] = await db.query('DELETE FROM comments WHERE id = ?', [commentId]);
-        if (result.affectedRows === 0) {
+        const result = await db.query(
+            'DELETE FROM comments WHERE id = @id',
+            { id: commentId }
+        );
+
+        if (result.rowsAffected[0] === 0) {
             return res.status(404).send('Comment not found');
         }
         res.sendStatus(204);
@@ -104,23 +130,28 @@ router.delete('admin/:id', AdminOnly, async (req, res) => {
     }
 });
 
+// -----------------------------------------------------------------------------
+// DELETE — User delete own comment
+// -----------------------------------------------------------------------------
 router.delete('/user/:id', AuthenticateToken, async (req, res) => {
     const commentId = req.params.id;
     const userId = req.user.id;
 
     try {
-        // Ensure the comment belongs to this user
-        const [rows] = await db.query(
-            'SELECT * FROM comments WHERE id = ? AND user_id = ?',
-            [commentId, userId]
+        const rows = await db.query(
+            'SELECT * FROM comments WHERE id = @id AND user_id = @user_id',
+            { id: commentId, user_id: userId }
         );
 
         if (rows.length === 0) {
             return res.status(403).json({ message: "You can only delete your own comments." });
         }
 
-        // Delete the comment
-        await db.query('DELETE FROM comments WHERE id = ?', [commentId]);
+        await db.query(
+            'DELETE FROM comments WHERE id = @id',
+            { id: commentId }
+        );
+
         res.json({ message: "Comment deleted successfully." });
     } catch (err) {
         console.error(err);

@@ -54,7 +54,7 @@ async function deleteBlobFromUrl(url) {
 // -----------------------------------------------------------------------------
 router.get('/', async (req, res) => {
     try {
-        const [results] = await db.query(`
+        const results = await db.query(`
             SELECT 
                 c.chapter_num,
                 c.title,
@@ -84,8 +84,8 @@ router.post('/create', AdminOnly, upload.none(), async (req, res) => {
 
     try {
         await db.query(
-            'INSERT INTO chapters (chapter_num, title) VALUES (?, ?)',
-            [chapter_num, title]
+            'INSERT INTO chapters (chapter_num, title) VALUES (@chapter_num, @title)',
+            { chapter_num, title }
         );
 
         res.status(201).json({ message: 'Chapter created successfully!' });
@@ -107,12 +107,12 @@ router.put('/update/:oldchapter_num', AdminOnly, upload.none(), async (req, res)
     }
 
     try {
-        const [result] = await db.query(
-            'UPDATE chapters SET chapter_num = ?, title = ? WHERE chapter_num = ?',
-            [chapter_num, title, oldchapter_num]
+        const result = await db.query(
+            'UPDATE chapters SET chapter_num = @chapter_num, title = @title WHERE chapter_num = @oldchapter_num',
+            { chapter_num, title, oldchapter_num }
         );
 
-        if (result.affectedRows === 0) {
+        if (result.rowsAffected[0] === 0) {
             return res.status(404).send('Chapter not found');
         }
 
@@ -130,23 +130,19 @@ router.delete('/delete/:chapter_num', AdminOnly, async (req, res) => {
     const { chapter_num } = req.params;
 
     try {
-        const [images] = await db.query(
-            'SELECT image FROM pages WHERE chapter_num = ?',
-            [chapter_num]
+        const images = await db.query(
+            'SELECT image FROM pages WHERE chapter_num = @chapter_num',
+            { chapter_num }
         );
 
         for (const img of images) {
             await deleteBlobFromUrl(img.image);
         }
 
-        await db.query('DELETE FROM pages WHERE chapter_num = ?', [chapter_num]);
+        await db.query('DELETE FROM pages WHERE chapter_num = @chapter_num', { chapter_num });
+        const result = await db.query('DELETE FROM chapters WHERE chapter_num = @chapter_num', { chapter_num });
 
-        const [result] = await db.query(
-            'DELETE FROM chapters WHERE chapter_num = ?',
-            [chapter_num]
-        );
-
-        if (result.affectedRows === 0) {
+        if (result.rowsAffected[0] === 0) {
             return res.status(404).send('Chapter not found');
         }
 
@@ -164,9 +160,9 @@ router.get('/:chapter_num/pages', async (req, res) => {
     const { chapter_num } = req.params;
 
     try {
-        const [pages] = await db.query(
-            'SELECT * FROM pages WHERE chapter_num = ? ORDER BY page_num ASC',
-            [chapter_num]
+        const pages = await db.query(
+            'SELECT * FROM pages WHERE chapter_num = @chapter_num ORDER BY page_num ASC',
+            { chapter_num }
         );
 
         res.json(pages);
@@ -187,9 +183,9 @@ router.post('/upload/:chapter_num', AdminOnly, upload.array('images'), async (re
     }
 
     try {
-        const [result] = await db.query(
-            'SELECT MAX(page_num) AS maxPage FROM pages WHERE chapter_num = ?',
-            [chapter_num]
+        const result = await db.query(
+            'SELECT MAX(page_num) AS maxPage FROM pages WHERE chapter_num = @chapter_num',
+            { chapter_num }
         );
 
         let nextPage = result[0].maxPage ? result[0].maxPage + 1 : 1;
@@ -198,8 +194,8 @@ router.post('/upload/:chapter_num', AdminOnly, upload.array('images'), async (re
             const imageUrl = await uploadToAzureBlob(file.buffer, file.originalname);
 
             await db.query(
-                'INSERT INTO pages (page_num, chapter_num, image) VALUES (?, ?, ?)',
-                [nextPage, chapter_num, imageUrl]
+                'INSERT INTO pages (page_num, chapter_num, image) VALUES (@page_num, @chapter_num, @image)',
+                { page_num: nextPage, chapter_num, image: imageUrl }
             );
 
             nextPage++;
@@ -225,13 +221,12 @@ router.put('/reorder/:chapter_num', AdminOnly, async (req, res) => {
     try {
         const operations = pages.map((page, index) =>
             db.query(
-                'UPDATE pages SET page_num = ? WHERE id = ?',
-                [index + 1, page.id]
+                'UPDATE pages SET page_num = @page_num WHERE id = @id',
+                { page_num: index + 1, id: page.id }
             )
         );
 
         await Promise.all(operations);
-
         res.sendStatus(204);
     } catch (err) {
         console.error(err);
@@ -246,9 +241,9 @@ router.delete('/delete/:chapter_num/page/:page_num', AdminOnly, async (req, res)
     const { chapter_num, page_num } = req.params;
 
     try {
-        const [rows] = await db.query(
-            'SELECT image FROM pages WHERE chapter_num = ? AND page_num = ?',
-            [chapter_num, page_num]
+        const rows = await db.query(
+            'SELECT image FROM pages WHERE chapter_num = @chapter_num AND page_num = @page_num',
+            { chapter_num, page_num }
         );
 
         if (rows.length === 0) {
@@ -258,8 +253,8 @@ router.delete('/delete/:chapter_num/page/:page_num', AdminOnly, async (req, res)
         await deleteBlobFromUrl(rows[0].image);
 
         await db.query(
-            'DELETE FROM pages WHERE chapter_num = ? AND page_num = ?',
-            [chapter_num, page_num]
+            'DELETE FROM pages WHERE chapter_num = @chapter_num AND page_num = @page_num',
+            { chapter_num, page_num }
         );
 
         res.sendStatus(204);
@@ -276,19 +271,16 @@ router.delete('/delete/:chapter_num/all', AdminOnly, async (req, res) => {
     const { chapter_num } = req.params;
 
     try {
-        const [images] = await db.query(
-            'SELECT image FROM pages WHERE chapter_num = ?',
-            [chapter_num]
+        const images = await db.query(
+            'SELECT image FROM pages WHERE chapter_num = @chapter_num',
+            { chapter_num }
         );
 
         for (const img of images) {
             await deleteBlobFromUrl(img.image);
         }
 
-        await db.query(
-            'DELETE FROM pages WHERE chapter_num = ?',
-            [chapter_num]
-        );
+        await db.query('DELETE FROM pages WHERE chapter_num = @chapter_num', { chapter_num });
 
         res.sendStatus(204);
     } catch (err) {

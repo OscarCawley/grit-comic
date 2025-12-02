@@ -138,7 +138,7 @@ const PageAdmin = ({ setView, setSelectedChapter, selectedChapter }) => {
                         <button className='arrow-button-right' onClick={() => handleReorder('right', page)}>&gt;</button>
                     </div>
                     <div className='page-content'>
-                        <img src={`${process.env.REACT_APP_API_URL}${page.image}`} alt={`Page ${page.page_num} of Chapter ${page.chapter_num}`} />
+                        <img src={`${page.image}`} alt={`Page ${page.page_num} of Chapter ${page.chapter_num}`} />
                         <button onClick={() => handleDelete(page)}>Delete</button>
                     </div>  
                 </div>

@@ -231,7 +231,7 @@ const Home = () => {
                 <div className="comic-viewer" onClick={handleImageClick}>
                     {chapters.length > 0 && chapters[currentChapter]?.pages?.length > 0 ? (
                         <img
-                            src={`${process.env.REACT_APP_API_URL}${chapters[currentChapter].pages[currentPage].image}`}
+                            src={`${chapters[currentChapter].pages[currentPage].image}`}
                             alt={`Comic page ${currentPage + 1}`}
                         />
                     ) : (

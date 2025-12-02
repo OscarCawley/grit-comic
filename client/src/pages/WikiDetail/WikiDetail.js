@@ -52,7 +52,7 @@ function WikiDetailPage() {
                         <div className="wiki-detail-main-content">
                             {post.image && (
                                 <img
-                                src={`${process.env.REACT_APP_API_URL}${post.image}`}
+                                src={`${post.image}`}
                                 alt={post.title} 
                                 className="wiki-detail-image"
                                 />

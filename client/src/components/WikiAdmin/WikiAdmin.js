@@ -180,7 +180,7 @@ const WikiAdmin = () => {
 					<div>
 						<p>Current Image:</p>
 						<img
-							src={`${process.env.REACT_APP_API_URL}${formData.existingImage}`}
+							src={`${formData.existingImage}`}
 							alt="Current"
 							style={{ maxWidth: '200px', display: 'block', marginBottom: '1em' }}
 						/>

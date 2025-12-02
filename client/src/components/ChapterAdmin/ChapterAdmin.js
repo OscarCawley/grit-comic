@@ -32,7 +32,7 @@ const ChapterAdmin = ({ setView, setSelectedChapter }) => {
 			return;}
 
         try {
-            await axios.post(`${process.env.REACT_APP_API_URL}/api/chapters/create`, { chapterNum, title }, {
+            await axios.post(`${process.env.REACT_APP_API_URL}/api/chapters/create`, { chapter_num: chapterNum, title }, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             alert('Chapter created!');
@@ -85,7 +85,7 @@ const ChapterAdmin = ({ setView, setSelectedChapter }) => {
             <h1>Chapters</h1>
             <form className='chapter-form' onSubmit={(e) => {
                 e.preventDefault();
-                editingId ? handleUpdate() : handleCreate();
+                editingId ? handleUpdate() : handleCreate(e);
             }}>
                 <input
                 className='chapter-num-input'

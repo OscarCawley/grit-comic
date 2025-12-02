@@ -1,30 +1,56 @@
 const express = require('express');
 const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
 const db = require('../db');
 const AdminOnly = require('../middleware/AdminOnly.js');
+const { BlobServiceClient } = require("@azure/storage-blob");
+require("dotenv").config();
 
 const router = express.Router();
 
-const uploadDir = path.join(__dirname, '..', 'uploads');
+// -----------------------------
+// Azure Blob Storage
+// -----------------------------
+const blobService = BlobServiceClient.fromConnectionString(
+    process.env.AZURE_STORAGE_CONNECTION_STRING
+);
+const containerName = "uploads";
+const containerClient = blobService.getContainerClient(containerName);
 
-// Multer config
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, uploadDir); // Ensure this folder exists
-    },
-    filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, uniqueSuffix + path.extname(file.originalname));
+// Multer (memory buffer)
+
+const upload = multer({ storage: multer.memoryStorage() });
+
+// -----------------------------------------------------------------------------
+// Helper: Upload blob
+// -----------------------------------------------------------------------------
+async function uploadToAzureBlob(fileBuffer, originalName) {
+    const timestamp = Date.now();
+    const blobName = `${timestamp}-${originalName}`;
+    const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+
+    await blockBlobClient.uploadData(fileBuffer, {
+        blobHTTPHeaders: { blobContentType: "image/jpeg" }
+    });
+
+    return blockBlobClient.url; // return public blob URL
+}
+
+// -----------------------------------------------------------------------------
+// Helper: Delete blob from full URL
+// -----------------------------------------------------------------------------
+async function deleteBlobFromUrl(url) {
+    try {
+        const blobName = url.split("/").pop();
+        const blobClient = containerClient.getBlobClient(blobName);
+        await blobClient.deleteIfExists();
+    } catch (err) {
+        console.warn("Could not delete blob:", err);
     }
-});
+}
 
-const upload = multer({ storage });
-
-// Serve static images
-router.use('/uploads', express.static(uploadDir));
-
+// -----------------------------------------------------------------------------
+// GET — All posts or paginated
+// -----------------------------------------------------------------------------
 router.get('/posts', async (req, res) => {
     try {
         const search = req.query.search ? req.query.search.toLowerCase() : null;
@@ -33,9 +59,6 @@ router.get('/posts', async (req, res) => {
 
         const isPaginated = search !== null || limit !== null || offset !== null;
 
-        // -------------------------
-        // CASE 1: NO PAGINATION → Return all posts (old behavior)
-        // -------------------------
         if (!isPaginated) {
             const [results] = await db.query(`
                 SELECT 
@@ -48,10 +71,6 @@ router.get('/posts', async (req, res) => {
             return res.json(results);
         }
 
-        // -------------------------
-        // CASE 2: PAGINATED + SEARCH
-        // -------------------------
-
         let where = "";
         let params = [];
 
@@ -63,7 +82,6 @@ router.get('/posts', async (req, res) => {
         const safeLimit = limit ?? 10;
         const safeOffset = offset ?? 0;
 
-        // Count total
         const [countRows] = await db.query(
             `SELECT COUNT(*) AS total FROM wiki ${where}`,
             params
@@ -71,7 +89,6 @@ router.get('/posts', async (req, res) => {
 
         const total = countRows[0].total;
 
-        // Fetch paginated results
         const [results] = await db.query(
             `
             SELECT 
@@ -102,11 +119,14 @@ router.get('/posts', async (req, res) => {
     }
 });
 
+// -----------------------------------------------------------------------------
+// GET — Single post by slug
+// -----------------------------------------------------------------------------
 router.get('/posts/:slug', async (req, res) => {
     const { slug } = req.params;
     try {
         const [post] = await db.query(`
-            SELECT wiki.*, wiki.image, 
+            SELECT wiki.*, wiki.image,
             DATE_FORMAT(wiki.created_at, '%d/%m/%Y %H:%i') AS created_at_formatted, 
             DATE_FORMAT(wiki.updated_at, '%d/%m/%Y %H:%i') AS updated_at_formatted 
             FROM wiki WHERE wiki.slug = ?
@@ -123,18 +143,26 @@ router.get('/posts/:slug', async (req, res) => {
     }
 });
 
+// -----------------------------------------------------------------------------
+// POST — Create post
+// -----------------------------------------------------------------------------
 router.post('/create', AdminOnly, upload.single('image'), async (req, res) => {
     const { title, slug, content } = req.body;
-    const image = req.file ? `/uploads/${req.file.filename}` : null;
 
     if (!title || !slug || !content) {
         return res.status(400).json({ message: 'Please provide all fields' });
     }
 
+    let imageUrl = null;
+
     try {
+        if (req.file) {
+            imageUrl = await uploadToAzureBlob(req.file.buffer, req.file.originalname);
+        }
+
         await db.query(
             'INSERT INTO wiki (title, slug, content, image) VALUES (?, ?, ?, ?)',
-            [title, slug, content, image]
+            [title, slug, content, imageUrl]
         );
 
         res.status(201).json({ message: 'Post created successfully!' });
@@ -144,37 +172,36 @@ router.post('/create', AdminOnly, upload.single('image'), async (req, res) => {
     }
 });
 
+// -----------------------------------------------------------------------------
+// PUT — Update post
+// -----------------------------------------------------------------------------
 router.put('/:id', AdminOnly, upload.single('image'), async (req, res) => {
     const { id } = req.params;
     const { title, slug, content } = req.body;
-    const image = req.file ? `/uploads/${req.file.filename}` : null;
 
     if (!title || !slug || !content) {
         return res.status(400).json({ message: 'Please provide all fields' });
     }
 
     try {
-        if (image) {
+        let newImageUrl = null;
+
+        if (req.file) {
+            // Delete old blob
             const [rows] = await db.query('SELECT image FROM wiki WHERE id = ?', [id]);
-            const oldImage = rows[0]?.image;
-            if (oldImage) {
-                const oldPath = path.join(__dirname, '..', oldImage);
-                try {
-                    if (fs.existsSync(oldPath)) {
-                        fs.unlinkSync(oldPath);
-                    }
-                } catch (e) {
-                    console.warn('Failed to delete old image:', e);
-                }
-            }
+            const oldUrl = rows[0]?.image;
+            if (oldUrl) await deleteBlobFromUrl(oldUrl);
+
+            // Upload new blob
+            newImageUrl = await uploadToAzureBlob(req.file.buffer, req.file.originalname);
         }
 
         let query = 'UPDATE wiki SET title = ?, slug = ?, content = ?';
         const params = [title, slug, content];
 
-        if (image) {
+        if (newImageUrl) {
             query += ', image = ?';
-            params.push(image);
+            params.push(newImageUrl);
         }
 
         query += ' WHERE id = ?';
@@ -189,24 +216,22 @@ router.put('/:id', AdminOnly, upload.single('image'), async (req, res) => {
     }
 });
 
+// -----------------------------------------------------------------------------
+// DELETE — Remove post + blob
+// -----------------------------------------------------------------------------
 router.delete('/:id', AdminOnly, async (req, res) => {
     const { id } = req.params;
 
     try {
         const [rows] = await db.query('SELECT image FROM wiki WHERE id = ?', [id]);
-        const imagePath = rows[0]?.image;
-        if (imagePath) {
-            const fullPath = path.join(__dirname, '..', imagePath);
-            try {
-                if (fs.existsSync(fullPath)) {
-                    fs.unlinkSync(fullPath);
-                }
-            } catch (e) {
-                console.warn(`Failed to delete image ${imagePath}:`, e);
-            }
+        const url = rows[0]?.image;
+
+        if (url) {
+            await deleteBlobFromUrl(url);
         }
 
         await db.query('DELETE FROM wiki WHERE id = ?', [id]);
+
         res.status(200).json({ message: 'Post deleted successfully!' });
     } catch (err) {
         console.error(err);

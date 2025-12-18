@@ -1,29 +1,74 @@
-# GRIT Comic Website
+# Serialised Comic Website – Full-Stack Application
 
-A dynamic web platform created to showcase the comic book *GRIT*, offering fans an immersive experience where they can explore chapters, pages, and the rich lore of the story, while staying up-to-date with news and updates from the creators.
+## Overview
 
-## Current Features
+This project is a full-stack website developed to host and manage a serialised comic. The platform provides a complete reader experience alongside a comprehensive admin interface for content management. The frontend is built with **React.js**, while the backend uses **Express.js** and a **MySQL** database to store and serve all site data. The website also features a custom font created using **FontForge** to support the comic’s visual identity.
 
-- **Chapter & Page Viewing**  
-  Browse the comic by chapters and read individual pages in a clean, responsive layout.
+---
 
-- **Wiki Page**  
-  Explore the world, characters, and lore of *GRIT* in a dedicated wiki section.
+## Tech Stack
 
-- **Updates Page**  
-  Stay informed with regular announcements and news related to the comic.
+### Frontend
+- React.js
+- HTML5 / CSS3
+- JavaScript (ES6+)
 
-- **User Features**  
-  User accounts with sign-in functionality.
+### Backend
+- Node.js
+- Express.js
+- MySQL
 
-## Upcoming Features
+### Other Tools
+- FontForge (custom font creation)
+- RESTful API architecture
+- JSON-based client–server communication
 
-- **Comment Section**  
-  A Comment section where comments are linked to user accounts on pages and posts.
+---
 
-- **Support Page**  
-  A dedicated support section for feedback, questions, and other inquiries.
+## Features
 
+### Reader-Facing Features
+- Dedicated comic viewer organised by chapters and pages
+- Integrated wiki documenting the comic’s world, characters, and lore
+- News page for announcements and updates
+- Support page with an FAQ section and links to external platforms (e.g. Patreon)
+- User account system allowing readers to register and log in
 
-- **TODO**
-  whether wiki searching lags on server (due to requests every letter insert)
+### Admin Interface
+- Create and manage comic chapters
+- Upload comic pages in bulk or individually
+- Edit, replace, and manage image assets
+- Create, update, and delete wiki entries
+- Post and manage news updates
+- View and manage user accounts
+
+---
+
+## Backend & Database
+
+- All comic content, site data, and user information are stored in a MySQL database
+- The Express.js backend exposes a RESTful API
+- The React frontend communicates with the backend via HTTP requests using JSON
+- Backend handles authentication, content management, and administrative actions
+
+---
+
+## Project Goals
+
+- Independently design and develop a complete end-to-end web application
+- Build a custom content management system tailored to a serialised comic
+- Combine creative design elements with robust backend architecture
+- Demonstrate full-stack development skills using modern web technologies
+
+---
+
+## Project Status
+
+This project is **not currently deployed**.  
+The codebase is hosted on GitHub and is under active development, with features and content continuing to be refined and expanded.
+
+---
+
+## Author
+
+Developed independently by Oscar Cawley

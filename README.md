@@ -1,4 +1,4 @@
-# Serialised Comic Website – Full-Stack Application
+# GRIT Comic – Full-Stack Application
 
 ## Overview
 
